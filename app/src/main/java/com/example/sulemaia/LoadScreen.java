@@ -17,7 +17,7 @@ public class LoadScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Tutorial.class);
         startActivity(intent);
     }
 
