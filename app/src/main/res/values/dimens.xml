@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="button_add_map_textsize">25sp</dimen>
+    <dimen name="text_not_selected_file_textsize">55sp</dimen>
+    <dimen name="toolbar_margin_button">10dp</dimen>
+    <dimen name="text_header_size">25sp</dimen>
 </resources>

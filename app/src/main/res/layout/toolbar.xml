@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    app:theme="@style/AppTheme"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    android:gravity="center"
+    >
+
+    <ImageButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/toolbar_margin_button"
+        android:layout_gravity="start"
+        android:src="@drawable/outline_cancel_white"
+        android:background="?android:attr/selectableItemBackground"
+        />
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        style="@style/AppTheme.ToolbarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_ok"
+        android:layout_marginEnd="@dimen/toolbar_margin_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:src="@drawable/outline_check_circle_white"
+        android:background="?android:attr/selectableItemBackground"
+        />
+
+</androidx.appcompat.widget.Toolbar>
