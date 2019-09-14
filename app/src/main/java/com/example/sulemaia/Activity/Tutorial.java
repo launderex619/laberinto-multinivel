@@ -1,4 +1,4 @@
-package com.example.sulemaia;
+package com.example.sulemaia.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.sulemaia.R;
 
 public class Tutorial extends AppCompatActivity {
 

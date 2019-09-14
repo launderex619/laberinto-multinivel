@@ -33,4 +33,5 @@ public class Constants {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL = 1;
     public static final int REQUEST_FILE_READ_EXTERNAL = 2;
+    public static final int RESULT_FOR_FIELD_INFORMATION = 3;
 }

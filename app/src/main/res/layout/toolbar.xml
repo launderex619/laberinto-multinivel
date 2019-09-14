@@ -13,13 +13,13 @@
 
     <ImageButton
         android:id="@+id/btn_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/toolbar_margin_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="start"
-        android:src="@drawable/outline_cancel_white"
+        android:layout_marginStart="@dimen/toolbar_margin_button"
         android:background="?android:attr/selectableItemBackground"
-        />
+        android:scaleType="fitXY"
+        android:src="@drawable/outline_cancel_white" />
 
     <TextView
         android:id="@+id/toolbar_title"
@@ -31,12 +31,12 @@
 
     <ImageButton
         android:id="@+id/btn_ok"
-        android:layout_marginEnd="@dimen/toolbar_margin_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="end"
-        android:src="@drawable/outline_check_circle_white"
+        android:layout_marginEnd="@dimen/toolbar_margin_button"
         android:background="?android:attr/selectableItemBackground"
-        />
+        android:scaleType="fitXY"
+        android:src="@drawable/outline_check_circle_white" />
 
 </androidx.appcompat.widget.Toolbar>

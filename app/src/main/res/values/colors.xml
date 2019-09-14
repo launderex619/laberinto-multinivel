@@ -9,5 +9,7 @@
   <color name="primaryTextColor">#ffffff</color>
   <color name="secondaryTextColor">#000000</color>
   <color name="backgroundGrayColor">#e1e2e1</color>
+    <color name="label">#151515</color>
+  <color name="label_ligth">#252525</color>
 
 </resources>

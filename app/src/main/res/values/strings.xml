@@ -15,4 +15,10 @@
     <string name="land_code_test">100</string>
     <string name="change_name">Cambiar nombre</string>
     <string name="change_name_message">Escribe el nuevo nombre a asignar al elemento</string>
+    <string name="field_name">Nombre del campo</string>
+    <string name="field_type">Tipo</string>
+    <string name="field_value">Valor</string>
+    <string name="field_initial">Inicial</string>
+    <string name="field_final">Final</string>
+    <string name="field_information_activity_name">Informacion de celda</string>
 </resources>

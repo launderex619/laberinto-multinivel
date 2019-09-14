@@ -1,8 +1,7 @@
-package com.example.sulemaia;
+package com.example.sulemaia.Activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -13,6 +12,7 @@ import com.example.sulemaia.Adapter.MainActivityAdapter;
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Model.LandItem;
+import com.example.sulemaia.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -24,10 +24,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -55,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private String fileDataUnFiltered = "";
     private Hashtable<Integer, ArrayList<LandItem>> hashCodes;
     private View.OnClickListener buttonActions;
+    private LandItem lastItemInTablePressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,33 +90,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_FILE_READ_EXTERNAL && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                Uri fileUri = data.getData();
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(fileUri);
-                    int content = inputStream.read();
-                    while (content != -1) {
-                        fileDataUnFiltered += (char) content;
-                        content = inputStream.read();
-                    }
-                    (new SimpleOkDialog(this,
-                            getString(R.string.content_file), fileDataUnFiltered))
-                            .build().create().show();
-                    //funcion que implementara silva:
-                    //if(isStringValid(fileDataUnFiltered){
-                    showMapAndElements();
-                    //} else {
-                    // crearAlertDialog diciendo que el archivo no es valido xd
-                    //}
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if(resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.REQUEST_FILE_READ_EXTERNAL) {
+                if (data != null) {
+                    Uri fileUri = data.getData();
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(fileUri);
+                        int content = inputStream.read();
+                        while (content != -1) {
+                            fileDataUnFiltered += (char) content;
+                            content = inputStream.read();
+                        }
+                        (new SimpleOkDialog(this,
+                                getString(R.string.content_file), fileDataUnFiltered))
+                                .build().create().show();
+                        //funcion que implementara silva:
+                        //if(isStringValid(fileDataUnFiltered){
+                        showMapAndElements();
+                        //} else {
+                        // crearAlertDialog diciendo que el archivo no es valido xd
+                        //}
+                    } catch (IOException e) {
+                        e.printStackTrace();
 
+                    }
+                } else {
+                    (new SimpleOkDialog(this,
+                            getString(R.string.content_file), getString(R.string.unselected_file)))
+                            .build().create().show();
                 }
-            } else {
-                (new SimpleOkDialog(this,
-                        getString(R.string.content_file), getString(R.string.unselected_file)))
-                        .build().create().show();
+            }
+            else if(requestCode == Constants.RESULT_FOR_FIELD_INFORMATION){
+
             }
         }
     }
@@ -173,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
                 item = new LandItem(btn, tempValuesForFile[i][j]);
+                btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
                         TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / tempValuesForFile.length
                 ));
@@ -227,6 +232,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (v == btnOk) {
 
+            }
+            else{
+                LandItem lndI = (LandItem) v.getTag();
+                lastItemInTablePressed = lndI;
+                Intent intent = new Intent(getApplicationContext(), FieldInformation.class);
+                intent.putExtra("field", lndI);
+                startActivityForResult(intent, Constants.RESULT_FOR_FIELD_INFORMATION);
             }
         }
 

@@ -7,25 +7,20 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sulemaia.Dialog.SimpleInputDialog;
 import com.example.sulemaia.Helper.Constants;
-import com.example.sulemaia.MainActivity;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Set;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
