@@ -33,13 +33,16 @@
             android:orientation="vertical">
 
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_field_color"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp"
-                android:background="@color/backgroundGrayColor" />
+                android:src="@color/backgroundGrayColor"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FFFFFFFF"
+                />
 
             <TextView
                 style="@style/AppTheme.TextHeader"

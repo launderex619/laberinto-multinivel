@@ -20,15 +20,20 @@ public class Constants {
             "Tundra",
             "Desierto",
             "Taiga",
-            "Selva Tropical",
+            "Selva",
             "Chaparral",
-            "Arrecifes de coral",
-            "Agua dulce",
+            "Arrecife de coral",
+            "Rio",
             "Pastizales",
-            "Océanos",
-            "Sabanas",
-            "Bosques templados",
-            "Humedales"
+            "Océano",
+            "Sabana",
+            "Bosque templado",
+            "Humedal",
+            "Montaña",
+            "Camino",
+            "Bosque",
+            "Lava",
+            "Tonala"
     };
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL = 1;

@@ -47,13 +47,9 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     public void onBindViewHolder(@NonNull final Item holder, int position) {
         final int key = Integer.parseInt(hashCodes.keySet().toArray()[position].toString());
         final LandItem item = hashCodes.get(key).get(0);
-        final String name = Constants.biomes[position];
+        final String name = item.getName();
         int color = item.getColor();
         String code = String.valueOf(item.getCode());
-
-        for (LandItem i :hashCodes.get(key)) {
-            i.setName(name);
-        }
 
         holder.color.setBackgroundColor(color);
         holder.code.setText(code);
@@ -74,6 +70,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                                     holder.name.setText(text.getText().toString());
                                     i.setName(text.getText().toString());
                                 }
+                                notifyDataSetChanged();
                             }
                         })
                         .setMessage(mainActivity.getString(R.string.change_name_message))

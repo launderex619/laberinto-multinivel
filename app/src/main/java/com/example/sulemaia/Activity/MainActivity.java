@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private Hashtable<Integer, ArrayList<LandItem>> hashCodes;
     private View.OnClickListener buttonActions;
     private LandItem lastItemInTablePressed;
+    private LandItem initialItem;
+    private LandItem finalItem;
+    private ArrayList<String> biomesInUse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //instancia de elementos del xml
         hashCodes = new Hashtable<>();
+        biomesInUse = new ArrayList<>();
         Toolbar toolbar = findViewById(R.id.toolbar);
         TextView tvActivityTitle = findViewById(R.id.toolbar_title);
         btnCancel = findViewById(R.id.btn_cancel);
@@ -121,7 +125,39 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else if(requestCode == Constants.RESULT_FOR_FIELD_INFORMATION){
-
+                String name;
+                int color;
+                boolean isFinal, isInitial;
+                name = data.getStringExtra("name");
+                color = data.getIntExtra("color", lastItemInTablePressed.getColor());
+                isFinal = data.getBooleanExtra("isFinal", lastItemInTablePressed.isFinal());
+                isInitial = data.getBooleanExtra("isInitial", lastItemInTablePressed.isInitial());
+                for (LandItem item : hashCodes.get(lastItemInTablePressed.getCode())){
+                    item.setName(name);
+                    item.setColor(color);
+                }
+                if(isFinal){
+                    if(finalItem == null){
+                        finalItem = lastItemInTablePressed;
+                        finalItem.setFinal(isFinal);
+                    }
+                    else{
+                        finalItem.setFinal(!isFinal);
+                        finalItem = lastItemInTablePressed;
+                        finalItem.setFinal(isFinal);
+                    }
+                }
+                if(isInitial){
+                    if(initialItem == null){
+                        initialItem = lastItemInTablePressed;
+                        initialItem.setInitial(isInitial);
+                    }
+                    else{
+                        initialItem.setInitial(!isInitial);
+                        initialItem = lastItemInTablePressed;
+                        initialItem.setInitial(isInitial);
+                    }
+                }
             }
         }
     }
@@ -162,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void createTable() {
         int tempValuesForFile[][] = Constants.mapValues;
+        Hashtable<Integer, String> names = new Hashtable<>();
+        int counter = 0;
         //creacion de las filas
         for (int i = 0; i < tempValuesForFile.length; i++) {
             TableRow tableRow = new TableRow(MainActivity.this);
@@ -177,6 +215,11 @@ public class MainActivity extends AppCompatActivity {
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
                 item = new LandItem(btn, tempValuesForFile[i][j]);
+                if(!names.containsKey(tempValuesForFile[i][j])){
+                    names.put(tempValuesForFile[i][j], Constants.biomes[counter]);
+                    counter++;
+                }
+                item.setName(names.get(tempValuesForFile[i][j]));
                 btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
                         TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / tempValuesForFile.length
@@ -235,9 +278,19 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 LandItem lndI = (LandItem) v.getTag();
+                biomesInUse.clear();
+                for (int i = 0; i < hashCodes.size(); i++){
+                    final int key = Integer.parseInt(hashCodes.keySet().toArray()[i].toString());
+                    biomesInUse.add(hashCodes.get(key).get(0).getName());
+                }
                 lastItemInTablePressed = lndI;
                 Intent intent = new Intent(getApplicationContext(), FieldInformation.class);
-                intent.putExtra("field", lndI);
+                intent.putStringArrayListExtra("biomesInUse", biomesInUse);
+                intent.putExtra("name", lastItemInTablePressed.getName());
+                intent.putExtra("color", lastItemInTablePressed.getColor());
+                intent.putExtra("isFinal", lastItemInTablePressed.isFinal());
+                intent.putExtra("isInitial", lastItemInTablePressed.isInitial());
+                intent.putExtra("code", lastItemInTablePressed.getCode());
                 startActivityForResult(intent, Constants.RESULT_FOR_FIELD_INFORMATION);
             }
         }
