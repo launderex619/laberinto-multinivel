@@ -8,4 +8,11 @@
     <string name="read_permission">No se otorgaron los permisos de escritura</string>
     <string name="read_permission_granted">Permisos de lectura otorgados</string>
     <string name="read_permission_denied">Permisos de lectura denegados</string>
+    <string name="content_file">Contenido del archivo</string>
+    <string name="invalid_content">Contenido no valido</string>
+    <string name="unselected_file">No se selecciono ningun archivo</string>
+    <string name="land_name_test">Pantano</string>
+    <string name="land_code_test">100</string>
+    <string name="change_name">Cambiar nombre</string>
+    <string name="change_name_message">Escribe el nuevo nombre a asignar al elemento</string>
 </resources>

@@ -44,9 +44,16 @@
 
             <TableLayout
                 android:id="@+id/table_map"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:layout_margin="5dp"></TableLayout>
+                android:layout_margin="5dp"
+                android:stretchColumns="*"
+                android:shrinkColumns="*"
+                android:layout_gravity="center"
+                >
+
+            </TableLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -54,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             >
 
             <Button
@@ -64,7 +71,8 @@
                 android:layout_height="75dp"
                 android:layout_gravity="center"
                 android:text="@string/add_map"
-                android:textSize="@dimen/button_add_map_textsize" />
+                android:textSize="@dimen/button_add_map_textsize"
+                />
 
             <LinearLayout
                 android:id="@+id/ll_items_holder"

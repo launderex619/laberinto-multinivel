@@ -37,6 +37,11 @@
         <item name="android:textColor">@color/blackColor</item>
     </style>
 
+    <style name="AppTheme.TextRow">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/blackColor</item>
+    </style>
+
     <color name="blackColor">#000000</color>
     <color name="white">#ffffff</color>
 </resources>

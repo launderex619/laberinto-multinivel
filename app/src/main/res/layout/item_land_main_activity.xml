@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    >
+
+    <ImageView
+        android:id="@+id/item_land_color"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/backgroundGrayColor"
+        />
+
+    <TextView
+        android:id="@+id/item_land_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/land_name_test"
+        android:textColor="@color/blackColor"
+        android:textSize="@dimen/text_item_size"
+        android:theme="@style/AppTheme.TextRow"
+        android:focusable="true"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/item_land_code"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="end"
+        android:text="@string/land_code_test"
+        android:textColor="@color/blackColor"
+        android:textSize="@dimen/text_item_size"
+        android:theme="@style/AppTheme.TextRow" />
+</LinearLayout>
