@@ -137,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
                     item.setColor(color);
                 }
                 if(isFinal){
+                    if(initialItem == lastItemInTablePressed){
+                        initialItem = null;
+                    }
                     if(finalItem == null){
                         finalItem = lastItemInTablePressed;
                         finalItem.setFinal(isFinal);
@@ -148,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if(isInitial){
+                    if(finalItem == lastItemInTablePressed){
+                        finalItem = null;
+                    }
                     if(initialItem == null){
                         initialItem = lastItemInTablePressed;
                         initialItem.setInitial(isInitial);
@@ -158,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         initialItem.setInitial(isInitial);
                     }
                 }
+                rvWorldElements.getAdapter().notifyDataSetChanged();
             }
         }
     }

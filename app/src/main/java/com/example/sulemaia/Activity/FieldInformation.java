@@ -144,7 +144,7 @@ public class FieldInformation extends AppCompatActivity {
             }
             else if (v == fabOk){
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("name", etFieldName.getText());
+                returnIntent.putExtra("name", etFieldName.getText().toString());
                 returnIntent.putExtra("color", color);
                 returnIntent.putExtra("isInitial", cbIsInitial.isChecked());
                 returnIntent.putExtra("isFinal", cbIsFinal.isChecked());
