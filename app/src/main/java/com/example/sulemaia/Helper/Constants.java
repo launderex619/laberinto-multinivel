@@ -105,7 +105,6 @@ public class Constants {
         String line;
         String[] numbers;
         Reader stringReader = new StringReader(fileDataUnFiltered);
-
         try (BufferedReader bufferedReader = new BufferedReader(stringReader)) {
             while ((line = bufferedReader.readLine()) != null) {
                 numbers = line.split(",");
@@ -114,6 +113,7 @@ public class Constants {
                 for (int i = 0; i < size; i++) {
                     array[i] = Integer.parseInt(numbers[i]);
                 }
+                mapValues = new int[array.length][size];
                 for (int y = 0; y < array.length; y++) {
                     mapValues[row][y] = array[y];
                 }
