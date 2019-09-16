@@ -108,12 +108,18 @@ public class MainActivity extends AppCompatActivity {
                         (new SimpleOkDialog(this,
                                 getString(R.string.content_file), fileDataUnFiltered))
                                 .build().create().show();
-                        //funcion que implementara silva:
-                        if(Constants.isValidStringInFile(fileDataUnFiltered)){
+                        if(Constants.isValidStringInFile(fileDataUnFiltered) == 0){
                             showMapAndElements(Constants.getFileArray(fileDataUnFiltered));
-                        }// else {
-                        // crearAlertDialog diciendo que el archivo no es valido xd
-                        //}
+                        }else {
+                            if(Constants.isValidStringInFile(fileDataUnFiltered) == 1){
+                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos",fileDataUnFiltered))
+                                        .build().create().show();
+                            }
+                            else if(Constants.isValidStringInFile(fileDataUnFiltered) == 1){
+                                (new SimpleOkDialog(this, "Error en los datos del archivo", fileDataUnFiltered))
+                                        .build().create().show();
+                            }
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
 

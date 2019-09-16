@@ -50,21 +50,13 @@ public class Constants {
     public static final int REQUEST_FILE_READ_EXTERNAL = 2;
     public static final int RESULT_FOR_FIELD_INFORMATION = 3;
 
-    public static boolean isValidStringInFile(String fileContent) {
-        //estoy pensando que quiza en lugar de regresar true o false deberia regresar un codigo de accion
-        //de esta manera si no es valido podemos mostrar el mensaje dependiendo su codigo, por ejemplo
-        //si es correcto regresamos 0, si es incorrecto vemos por que, si tiene letras, regresamos 1,
-        //si tiene distinto numero de columnas regresamos 2, etc, etc, al final de cuentas estamos en
-        //una clase helper que nos ayuda a verificar estos datos, simplemente creamos constantes como
-        //un hashTable de errorCodes, y ya validamos mejor en la aplicacion, no se que opines.
-
-        //pd, no es necesario que comentes linea por linea xd, solo bloques de codigo
+    public static int isValidStringInFile(String fileContent) {
         String line;
         String[] numbers;
         int result;
         int total = 0, localTotal = 0;
         boolean exists = false;
-        ArrayList<Integer> codes = new ArrayList<Integer>();
+        ArrayList<Integer> codes = new ArrayList<>();
         Pattern regPattern = Pattern.compile("\\d+");
         Matcher match;
         Reader stringReader = new StringReader(fileContent);
@@ -76,12 +68,14 @@ public class Constants {
                 localTotal = numbers.length;
 
                 if (total != localTotal)
-                    return false;
-                ///Numero inconsistente de datos.
+                    return 1;
+                    ///Numero inconsistente de datos entre cada fila.
                 for (String a : numbers) {
                     match = regPattern.matcher(a);
                     if (!match.matches()) {
-                        return false;
+                        return 2;
+                        ///En lugar de un numero, tenemos un dato erroneo, e.g.:
+                        ///float, char, negative, comas juntas.
                     } else {
                         result = Integer.parseInt(a);
                         ///Revisamos que el numero leido no este en el arreglo de codigos y lo agregamos.
@@ -90,26 +84,44 @@ public class Constants {
                                 exists = true;
                             }
                         }
-                        if (exists == false) {
+                        if (!exists) {
                             codes.add(result);
                         }
                     }
                     exists = false;
                 }
             }
-            for (int z = 0; z < codes.size(); z++) {
-                System.out.println(codes.get(z));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+        ///txt correcto.
+    }
+
+    public static int[][] getFileArray(String fileDataUnFiltered) {
+        int[][] mapValues = new int[0][0];
+        int row = 0;
+        int size;
+        String line;
+        String[] numbers;
+        Reader stringReader = new StringReader(fileDataUnFiltered);
+
+        try (BufferedReader bufferedReader = new BufferedReader(stringReader)) {
+            while ((line = bufferedReader.readLine()) != null) {
+                numbers = line.split(",");
+                size = numbers.length;
+                int[] array = new int[size];
+                for (int i = 0; i < size; i++) {
+                    array[i] = Integer.parseInt(numbers[i]);
+                }
+                for (int y = 0; y < array.length; y++) {
+                    mapValues[row][y] = array[y];
+                }
+                row++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
-    }
-
-    public static int[][] getFileArray(String fileDataUnFiltered) {
-        //modifica esta funcion
-        //vas a recibir exactamente la misma cadena que la funcion de arriba, pero ya tienes la certeza que es valida
-        //solo crea un arreglo de enteros y lo debuelves
         return mapValues;
     }
 }
