@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
                                 getString(R.string.content_file), fileDataUnFiltered))
                                 .build().create().show();
                         //funcion que implementara silva:
-                        //if(isStringValid(fileDataUnFiltered){
-                        showMapAndElements();
-                        //} else {
+                        if(Constants.isValidStringInFile(fileDataUnFiltered)){
+                            showMapAndElements(Constants.getFileArray(fileDataUnFiltered));
+                        }// else {
                         // crearAlertDialog diciendo que el archivo no es valido xd
                         //}
                     } catch (IOException e) {
@@ -169,14 +169,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showMapAndElements() {
+    private void showMapAndElements(int [][]mapValues) {
         btnCancel.setVisibility(View.VISIBLE);
         btnOk.setVisibility(View.VISIBLE);
         btnAddFile.setVisibility(View.GONE);
         tvTextSelectedMap.setVisibility(View.GONE);
         llItemsHolder.setVisibility(View.VISIBLE);
 
-        createTable();
+        createTable(mapValues);
         setColorsToTable();
         setReciclerViewForCodes();
     }
@@ -203,42 +203,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void createTable() {
-        int tempValuesForFile[][] = Constants.mapValues;
+    private void createTable(int [][]mapValues) {
         Hashtable<Integer, String> names = new Hashtable<>();
         int counter = 0;
         //creacion de las filas
-        for (int i = 0; i < tempValuesForFile.length; i++) {
+        for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(MainActivity.this);
             tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
             tableRow.setGravity(Gravity.CENTER);
             //creacion de los textViews de cada columna
-            for (int j = 0; j < tempValuesForFile[i].length; j++) {
+            for (int j = 0; j < mapValues[i].length; j++) {
                 Button btn = new Button(MainActivity.this);
                 LandItem item;
-                btn.setText(String.valueOf(tempValuesForFile[i][j]));
+                btn.setText(String.valueOf(mapValues[i][j]));
                 btn.setTextSize(10f);
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
-                item = new LandItem(btn, tempValuesForFile[i][j]);
-                if(!names.containsKey(tempValuesForFile[i][j])){
-                    names.put(tempValuesForFile[i][j], Constants.biomes[counter]);
+                item = new LandItem(btn, mapValues[i][j]);
+                if(!names.containsKey(mapValues[i][j])){
+                    names.put(mapValues[i][j], Constants.biomes[counter]);
                     counter++;
                 }
-                item.setName(names.get(tempValuesForFile[i][j]));
+                item.setName(names.get(mapValues[i][j]));
                 btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / tempValuesForFile.length
+                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / mapValues.length
                 ));
                 //si el elemento ya existe en la tabla agrego el btn a la lista
-                if(hashCodes.containsKey(tempValuesForFile[i][j])){
-                    hashCodes.get(tempValuesForFile[i][j]).add(item);
+                if(hashCodes.containsKey(mapValues[i][j])){
+                    hashCodes.get(mapValues[i][j]).add(item);
                 }
                 else{
                     ArrayList<LandItem> arrayListItems = new ArrayList<LandItem>();
                     arrayListItems.add(item);
-                    hashCodes.put(tempValuesForFile[i][j], arrayListItems);
+                    hashCodes.put(mapValues[i][j], arrayListItems);
                 }
             }
             tlTableMap.addView(tableRow);
