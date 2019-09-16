@@ -99,28 +99,18 @@ public class Constants {
     }
 
     public static int[][] getFileArray(String fileDataUnFiltered) {
-        int[][] mapValues = new int[0][0];
-        int row = 0;
-        int size;
-        String line;
-        String[] numbers;
-        Reader stringReader = new StringReader(fileDataUnFiltered);
-        try (BufferedReader bufferedReader = new BufferedReader(stringReader)) {
-            while ((line = bufferedReader.readLine()) != null) {
-                numbers = line.split(",");
-                size = numbers.length;
-                int[] array = new int[size];
-                for (int i = 0; i < size; i++) {
-                    array[i] = Integer.parseInt(numbers[i]);
-                }
-                mapValues = new int[array.length][size];
-                for (int y = 0; y < array.length; y++) {
-                    mapValues[row][y] = array[y];
-                }
-                row++;
+        int[][] mapValues;
+        int i = 0, j = 0;
+        String[] rows = fileDataUnFiltered.split("(\n|\n\r|\r\n|\r)");
+        mapValues = new int[rows.length][rows[0].split(",").length];
+        for (String line: rows) {
+            String[] numbers = line.split(",");
+            for (String number: numbers) {
+                mapValues[i][j] = Integer.parseInt(number);
+                j++;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            j=0;
+            i++;
         }
         return mapValues;
     }
