@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.sulemaia.Adapter.MainActivityAdapter;
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.REQUEST_FILE_READ_EXTERNAL) {
                 if (data != null) {
                     Uri fileUri = data.getData();
@@ -108,14 +110,13 @@ public class MainActivity extends AppCompatActivity {
                         (new SimpleOkDialog(this,
                                 getString(R.string.content_file), fileDataUnFiltered))
                                 .build().create().show();
-                        if(Constants.isValidStringInFile(fileDataUnFiltered) == 0){
-                            showMapAndElements(Constants.getFileArray(fileDataUnFiltered));
-                        }else {
-                            if(Constants.isValidStringInFile(fileDataUnFiltered) == 1){
-                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos",fileDataUnFiltered))
+                        if (Parser.isValidStringInFile(fileDataUnFiltered) == 0) {
+                            showMapAndElements(Parser.getFileArray(fileDataUnFiltered));
+                        } else {
+                            if (Parser.isValidStringInFile(fileDataUnFiltered) == 1) {
+                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos", fileDataUnFiltered))
                                         .build().create().show();
-                            }
-                            else if(Constants.isValidStringInFile(fileDataUnFiltered) == 1){
+                            } else if (Parser.isValidStringInFile(fileDataUnFiltered) == 1) {
                                 (new SimpleOkDialog(this, "Error en los datos del archivo", fileDataUnFiltered))
                                         .build().create().show();
                             }
@@ -129,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
                             getString(R.string.content_file), getString(R.string.unselected_file)))
                             .build().create().show();
                 }
-            }
-            else if(requestCode == Constants.RESULT_FOR_FIELD_INFORMATION){
+            } else if (requestCode == Constants.RESULT_FOR_FIELD_INFORMATION) {
                 String name;
                 int color;
                 boolean isFinal, isInitial;
@@ -138,33 +138,31 @@ public class MainActivity extends AppCompatActivity {
                 color = data.getIntExtra("color", lastItemInTablePressed.getColor());
                 isFinal = data.getBooleanExtra("isFinal", lastItemInTablePressed.isFinal());
                 isInitial = data.getBooleanExtra("isInitial", lastItemInTablePressed.isInitial());
-                for (LandItem item : hashCodes.get(lastItemInTablePressed.getCode())){
+                for (LandItem item : hashCodes.get(lastItemInTablePressed.getCode())) {
                     item.setName(name);
                     item.setColor(color);
                 }
-                if(isFinal){
-                    if(initialItem == lastItemInTablePressed){
+                if (isFinal) {
+                    if (initialItem == lastItemInTablePressed) {
                         initialItem = null;
                     }
-                    if(finalItem == null){
+                    if (finalItem == null) {
                         finalItem = lastItemInTablePressed;
                         finalItem.setFinal(isFinal);
-                    }
-                    else{
+                    } else {
                         finalItem.setFinal(!isFinal);
                         finalItem = lastItemInTablePressed;
                         finalItem.setFinal(isFinal);
                     }
                 }
-                if(isInitial){
-                    if(finalItem == lastItemInTablePressed){
+                if (isInitial) {
+                    if (finalItem == lastItemInTablePressed) {
                         finalItem = null;
                     }
-                    if(initialItem == null){
+                    if (initialItem == null) {
                         initialItem = lastItemInTablePressed;
                         initialItem.setInitial(isInitial);
-                    }
-                    else{
+                    } else {
                         initialItem.setInitial(!isInitial);
                         initialItem = lastItemInTablePressed;
                         initialItem.setInitial(isInitial);
@@ -175,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showMapAndElements(int [][]mapValues) {
+    private void showMapAndElements(int[][] mapValues) {
         btnCancel.setVisibility(View.VISIBLE);
         btnOk.setVisibility(View.VISIBLE);
         btnAddFile.setVisibility(View.GONE);
@@ -203,13 +201,13 @@ public class MainActivity extends AppCompatActivity {
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256),
                     rnd.nextInt(256));
-            for(LandItem item: hashCodes.get(i)){
+            for (LandItem item : hashCodes.get(i)) {
                 item.setColor(color);
             }
         }
     }
 
-    private void createTable(int [][]mapValues) {
+    private void createTable(int[][] mapValues) {
         Hashtable<Integer, String> names = new Hashtable<>();
         int counter = 0;
         //creacion de las filas
@@ -226,8 +224,8 @@ public class MainActivity extends AppCompatActivity {
                 btn.setTextSize(10f);
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
-                item = new LandItem(btn, mapValues[i][j]);
-                if(!names.containsKey(mapValues[i][j])){
+                item = new LandItem(btn, mapValues[i][j], new Point(j, i));
+                if (!names.containsKey(mapValues[i][j])) {
                     names.put(mapValues[i][j], Constants.biomes[counter]);
                     counter++;
                 }
@@ -237,10 +235,9 @@ public class MainActivity extends AppCompatActivity {
                         TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / mapValues.length
                 ));
                 //si el elemento ya existe en la tabla agrego el btn a la lista
-                if(hashCodes.containsKey(mapValues[i][j])){
+                if (hashCodes.containsKey(mapValues[i][j])) {
                     hashCodes.get(mapValues[i][j]).add(item);
-                }
-                else{
+                } else {
                     ArrayList<LandItem> arrayListItems = new ArrayList<LandItem>();
                     arrayListItems.add(item);
                     hashCodes.put(mapValues[i][j], arrayListItems);
@@ -286,12 +283,40 @@ public class MainActivity extends AppCompatActivity {
                     startIntentToReadFile();
                 }
             } else if (v == btnOk) {
-
-            }
-            else{
+                if (finalItem != null) {
+                    if (initialItem != null) {
+                        Intent intent = new Intent(getApplicationContext(), CharacterSelector.class);
+                        ArrayList<String> biomes = new ArrayList<>();
+                        ArrayList<Integer> codes = new ArrayList<>();
+                        for(int i = 0;i < hashCodes.size(); i++) {
+                            int key = Integer.parseInt(hashCodes.keySet().toArray()[i].toString());
+                            biomes.add(hashCodes.get(key).get(0).getName());
+                            codes.add(hashCodes.get(key).get(0).getCode());
+                        }
+                        intent.putExtra("contentFile", fileDataUnFiltered);
+                        intent.putExtra("initialX", initialItem.getPosition().x);
+                        intent.putExtra("initialY", initialItem.getPosition().y);
+                        intent.putExtra("finalX", finalItem.getPosition().x);
+                        intent.putExtra("finalY", finalItem.getPosition().y);
+                        intent.putStringArrayListExtra("biomes", biomes);
+                        intent.putIntegerArrayListExtra("codes", codes);
+                        startActivity(intent);
+                    } else {
+                        new SimpleOkDialog(MainActivity.this, getString(R.string.error),
+                                getString(R.string.please_select_initial))
+                                .build()
+                                .setIcon(getDrawable(R.drawable.ic_warning_lime_24dp)).show();
+                    }
+                } else {
+                    new SimpleOkDialog(MainActivity.this, getString(R.string.error),
+                            getString(R.string.please_select_final))
+                            .build()
+                            .setIcon(getDrawable(R.drawable.ic_warning_lime_24dp)).show();
+                }
+            } else {
                 LandItem lndI = (LandItem) v.getTag();
                 biomesInUse.clear();
-                for (int i = 0; i < hashCodes.size(); i++){
+                for (int i = 0; i < hashCodes.size(); i++) {
                     final int key = Integer.parseInt(hashCodes.keySet().toArray()[i].toString());
                     biomesInUse.add(hashCodes.get(key).get(0).getName());
                 }

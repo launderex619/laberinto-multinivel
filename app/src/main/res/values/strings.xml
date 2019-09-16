@@ -21,7 +21,14 @@
     <string name="field_initial">Inicial</string>
     <string name="field_final">Final</string>
     <string name="field_information_activity_name">Informacion de celda</string>
+    <string name="character_selector_activity_name">Selector de personaje</string>
     <string name="character_name">Nombre</string>
     <string name="character_main">Este personaje es mejor en:</string>
     <string name="character_main_field">Oceano</string>
+    <string name="please_select_final">Por favor selecciona un final</string>
+    <string name="error">Error</string>
+    <string name="please_select_initial">Por favor selecciona un inicial</string>
+    <string name="accept">Aceptar</string>
+    <string name="biome">Bioma</string>
+    <string name="costs">Costos</string>
 </resources>

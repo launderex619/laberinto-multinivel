@@ -10,8 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Activity.CharacterSelector"></activity>
+        android:theme="@style/AppTheme"
+        >
+        <activity
+            android:name=".Activity.CharacterSelector"
+            android:label="@string/character_selector_activity_name"
+            android:parentActivityName=".Activity.MainActivity"
+            ></activity>
         <activity
             android:name=".Activity.FieldInformation"
             android:label="@string/field_information_activity_name"
@@ -25,7 +30,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

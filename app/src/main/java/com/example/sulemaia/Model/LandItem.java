@@ -1,6 +1,7 @@
 package com.example.sulemaia.Model;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.widget.Button;
 
@@ -11,14 +12,24 @@ public class LandItem  {
     private boolean isFinal;
     private String Name;
     private int color;
+    private Point position;
 
-    public LandItem(Button btnItemMap, int code) {
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
+    public LandItem(Button btnItemMap, int code, Point pos) {
         this.btnItemMap = btnItemMap;
         this.code = code;
         isInitial = false;
         isFinal = false;
         Name = "";
         color = 0;
+        position = pos;
     }
 
     public Button getBtnItemMap() {
