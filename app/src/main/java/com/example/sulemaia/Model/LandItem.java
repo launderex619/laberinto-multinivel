@@ -2,12 +2,7 @@ package com.example.sulemaia.Model;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.io.Serializable;
 
 public class LandItem  {
     private Button btnItemMap;

@@ -44,6 +44,17 @@
         <item name="android:textColor">@color/blackColor</item>
     </style>
 
+    <style name="AppTheme.TextCharacterName">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="AppTheme.TextCharacterMain">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
     <color name="blackColor">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="dark_gray">#353535</color>
 </resources>

@@ -11,14 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.FieldInformation"
-            android:parentActivityName=".Activity.MainActivity"
-            android:label="@string/field_information_activity_name">
-
-        </activity>
+        <activity android:name=".Activity.CharacterSelector"></activity>
+        <activity
+            android:name=".Activity.FieldInformation"
+            android:label="@string/field_information_activity_name"
+            android:parentActivityName=".Activity.MainActivity"></activity>
         <activity
             android:name=".Activity.Tutorial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.LoadScreen"
             android:label="@string/title_activity_load_screen"
@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".Activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
