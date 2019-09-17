@@ -45,21 +45,23 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
         holder.cvImage.setImageDrawable(characterItems.get(position).getIcon());
         holder.tvName.setText(characterItems.get(position).getName());
         holder.tvMain.setText(characterItems.get(position).getMainLand());
-        ButtonActions buttonActions = new ButtonActions(holder);
+        ButtonActions buttonActions = new ButtonActions(holder, position);
 
         holder.ibInfo.setOnClickListener(buttonActions);
     }
 
     public class ButtonActions implements View.OnClickListener {
         Item item;
-        public ButtonActions(Item holder) {
+        int pos;
+        public ButtonActions(Item holder, int pos) {
             item = holder;
+            this.pos = pos;
         }
 
         @Override
         public void onClick(View v) {
             if(v == item.ibInfo){
-                new CustomCharacterInfoDialog().showDialog(activity);
+                new CustomCharacterInfoDialog().showDialog(activity, characterItems.get(pos));
             }
         }
     }

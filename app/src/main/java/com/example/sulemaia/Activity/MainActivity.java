@@ -288,16 +288,19 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), CharacterSelector.class);
                         ArrayList<String> biomes = new ArrayList<>();
                         ArrayList<Integer> codes = new ArrayList<>();
+                        ArrayList<Integer> colors = new ArrayList<>();
                         for(int i = 0;i < hashCodes.size(); i++) {
                             int key = Integer.parseInt(hashCodes.keySet().toArray()[i].toString());
                             biomes.add(hashCodes.get(key).get(0).getName());
                             codes.add(hashCodes.get(key).get(0).getCode());
+                            colors.add(hashCodes.get(key).get(0).getColor());
                         }
                         intent.putExtra("contentFile", fileDataUnFiltered);
                         intent.putExtra("initialX", initialItem.getPosition().x);
                         intent.putExtra("initialY", initialItem.getPosition().y);
                         intent.putExtra("finalX", finalItem.getPosition().x);
                         intent.putExtra("finalY", finalItem.getPosition().y);
+                        intent.putIntegerArrayListExtra("colors", colors);
                         intent.putStringArrayListExtra("biomes", biomes);
                         intent.putIntegerArrayListExtra("codes", codes);
                         startActivity(intent);

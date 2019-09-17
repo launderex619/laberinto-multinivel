@@ -12,6 +12,16 @@ public class CharacterItem {
     private ArrayList<String> lands;
     private ArrayList<Float> landsCosts;
 
+    public ArrayList<Integer> getLandsColors() {
+        return landsColors;
+    }
+
+    public void setLandsColors(ArrayList<Integer> landsColors) {
+        this.landsColors = landsColors;
+    }
+
+    private ArrayList<Integer> landsColors;
+
 
     public CharacterItem(Drawable icon, String name, String mainLand) {
         this.name = name;

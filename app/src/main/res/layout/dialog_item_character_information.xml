@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    >
+    android:layout_gravity="center">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -13,133 +12,86 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/congratulation_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
+            android:layout_gravity="bottom"
             android:layout_marginTop="32dp"
-            android:id="@+id/congratulation_card"
             app:cardBackgroundColor="#FAFAFA"
-            app:cardElevation="0dp"
-            android:layout_gravity="bottom">
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/dialog_item_character_name"
+                    android:id="@+id/tv_dialog_item_character_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/primary_text_light"
                     android:layout_marginTop="48dp"
-                    android:text="@string/character_name"/>
+                    android:text="@string/character_name"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="24sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/biome"
-                        android:textSize="18sp"
-                        android:textColor="@android:color/primary_text_light"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="50dp"
-                        />
+                        android:text="@string/biome"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/costs"
                         android:layout_marginStart="50dp"
-                        android:textSize="18sp"
-                        android:textColor="@android:color/primary_text_light"
                         android:layout_marginTop="10dp"
-                        />
+                        android:text="@string/costs"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_dialog_item_character"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            >
-                            <TextView
-                                android:id="@+id/tv_dialog_item_character_biomes"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxWidth="120dp"
-                                android:textSize="16sp"
-                                android:textColor="@color/dark_gray"
-                                android:textAlignment="center"
-                                android:text="You've just displayed this awesome pop up view "
-                                />
+                </androidx.recyclerview.widget.RecyclerView>
 
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            >
-                            <TextView
-                                android:id="@+id/tv_dialog_item_character_costs"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="16sp"
-                                android:maxWidth="120dp"
-                                android:textColor="@color/dark_gray"
-                                android:textAlignment="textStart"
-                                android:text="You've just displayed this awesome pop up view "
-                                />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </ScrollView>
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accept"
                     android:id="@+id/btn_dialog_item_character_ok"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:textColor="@android:color/white"
                     style="@style/AppTheme.Button"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/accept"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_dialog_item_character_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_gravity="center_horizontal|top"
             android:padding="1dp"
             android:src="@drawable/cabra"
-            android:layout_gravity="center_horizontal|top"
-            app:civ_border_width="3dp"
             app:civ_border_color="#FAFAFA"
-            />
+            app:civ_border_width="3dp" />
 
     </FrameLayout>
 </LinearLayout>

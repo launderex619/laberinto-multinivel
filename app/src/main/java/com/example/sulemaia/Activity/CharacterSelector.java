@@ -30,6 +30,7 @@ public class CharacterSelector extends AppCompatActivity {
     private CharacterSelectorAdapter characterAdapter;
     private ArrayList<String> biomes = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
+    private ArrayList<Integer> colors = new ArrayList<>();
     private int initialX, initialY, finalX, finalY;
     private String contentFile;
 
@@ -46,6 +47,7 @@ public class CharacterSelector extends AppCompatActivity {
         Intent intent = getIntent();
         biomes.addAll(intent.getStringArrayListExtra("biomes"));
         contentFile = intent.getStringExtra("contentFile");
+        colors.addAll(intent.getIntegerArrayListExtra("colors"));
         codes.addAll(intent.getIntegerArrayListExtra("codes"));
         initialX = intent.getIntExtra("initialX", 0);
         finalX = intent.getIntExtra("finalX", 0);
@@ -62,6 +64,7 @@ public class CharacterSelector extends AppCompatActivity {
             }
             item.setLands(biomes);
             item.setLandsCosts(costs);
+            item.setLandsColors(colors);
         }
 
         fabAddCharacter = findViewById(R.id.fab_add_character);
