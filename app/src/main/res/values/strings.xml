@@ -31,4 +31,12 @@
     <string name="accept">Aceptar</string>
     <string name="biome">Bioma</string>
     <string name="costs">Costos</string>
+    <string name="aply_cost">Aplica\ncosto</string>
+    <string name="cost">Costo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="character_activity">Personaje</string>
+    <string name="cancel">Cancelar</string>
+    <string name="color">Color</string>
 </resources>

@@ -11,5 +11,6 @@
   <color name="backgroundGrayColor">#e1e2e1</color>
     <color name="label">#151515</color>
   <color name="label_ligth">#252525</color>
+    <color name="red">#FF0000</color>
 
 </resources>

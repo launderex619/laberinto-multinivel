@@ -5,7 +5,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.widget.Button;
 
-public class LandItem  {
+public class LandItem {
     private Button btnItemMap;
     private int code;
     private boolean isInitial;

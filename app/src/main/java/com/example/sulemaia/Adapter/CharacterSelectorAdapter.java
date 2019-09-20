@@ -1,18 +1,21 @@
 package com.example.sulemaia.Adapter;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sulemaia.Activity.CharacterEditor;
 import com.example.sulemaia.Activity.CharacterSelector;
 import com.example.sulemaia.Dialog.CustomCharacterInfoDialog;
+import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
 
@@ -20,17 +23,21 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSelectorAdapter.Item>{
+import static com.example.sulemaia.Helper.Constants.icons;
+
+public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSelectorAdapter.Item> {
 
     private ArrayList<CharacterItem> characterItems;
     private int resource;
     private CharacterSelector activity;
+
 
     public CharacterSelectorAdapter(ArrayList<CharacterItem> characterItems, int resource,
                                     CharacterSelector activity) {
         this.characterItems = characterItems;
         this.resource = resource;
         this.activity = activity;
+
     }
 
     @NonNull
@@ -42,17 +49,25 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
 
     @Override
     public void onBindViewHolder(@NonNull Item holder, int position) {
-        holder.cvImage.setImageDrawable(characterItems.get(position).getIcon());
+
+        holder.cvImage.setImageDrawable(icons[characterItems.get(position).getIcon()]);
         holder.tvName.setText(characterItems.get(position).getName());
         holder.tvMain.setText(characterItems.get(position).getMainLand());
         ButtonActions buttonActions = new ButtonActions(holder, position);
 
         holder.ibInfo.setOnClickListener(buttonActions);
+        holder.ibEdit.setOnClickListener(buttonActions);
+    }
+
+    @Override
+    public int getItemCount() {
+        return characterItems.size();
     }
 
     public class ButtonActions implements View.OnClickListener {
         Item item;
         int pos;
+
         public ButtonActions(Item holder, int pos) {
             item = holder;
             this.pos = pos;
@@ -60,24 +75,24 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
 
         @Override
         public void onClick(View v) {
-            if(v == item.ibInfo){
+            if (v == item.ibInfo) {
                 new CustomCharacterInfoDialog().showDialog(activity, characterItems.get(pos));
+            } else if (v == item.ibEdit) {
+                Intent intent = new Intent(activity, CharacterEditor.class);
+                intent.putExtra("item", characterItems.get(pos));
+                activity.startActivityForResult(intent, Constants.RESULT_FOR_CHARACTER_EDITOR);
             }
         }
-    }
-    @Override
-    public int getItemCount() {
-        return characterItems.size();
     }
 
     public class Item extends RecyclerView.ViewHolder {
 
-        private CircleImageView cvImage;
-        private ImageButton ibInfo;
-        private ImageButton ibEdit;
-        private AppCompatCheckBox cbSelect;
-        private TextView tvName;
-        private TextView tvMain;
+        public CircleImageView cvImage;
+        public ImageButton ibInfo;
+        public ImageButton ibEdit;
+        public AppCompatCheckBox cbSelect;
+        public TextView tvName;
+        public TextView tvMain;
 
         public Item(@NonNull View itemView) {
             super(itemView);

@@ -1,13 +1,13 @@
 package com.example.sulemaia.Activity;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.example.sulemaia.Adapter.CharacterSelectorAdapter;
 import com.example.sulemaia.Helper.Constants;
@@ -17,10 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Random;
 
-import static com.example.sulemaia.Helper.Constants.biomes;
+import static com.example.sulemaia.Helper.Constants.charactersConstant;
 
 public class CharacterSelector extends AppCompatActivity {
 
@@ -38,10 +36,11 @@ public class CharacterSelector extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_selector);
-        CharacterItem[] charactersConstant = {
-                new CharacterItem(getDrawable(R.drawable.calamar), "Calamar", Constants.biomes[8]),
-                new CharacterItem(getDrawable(R.drawable.cabra), "Cabra", Constants.biomes[12]),
-                new CharacterItem(getDrawable(R.drawable.mariposa), "Mariposa", Constants.biomes[14]),
+
+        Constants.icons = new Drawable[]{
+                getDrawable(R.drawable.calamar),
+                getDrawable(R.drawable.cabra),
+                getDrawable(R.drawable.mariposa)
         };
 
         Intent intent = getIntent();
@@ -59,8 +58,8 @@ public class CharacterSelector extends AppCompatActivity {
 
         for (CharacterItem item : characters) {
             ArrayList<Float> costs = new ArrayList<>();
-            for (int i = 0; i < biomes.size(); i++){
-                costs.add((float) ((Math.round( (float) Math.random()*100f) * 100f) / 100d));
+            for (int i = 0; i < biomes.size(); i++) {
+                costs.add((float) ((Math.round((float) Math.random() * 100f) * 100f) / 100d));
             }
             item.setLands(biomes);
             item.setLandsCosts(costs);
@@ -72,6 +71,7 @@ public class CharacterSelector extends AppCompatActivity {
         characterAdapter = new CharacterSelectorAdapter(characters,
                 R.layout.item_character_selector_activity,
                 this);
+
         LinearLayoutManager mainLayoutManager = new LinearLayoutManager(getApplicationContext());
         mainLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvCharacters.setLayoutManager(mainLayoutManager);

@@ -29,11 +29,10 @@ public class DialogCharacterInformationAdapter extends RecyclerView.Adapter<Dial
     private int resource;
     private Activity activity;
 
-    public DialogCharacterInformationAdapter(ArrayList<String> biomes, ArrayList<Float> costs,
-                                             ArrayList<Integer> colors, int resource, Activity activity) {
-        this.biomes = biomes;
-        this.costs = costs;
-        this.colors = colors;
+    public DialogCharacterInformationAdapter(CharacterItem item, int resource, Activity activity) {
+        this.biomes = item.getLands();
+        this.costs = item.getLandsCosts();
+        this.colors = item.getLandsColors();
         this.resource = resource;
         this.activity = activity;
     }

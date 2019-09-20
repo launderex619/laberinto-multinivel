@@ -1,16 +1,21 @@
 package com.example.sulemaia.Model;
 
-import android.graphics.drawable.Drawable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
-public class CharacterItem {
+public class CharacterItem implements Serializable {
     private String name;
     private String mainLand;
-    private Drawable icon;
+    private int icon;
     private ArrayList<String> lands;
     private ArrayList<Float> landsCosts;
+    private ArrayList<Integer> landsColors;
+
+    public CharacterItem(int icon, String name, String mainLand) {
+        this.name = name;
+        this.mainLand = mainLand;
+        this.icon = icon;
+    }
 
     public ArrayList<Integer> getLandsColors() {
         return landsColors;
@@ -18,15 +23,6 @@ public class CharacterItem {
 
     public void setLandsColors(ArrayList<Integer> landsColors) {
         this.landsColors = landsColors;
-    }
-
-    private ArrayList<Integer> landsColors;
-
-
-    public CharacterItem(Drawable icon, String name, String mainLand) {
-        this.name = name;
-        this.mainLand = mainLand;
-        this.icon = icon;
     }
 
     public ArrayList<String> getLands() {
@@ -61,11 +57,11 @@ public class CharacterItem {
         this.mainLand = mainLand;
     }
 
-    public Drawable getIcon() {
+    public int getIcon() {
         return icon;
     }
 
-    public void setIcon(Drawable icon) {
+    public void setIcon(int icon) {
         this.icon = icon;
     }
 
