@@ -23,16 +23,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DialogCharacterInformationAdapter extends RecyclerView.Adapter<DialogCharacterInformationAdapter.Item> {
 
-    private ArrayList<String> biomes;
-    private ArrayList<Float> costs;
-    private ArrayList<Integer> colors;
+    private CharacterItem item;
     private int resource;
     private Activity activity;
 
     public DialogCharacterInformationAdapter(CharacterItem item, int resource, Activity activity) {
-        this.biomes = item.getLands();
-        this.costs = item.getLandsCosts();
-        this.colors = item.getLandsColors();
+        this.item = item;
         this.resource = resource;
         this.activity = activity;
     }
@@ -46,14 +42,19 @@ public class DialogCharacterInformationAdapter extends RecyclerView.Adapter<Dial
 
     @Override
     public void onBindViewHolder(@NonNull Item holder, int position) {
-        holder.cvImage.setImageDrawable(new ColorDrawable(colors.get(position)));;
-        holder.tvName.setText(biomes.get(position));
-        holder.tvCost.setText("" + costs.get(position));
+        holder.cvImage.setImageDrawable(new ColorDrawable(item.getLandsColors().get(position)));
+        holder.tvName.setText(item.getLands().get(position));
+        if (item.getCanPass().get(position)) {
+            holder.tvCost.setText(String.format("%.2f", item.getLandsCosts().get(position)));
+        }
+        else{
+            holder.tvCost.setText("N/A");
+        }
 
     }
     @Override
     public int getItemCount() {
-        return biomes.size();
+        return item.getLands().size();
     }
 
     public class Item extends RecyclerView.ViewHolder {

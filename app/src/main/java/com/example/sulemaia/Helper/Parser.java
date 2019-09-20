@@ -1,5 +1,8 @@
 package com.example.sulemaia.Helper;
 
+import android.text.InputFilter;
+import android.text.Spanned;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -71,5 +74,24 @@ public class Parser {
             i++;
         }
         return mapValues;
+    }
+
+    public static class DecimalDigitsInputFilter implements InputFilter {
+
+        Pattern mPattern;
+
+        public DecimalDigitsInputFilter(int digitsBeforeZero,int digitsAfterZero) {
+            mPattern=Pattern.compile("[0-9]{0," + (digitsBeforeZero-1) + "}+((\\.[0-9]{0," + (digitsAfterZero-1) + "})?)||(\\.)?");
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            Matcher matcher=mPattern.matcher(dest);
+            if(!matcher.matches())
+                return "";
+            return null;
+        }
+
     }
 }

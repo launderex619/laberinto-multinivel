@@ -52,8 +52,8 @@
             <EditText
                 android:id="@+id/et_item_character_editor_cost"
                 android:textSize="18sp"
-                android:layout_width="80dp"
-                android:lines="1"
+                android:layout_width="100dp"
+                android:maxLength="7"
                 android:textColor="@color/dark_gray"
                 android:layout_height="wrap_content"
                 android:hint="@string/cost"

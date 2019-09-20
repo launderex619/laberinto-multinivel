@@ -1,7 +1,9 @@
 package com.example.sulemaia.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
 
@@ -37,11 +40,33 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         return new Item(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewHolder(@NonNull Item holder, int position) {
-        //holder.etCost.setText(characterItem.getLandsCosts().get(position).toString());
-        holder.tvName.setText(characterItem.getName());
+    public void onBindViewHolder(@NonNull final Item holder, final int position) {
+        holder.etCost.setFilters(new InputFilter[]{new Parser.DecimalDigitsInputFilter(5, 2)});
+        holder.etCost.setText(String.format("%.2f", characterItem.getLandsCosts().get(position)));
+        holder.tvName.setText(characterItem.getLands().get(position));
         holder.cvImage.setImageDrawable(new ColorDrawable(characterItem.getLandsColors().get(position)));
+        holder.cbSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!holder.cbSelect.isChecked()) {
+                    holder.etCost.setText("");
+                    holder.etCost.setHint("N/A");
+                    holder.etCost.setEnabled(false);
+                } else {
+                    holder.etCost.setText(String.format("%.2f", characterItem.getLandsCosts().get(position)));
+                    holder.etCost.setHint(activity.getString(R.string.cost));
+                    holder.etCost.setEnabled(true);
+                }
+            }
+        });
+        if (!characterItem.getCanPass().get(position)){
+            holder.cbSelect.setChecked(false);
+            holder.etCost.setText("");
+            holder.etCost.setHint("N/A");
+            holder.etCost.setEnabled(false);
+        }
     }
 
     @Override

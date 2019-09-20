@@ -58,12 +58,15 @@ public class CharacterSelector extends AppCompatActivity {
 
         for (CharacterItem item : characters) {
             ArrayList<Float> costs = new ArrayList<>();
+            ArrayList<Boolean> canPass = new ArrayList<>();
             for (int i = 0; i < biomes.size(); i++) {
-                costs.add((float) ((Math.round((float) Math.random() * 100f) * 100f) / 100d));
+                costs.add(0.00f);
+                canPass.add(true);
             }
             item.setLands(biomes);
             item.setLandsCosts(costs);
             item.setLandsColors(colors);
+            item.setCanPass(canPass);
         }
 
         fabAddCharacter = findViewById(R.id.fab_add_character);

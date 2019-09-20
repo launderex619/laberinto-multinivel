@@ -44,7 +44,6 @@ public class CharacterEditor extends AppCompatActivity {
         btnOk = findViewById(R.id.fab_character_editor_ok);
         characterAdapter = new CharacterEditorAdapter(item, R.layout.item_character_editor_activity, this);
 
-
         etName.setText(item.getName());
         ivImage.setImageDrawable(icons[item.getIcon()]);
         btnOk.setOnClickListener(buttonActions);
@@ -71,41 +70,3 @@ public class CharacterEditor extends AppCompatActivity {
         }
     }
 }
-/*
-    final Dialog dialog = new Dialog(activity);
-    CircleImageView ivImage;
-    EditText etName;
-    RecyclerView rvEditor;
-    CharacterEditorAdapter characterAdapter;
-    ButtonActions buttonActions = new ButtonActions(dialog);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-                setCancelable(false);
-                setContentView(R.layout.dialog_character_editor);
-                getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-
-
-                show();
-                }
-
-private class ButtonActions implements View.OnClickListener {
-    Dialog dialog;
-
-    public ButtonActions(Dialog dialog) {
-        this.dialog = dialog;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == fabCancel) {
-            dismiss();
-        } else if (v == btnOk) {
-
-        }
-        else if (v == btnDelete){
-
-        }
-    }
-}
-*/

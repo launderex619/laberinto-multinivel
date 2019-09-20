@@ -10,6 +10,15 @@ public class CharacterItem implements Serializable {
     private ArrayList<String> lands;
     private ArrayList<Float> landsCosts;
     private ArrayList<Integer> landsColors;
+    private ArrayList<Boolean> canPass;
+
+    public ArrayList<Boolean> getCanPass() {
+        return canPass;
+    }
+
+    public void setCanPass(ArrayList<Boolean> canPass) {
+        this.canPass = canPass;
+    }
 
     public CharacterItem(int icon, String name, String mainLand) {
         this.name = name;
