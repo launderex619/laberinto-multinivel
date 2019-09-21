@@ -42,7 +42,7 @@ public class Constants {
             "Lava",
             "Tonala"
     };
-    public static Drawable[] icons;
+    public static Drawable[] characterIcons;
     public static CharacterItem[] charactersConstant = {
             new CharacterItem(0, "Calamar", Constants.biomes[8]),
             new CharacterItem(1, "Cabra", Constants.biomes[12]),

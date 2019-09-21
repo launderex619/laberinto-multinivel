@@ -1,7 +1,6 @@
 package com.example.sulemaia.Adapter;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.sulemaia.Helper.Constants.icons;
+import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSelectorAdapter.Item> {
 
@@ -50,7 +49,7 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
     @Override
     public void onBindViewHolder(@NonNull Item holder, int position) {
 
-        holder.cvImage.setImageDrawable(icons[characterItems.get(position).getIcon()]);
+        holder.cvImage.setImageDrawable(characterIcons[characterItems.get(position).getIcon()]);
         holder.tvName.setText(characterItems.get(position).getName());
         holder.tvMain.setText(characterItems.get(position).getMainLand());
         ButtonActions buttonActions = new ButtonActions(holder, position);

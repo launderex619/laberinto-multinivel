@@ -18,7 +18,7 @@ import com.example.sulemaia.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.sulemaia.Helper.Constants.icons;
+import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 public class CustomCharacterInfoDialog {
 
@@ -40,11 +40,10 @@ public class CustomCharacterInfoDialog {
         rvItems = dialog.findViewById(R.id.rv_dialog_item_character);
 
         tvName.setText(item.getName());
-        ivImage.setImageDrawable(icons[item.getIcon()]);
+        ivImage.setImageDrawable(characterIcons[item.getIcon()]);
         mDialogOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity,"Okay" , Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

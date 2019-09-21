@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:layout_gravity="center"
+    android:layout_margin="50dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_icon"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        >
+
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_dialog_character_editor_icon"
+        android:layout_width="match_parent"
+        android:layout_height="290dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:id="@+id/btn_dialog_character_editor_ok"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/accept"
+        android:textColor="@android:color/white"
+        android:layout_gravity="bottom"/>
+</LinearLayout>

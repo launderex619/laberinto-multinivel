@@ -33,6 +33,10 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         this.activity = activity;
     }
 
+    public CharacterItem getCharacterItem() {
+        return characterItem;
+    }
+
     @NonNull
     @Override
     public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -1,40 +1,48 @@
 package com.example.sulemaia.Activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sulemaia.Adapter.CharacterEditorAdapter;
+import com.example.sulemaia.Dialog.CustomCharacterEditorDialog;
+import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.sulemaia.Helper.Constants.icons;
+import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 public class CharacterEditor extends AppCompatActivity {
 
+    CharacterItem item;
     private Button btnOk;
     private ImageButton btnDelete;
     private CircleImageView ivImage;
     private EditText etName;
     private RecyclerView rvEditor;
     private CharacterEditorAdapter characterAdapter;
+    private LinearLayoutManager mainLayoutManager;
     private ButtonActions buttonActions = new ButtonActions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        CharacterItem item = (CharacterItem) intent.getSerializableExtra("item");
+        item = (CharacterItem) intent.getSerializableExtra("item");
         setContentView(R.layout.activity_character_editor);
 
         btnDelete = findViewById(R.id.btn_character_editor_delete);
@@ -45,11 +53,12 @@ public class CharacterEditor extends AppCompatActivity {
         characterAdapter = new CharacterEditorAdapter(item, R.layout.item_character_editor_activity, this);
 
         etName.setText(item.getName());
-        ivImage.setImageDrawable(icons[item.getIcon()]);
+        ivImage.setImageDrawable(characterIcons[item.getIcon()]);
         btnOk.setOnClickListener(buttonActions);
         btnDelete.setOnClickListener(buttonActions);
+        ivImage.setOnClickListener(buttonActions);
 
-        LinearLayoutManager mainLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mainLayoutManager = new LinearLayoutManager(getApplicationContext());
         mainLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvEditor.setLayoutManager(mainLayoutManager);
         rvEditor.setAdapter(characterAdapter);
@@ -57,15 +66,85 @@ public class CharacterEditor extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onBackPressed();
+        return true;
+    }
 
     private class ButtonActions implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
             if (v == btnOk) {
-
+                boolean canOk = true;
+                CharacterItem item = characterAdapter.getCharacterItem();
+                if(etName.getText().toString().equals("")){
+                    etName.setError(getString(R.string.not_valid_value), getDrawable(R.drawable.ic_warning_lime_24dp));
+                    canOk = false;
+                }
+                for (int i = 0; i < mainLayoutManager.getChildCount(); i++) {
+                    View view = mainLayoutManager.getChildAt(i);
+                    AppCompatCheckBox cbSelect = view.findViewById(R.id.cb_item_character_editor_apply);
+                    EditText etCost = view.findViewById(R.id.et_item_character_editor_cost);
+                    if (cbSelect.isChecked()) {
+                        if (etCost.getText().toString().equals("")) {
+                            etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
+                            canOk = false;
+                        } else {
+                            float cost = 0.00f;
+                            cost += Float.parseFloat(etCost.getText().toString());
+                            if (cost < 0) {
+                                etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
+                                canOk = false;
+                            } else {
+                                item.getLandsCosts().set(i, cost);
+                            }
+                        }
+                    } else {
+                        item.getCanPass().set(i, false);
+                        item.getLandsCosts().set(i, 0.00f);
+                    }
+                }
+                if (canOk) {
+                    Intent result = new Intent();
+                    result.putExtra("item", item);
+                    result.putExtra("isDeleted", false);
+                    setResult(Constants.RESULT_FOR_CHARACTER_EDITOR, result);
+                    finish();
+                }
             } else if (v == btnDelete) {
+                new AlertDialog.Builder(CharacterEditor.this)
+                        .setIcon(R.drawable.ic_warning_lime_24dp)
+                        .setTitle(getString(R.string.delete_character))
+                        .setMessage(getString(R.string.confirmation_delete_character))
+                        .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent result = new Intent();
+                                result.putExtra("item", item);
+                                result.putExtra("isDeleted", true);
+                                setResult(Constants.RESULT_FOR_CHARACTER_EDITOR, result);
+                                finish();
+                            }
 
+                        })
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show();
+            } else if (v == ivImage){
+                final CustomCharacterEditorDialog cdialog = new CustomCharacterEditorDialog();
+                final Dialog dialog = cdialog.showDialog(CharacterEditor.this);
+                Button mDialogOk = dialog.findViewById(R.id.btn_dialog_character_editor_ok);
+                mDialogOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int iconPos = cdialog.getAdapter().getIconSelected();
+                        if (iconPos != -1) {
+                            ivImage.setImageDrawable(characterIcons[iconPos]);
+                        }
+                        dialog.dismiss();
+                    }
+                });
             }
         }
     }

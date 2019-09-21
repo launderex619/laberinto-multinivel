@@ -37,7 +37,8 @@ public class CharacterSelector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_selector);
 
-        Constants.icons = new Drawable[]{
+        // TODO: necesitamos mas iconos para los personajes, pienso que unos 10 estarian bien
+        Constants.characterIcons = new Drawable[]{
                 getDrawable(R.drawable.calamar),
                 getDrawable(R.drawable.cabra),
                 getDrawable(R.drawable.mariposa)

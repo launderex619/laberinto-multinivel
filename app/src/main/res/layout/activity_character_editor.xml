@@ -4,126 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.CharacterEditor"
     android:background="@color/backgroundGrayColor"
-    >
+    tools:context=".Activity.CharacterEditor">
 
-    <androidx.cardview.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
-        android:elevation="0dp"
-        app:cardBackgroundColor="#FAFAFA"
-        app:cardCornerRadius="4dp">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/btn_character_editor_delete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:backgroundTint="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_delete_24dp" />
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="50dp"
+            android:elevation="0dp"
+            app:cardBackgroundColor="#FAFAFA"
+            app:cardCornerRadius="4dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_character_editor_image"
-                android:layout_marginTop="10dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal|top"
-                android:elevation="2dp"
-                android:src="@drawable/cabra"
-                app:civ_border_color="@color/secondaryLightColor"
-                app:civ_border_width="3dp" />
-
-
-            <EditText
-                android:id="@+id/et_character_editor_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:hint="@string/character_name"
-                android:text="@string/character_name"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="40sp"
-                 />
+            <ImageButton
+                android:id="@+id/btn_character_editor_delete"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_delete_24dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_character_editor_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="10dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/cabra"
+                    app:civ_border_color="@color/secondaryLightColor"
+                    app:civ_border_width="3dp" />
+
+
+                <EditText
+                    android:id="@+id/et_character_editor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:text="@string/color"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/character_name"
+                    android:text="@string/character_name"
                     android:textColor="@android:color/primary_text_light"
-                    android:textSize="18sp" />
+                    android:textSize="40sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="@string/biome"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lines="2"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
                     android:gravity="center"
-                    android:text="@string/aply_cost"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="18sp" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/costs"
-                    android:layout_marginStart="20dp"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/color"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/biome"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:text="@string/aply_cost"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/costs"
+                        android:textColor="@android:color/primary_text_light"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_character_editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <Button
+                    android:id="@+id/fab_character_editor_ok"
+                    style="@style/AppTheme.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="20dp"
+                    android:text="@string/accept" />
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_character_editor"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                >
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <Button
-                android:id="@+id/fab_character_editor_ok"
-                style="@style/AppTheme.Button"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_margin="20dp"
-                android:text="@string/accept"
-                />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

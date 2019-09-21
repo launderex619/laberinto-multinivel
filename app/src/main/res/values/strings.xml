@@ -39,4 +39,9 @@
     <string name="character_activity">Personaje</string>
     <string name="cancel">Cancelar</string>
     <string name="color">Color</string>
+    <string name="delete_character">Borrar caracter</string>
+    <string name="confirmation_delete_character">¿Estas segur@ de querer borrar este caracter?</string>
+    <string name="not_valid_value">Valor no valido</string>
+    <string name="delete">Borrar</string>
+    <string name="choose_icon">Elige un icono</string>
 </resources>

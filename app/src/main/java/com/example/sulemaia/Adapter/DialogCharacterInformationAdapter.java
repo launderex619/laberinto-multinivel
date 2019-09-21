@@ -5,19 +5,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sulemaia.Activity.CharacterSelector;
-import com.example.sulemaia.Dialog.CustomCharacterInfoDialog;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,12 +40,12 @@ public class DialogCharacterInformationAdapter extends RecyclerView.Adapter<Dial
         holder.tvName.setText(item.getLands().get(position));
         if (item.getCanPass().get(position)) {
             holder.tvCost.setText(String.format("%.2f", item.getLandsCosts().get(position)));
-        }
-        else{
+        } else {
             holder.tvCost.setText("N/A");
         }
 
     }
+
     @Override
     public int getItemCount() {
         return item.getLands().size();
