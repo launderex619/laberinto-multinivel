@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
                         (new SimpleOkDialog(this,
                                 getString(R.string.content_file), fileDataUnFiltered))
                                 .build().create().show();
-                        if (Parser.isValidStringInFile(fileDataUnFiltered) == 0) {
+                        if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.FULL_FILE_IS_CORRECT) {
                             showMapAndElements(Parser.getFileArray(fileDataUnFiltered));
                         } else {
-                            if (Parser.isValidStringInFile(fileDataUnFiltered) == 1) {
-                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos", fileDataUnFiltered))
+                            if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INCONSISTENT_ID_QUANTITY) {
+                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos", null))
                                         .build().create().show();
-                            } else if (Parser.isValidStringInFile(fileDataUnFiltered) == 1) {
-                                (new SimpleOkDialog(this, "Error en los datos del archivo", fileDataUnFiltered))
+                            } else if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INVALID_FILE_CONTENT) {
+                                (new SimpleOkDialog(this, "Error en los datos del archivo", null))
                                         .build().create().show();
                             }
                         }

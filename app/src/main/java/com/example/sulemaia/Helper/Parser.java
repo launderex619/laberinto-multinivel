@@ -12,6 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
+    public static final int FULL_FILE_IS_CORRECT = 0;
+    public static final int INCONSISTENT_ID_QUANTITY = 1;
+    public static final int INVALID_FILE_CONTENT = 2;
+
     public static int isValidStringInFile(String fileContent) {
         String line;
         String[] numbers;
@@ -24,6 +28,9 @@ public class Parser {
         Reader stringReader = new StringReader(fileContent);
         try(BufferedReader bufferedReader = new BufferedReader(stringReader)) {
             while ((line = bufferedReader.readLine()) != null) {
+                if(line.charAt(line.length()-1) == ','){
+                    return 1;
+                }
                 numbers = line.split(",");
                 if (total == 0)
                     total = numbers.length;
@@ -78,10 +85,11 @@ public class Parser {
 
     public static class DecimalDigitsInputFilter implements InputFilter {
 
-        Pattern mPattern;
+        Pattern mPattern, nPattern;
 
         public DecimalDigitsInputFilter(int digitsBeforeZero,int digitsAfterZero) {
-            mPattern=Pattern.compile("[0-9]{0," + (digitsBeforeZero-1) + "}+((\\.[0-9]{0," + (digitsAfterZero-1) + "})?)||(\\.)?");
+            //mPattern=Pattern.compile("[0-9]{0," + (digitsBeforeZero) + "}+((\\.[0-9]{0," + (digitsAfterZero-1) + "})?)||(\\.)?");
+            mPattern = Pattern.compile("([0-9]{0," + (digitsBeforeZero) + "})(\\.[0-9]{0," + (digitsAfterZero-1)  + "})?");
         }
 
         @Override
