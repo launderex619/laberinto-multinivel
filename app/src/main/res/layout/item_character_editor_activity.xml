@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/tv_item_character_editor_name"
-                android:layout_width="140dp"
+                android:layout_width="110dp"
                 android:lines="1"
                 android:layout_height="wrap_content"
                 android:text="@string/character_name"
