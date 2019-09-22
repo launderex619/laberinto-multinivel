@@ -88,12 +88,13 @@ public class CharacterEditor extends AppCompatActivity {
                     AppCompatCheckBox cbSelect = view.findViewById(R.id.cb_item_character_editor_apply);
                     EditText etCost = view.findViewById(R.id.et_item_character_editor_cost);
                     if (cbSelect.isChecked()) {
-                        if (etCost.getText().toString().equals("")) {
+                        String etTextCost = etCost.getText().toString();
+                        if (etTextCost.equals("") || etTextCost.equals(",")) {
                             etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
                             canOk = false;
                         } else {
                             float cost = 0.00f;
-                            cost += Float.parseFloat(etCost.getText().toString());
+                            cost += Float.parseFloat(etTextCost);
                             if (cost < 0) {
                                 etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
                                 canOk = false;

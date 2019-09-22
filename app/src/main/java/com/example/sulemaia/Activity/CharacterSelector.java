@@ -1,10 +1,12 @@
 package com.example.sulemaia.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,6 +83,17 @@ public class CharacterSelector extends AppCompatActivity {
         rvCharacters.setLayoutManager(mainLayoutManager);
         rvCharacters.setAdapter(characterAdapter);
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK){
+            if(requestCode == Constants.RESULT_FOR_CHARACTER_EDITOR) {
+
+            }
+        }
 
     }
 
