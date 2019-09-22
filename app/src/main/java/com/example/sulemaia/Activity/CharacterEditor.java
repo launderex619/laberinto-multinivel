@@ -28,7 +28,8 @@ import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 public class CharacterEditor extends AppCompatActivity {
 
-    CharacterItem item;
+    private CharacterItem item;
+    private int position;
     private Button btnOk;
     private ImageButton btnDelete;
     private CircleImageView ivImage;
@@ -43,6 +44,7 @@ public class CharacterEditor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         item = (CharacterItem) intent.getSerializableExtra("item");
+        position = intent.getIntExtra("position", 0);
         setContentView(R.layout.activity_character_editor);
 
         btnDelete = findViewById(R.id.btn_character_editor_delete);
@@ -79,9 +81,12 @@ public class CharacterEditor extends AppCompatActivity {
             if (v == btnOk) {
                 boolean canOk = true;
                 CharacterItem item = characterAdapter.getCharacterItem();
-                if(etName.getText().toString().equals("")){
+                String name = etName.getText().toString();
+                if(name.equals("")){
                     etName.setError(getString(R.string.not_valid_value), getDrawable(R.drawable.ic_warning_lime_24dp));
                     canOk = false;
+                } else {
+                    item.setName(name);
                 }
                 for (int i = 0; i < mainLayoutManager.getChildCount(); i++) {
                     View view = mainLayoutManager.getChildAt(i);
@@ -89,7 +94,7 @@ public class CharacterEditor extends AppCompatActivity {
                     EditText etCost = view.findViewById(R.id.et_item_character_editor_cost);
                     if (cbSelect.isChecked()) {
                         String etTextCost = etCost.getText().toString();
-                        if (etTextCost.equals("") || etTextCost.equals(",")) {
+                        if (etTextCost.equals("") || etTextCost.equals(".")) {
                             etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
                             canOk = false;
                         } else {
@@ -111,7 +116,8 @@ public class CharacterEditor extends AppCompatActivity {
                     Intent result = new Intent();
                     result.putExtra("item", item);
                     result.putExtra("isDeleted", false);
-                    setResult(Constants.RESULT_FOR_CHARACTER_EDITOR, result);
+                    result.putExtra("position", position);
+                    setResult(RESULT_OK, result);
                     finish();
                 }
             } else if (v == btnDelete) {
@@ -125,7 +131,8 @@ public class CharacterEditor extends AppCompatActivity {
                                 Intent result = new Intent();
                                 result.putExtra("item", item);
                                 result.putExtra("isDeleted", true);
-                                setResult(Constants.RESULT_FOR_CHARACTER_EDITOR, result);
+                                result.putExtra("position", position);
+                                setResult(RESULT_OK, result);
                                 finish();
                             }
 
@@ -142,6 +149,7 @@ public class CharacterEditor extends AppCompatActivity {
                         int iconPos = cdialog.getAdapter().getIconSelected();
                         if (iconPos != -1) {
                             ivImage.setImageDrawable(characterIcons[iconPos]);
+                            item.setIcon(iconPos);
                         }
                         dialog.dismiss();
                     }

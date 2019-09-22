@@ -44,4 +44,5 @@
     <string name="not_valid_value">Valor no valido</string>
     <string name="delete">Borrar</string>
     <string name="choose_icon">Elige un icono</string>
+    <string name="cant_less_1_item">No puede haber menos de 1 personaje :c</string>
 </resources>

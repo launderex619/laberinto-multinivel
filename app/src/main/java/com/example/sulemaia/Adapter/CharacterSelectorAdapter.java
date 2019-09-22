@@ -15,6 +15,7 @@ import com.example.sulemaia.Activity.CharacterEditor;
 import com.example.sulemaia.Activity.CharacterSelector;
 import com.example.sulemaia.Dialog.CustomCharacterInfoDialog;
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Interface.iCharacterSelected;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
 
@@ -29,10 +30,13 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
     private ArrayList<CharacterItem> characterItems;
     private int resource;
     private CharacterSelector activity;
+    private iCharacterSelected iSelected;
 
 
-    public CharacterSelectorAdapter(ArrayList<CharacterItem> characterItems, int resource,
+    public CharacterSelectorAdapter(iCharacterSelected iSelected,
+                                    ArrayList<CharacterItem> characterItems, int resource,
                                     CharacterSelector activity) {
+        this.iSelected = iSelected;
         this.characterItems = characterItems;
         this.resource = resource;
         this.activity = activity;
@@ -56,6 +60,7 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
 
         holder.ibInfo.setOnClickListener(buttonActions);
         holder.ibEdit.setOnClickListener(buttonActions);
+        holder.cbSelect.setOnClickListener(buttonActions);
     }
 
     @Override
@@ -79,7 +84,10 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
             } else if (v == item.ibEdit) {
                 Intent intent = new Intent(activity, CharacterEditor.class);
                 intent.putExtra("item", characterItems.get(pos));
+                intent.putExtra("position", pos);
                 activity.startActivityForResult(intent, Constants.RESULT_FOR_CHARACTER_EDITOR);
+            } else if (v == item.cbSelect){
+                iSelected.setCharacter(pos);
             }
         }
     }
