@@ -15,14 +15,29 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_character"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
         android:layout_margin="50dp"
-        style="@style/AppTheme.Button"
-        android:src="@drawable/ic_add_black_24dp"
-        />
+        >
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:src="@drawable/ic_add_black_24dp"
+            />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_character_selector_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            style="@style/AppTheme.Button"
+            android:src="@drawable/check_icon"
+            />
+
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

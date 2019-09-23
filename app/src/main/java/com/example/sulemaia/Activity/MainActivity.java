@@ -8,14 +8,15 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.example.sulemaia.Adapter.MainActivityAdapter;
-import com.example.sulemaia.Dialog.SimpleOkDialog;
-import com.example.sulemaia.Helper.Constants;
-import com.example.sulemaia.Helper.Parser;
-import com.example.sulemaia.Model.LandItem;
-import com.example.sulemaia.R;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,15 +27,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.example.sulemaia.Adapter.MainActivityAdapter;
+import com.example.sulemaia.Dialog.SimpleOkDialog;
+import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.Parser;
+import com.example.sulemaia.Model.LandItem;
+import com.example.sulemaia.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -216,12 +215,37 @@ public class MainActivity extends AppCompatActivity {
             tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
             tableRow.setGravity(Gravity.CENTER);
-            //creacion de los textViews de cada columna
+            if (i == 0) {
+                TableRow tableRowT = new TableRow(MainActivity.this);
+                tableRowT.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+                tableRowT.setGravity(Gravity.CENTER);
+                for (int j = 0; j <= mapValues[i].length; j++) {
+                    TextView tv = new TextView(MainActivity.this);
+                    tv.setText(Parser.getLetterForInt(j));
+                    tv.setTextSize(8f);
+                    tv.setGravity(Gravity.CENTER);
+                    tableRowT.addView(tv, new TableRow.LayoutParams(
+                            TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)
+                    ));
+                }
+                tlTableMap.addView(tableRowT);
+            }
+            //creacion de los Buttons de cada columna
             for (int j = 0; j < mapValues[i].length; j++) {
+                //TODO: revisar por que carajos deja de servir si le quito el && i != 0
+                if (j == 0 && i != 0) {
+                    TextView tv = new TextView(MainActivity.this);
+                    tv.setText(String.valueOf(i));
+                    tv.setTextSize(8f);
+                    tv.setGravity(Gravity.CENTER);
+                    tableRow.addView(tv, new TableRow.LayoutParams(
+                            TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)));
+                }
                 Button btn = new Button(MainActivity.this);
                 LandItem item;
                 btn.setText(String.valueOf(mapValues[i][j]));
-                btn.setTextSize(10f);
+                btn.setTextSize(8f);
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
                 item = new LandItem(btn, mapValues[i][j], new Point(j, i));
@@ -232,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setName(names.get(mapValues[i][j]));
                 btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / mapValues.length
+                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)
                 ));
                 //si el elemento ya existe en la tabla agrego el btn a la lista
                 if (hashCodes.containsKey(mapValues[i][j])) {
@@ -289,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<String> biomes = new ArrayList<>();
                         ArrayList<Integer> codes = new ArrayList<>();
                         ArrayList<Integer> colors = new ArrayList<>();
-                        for(int i = 0;i < hashCodes.size(); i++) {
+                        for (int i = 0; i < hashCodes.size(); i++) {
                             int key = Integer.parseInt(hashCodes.keySet().toArray()[i].toString());
                             biomes.add(hashCodes.get(key).get(0).getName());
                             codes.add(hashCodes.get(key).get(0).getCode());
@@ -300,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("initialY", initialItem.getPosition().y);
                         intent.putExtra("finalX", finalItem.getPosition().x);
                         intent.putExtra("finalY", finalItem.getPosition().y);
+                        intent.putExtra("initialName", initialItem.getName());
+                        intent.putExtra("finalName", finalItem.getName());
                         intent.putIntegerArrayListExtra("colors", colors);
                         intent.putStringArrayListExtra("biomes", biomes);
                         intent.putIntegerArrayListExtra("codes", codes);

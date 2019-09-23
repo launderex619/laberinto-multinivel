@@ -1,5 +1,6 @@
 package com.example.sulemaia.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -28,7 +29,7 @@ import static com.example.sulemaia.Helper.Constants.charactersConstant;
 
 public class CharacterSelector extends AppCompatActivity implements iCharacterSelected {
 
-    private FloatingActionButton fabAddCharacter;
+    private FloatingActionButton fabAddCharacter, fabNext;
     private LinearLayoutManager mainLayoutManager;
     private RecyclerView rvCharacters;
     private ArrayList<CharacterItem> characters;
@@ -37,8 +38,11 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
     private ArrayList<Integer> codes = new ArrayList<>();
     private ArrayList<Integer> colors = new ArrayList<>();
     private int initialX, initialY, finalX, finalY;
-    private String contentFile;
+    private String contentFile, initialNameField, finalNameField;
+    private ButtonActions buttonActions;
+    private int characterSelected;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,8 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         Intent intent = getIntent();
         biomes.addAll(intent.getStringArrayListExtra("biomes"));
         contentFile = intent.getStringExtra("contentFile");
+        initialNameField = intent.getStringExtra("initialName");
+        finalNameField = intent.getStringExtra("finalName");
         colors.addAll(intent.getIntegerArrayListExtra("colors"));
         codes.addAll(intent.getIntegerArrayListExtra("codes"));
         initialX = intent.getIntExtra("initialX", 0);
@@ -79,17 +85,16 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         }
 
         fabAddCharacter = findViewById(R.id.fab_add_character);
+        fabNext = findViewById(R.id.fab_character_selector_next);
         rvCharacters = findViewById(R.id.rv_character_items);
         characterAdapter = new CharacterSelectorAdapter(this, characters,
                 R.layout.item_character_selector_activity,
                 this);
+        fabNext.setVisibility(View.GONE);
+        buttonActions = new ButtonActions();
 
-        fabAddCharacter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: terminar esto
-            }
-        });
+        fabAddCharacter.setOnClickListener(buttonActions);
+        fabNext.setOnClickListener(buttonActions);
 
         mainLayoutManager = new LinearLayoutManager(getApplicationContext());
         mainLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -145,13 +150,92 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         return true;//super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void setCharacter(int pos) {
         for (int i = 0; i < mainLayoutManager.getChildCount(); i++) {
             AppCompatCheckBox cb = mainLayoutManager.getChildAt(i).findViewById(R.id.cb_item_select_character);
-
             if (pos != i) {
                 cb.setChecked(false);
+            } else {
+                if (cb.isChecked()) {
+                    fabNext.setVisibility(View.VISIBLE);
+                    characterSelected = pos;
+                } else {
+                    fabNext.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    private class ButtonActions implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (v == fabAddCharacter) {
+                if (characters.size() < 5) {
+                    CharacterItem item = new CharacterItem(0,
+                            charactersConstant[0].getName(),
+                            characters.get(0).getLands().get(0));
+                    ArrayList<Float> costs = new ArrayList<>();
+                    ArrayList<Boolean> canPass = new ArrayList<>();
+                    for (int i = 0; i < biomes.size(); i++) {
+                        costs.add(0.00f);
+                        canPass.add(true);
+                    }
+                    item.setLands(biomes);
+                    item.setLandsCosts(costs);
+                    item.setLandsColors(colors);
+                    item.setCanPass(canPass);
+                    characters.add(item);
+                    characterAdapter.notifyDataSetChanged();
+                } else {
+                    (new SimpleOkDialog(CharacterSelector.this, getString(R.string.error),
+                            getString(R.string.cant_more_5_items)))
+                            .build()
+                            .setIcon(R.drawable.ic_warning_lime_24dp)
+                            .show();
+                }
+            } else if (v == fabNext) {
+                CharacterItem item = characters.get(characterSelected);
+                String landCantPass;
+                int i = 0;
+                boolean canPass = true;
+                for (String land : item.getLands()) {
+                    if (land.equals(initialNameField)) {
+                        if (!item.getCanPass().get(i)) {
+                            canPass = false;
+                            (new SimpleOkDialog(CharacterSelector.this, getString(R.string.error),
+                                    getString(R.string.cant_start_in_field)))
+                                    .build()
+                                    .setIcon(R.drawable.ic_warning_lime_24dp)
+                                    .show();
+                        }
+                    }
+                    else if (land.equals(finalNameField)){
+                        if (!item.getCanPass().get(i)) {
+                            canPass = false;
+                            (new SimpleOkDialog(CharacterSelector.this, getString(R.string.error),
+                                    getString(R.string.cant_finish_in_field)))
+                                    .build()
+                                    .setIcon(R.drawable.ic_warning_lime_24dp)
+                                    .show();
+                        }
+                    }
+                    i++;
+                }
+                if (canPass){
+                    Intent intent = new Intent(getApplicationContext(), GameScreen.class);
+                    intent.putExtra("contentFile", contentFile);
+                    intent.putExtra("character", characters.get(characterSelected));
+                    intent.putExtra("initialX", initialX);
+                    intent.putExtra("finalX", finalX);
+                    intent.putExtra("initialY", initialY);
+                    intent.putExtra("finalY", finalY);
+                    intent.putExtra("biomes", biomes);
+                    intent.putExtra("colors", colors);
+                    intent.putExtra("codes", codes);
+                    startActivity(intent);
+                }
             }
         }
     }

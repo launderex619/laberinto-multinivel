@@ -70,7 +70,7 @@ public class Parser {
         int[][] mapValues;
         int i = 0, j = 0;
         String[] rows = fileDataUnFiltered.split("(\n|\n\r|\r\n|\r)");
-        mapValues = new int[rows.length][rows[0].split(",").length];
+        mapValues = new int[rows.length][rows[0].split(",").length ];
         for (String line: rows) {
             String[] numbers = line.split(",");
             for (String number: numbers) {
@@ -81,6 +81,13 @@ public class Parser {
             i++;
         }
         return mapValues;
+    }
+
+    public static String getLetterForInt(int j) {
+        //TODO: SILVA, ayudame con esta funcion
+        //si es 0 regresa vacio, si es 1: a, 2: b, ... etc
+        return "a";
+
     }
 
     public static class DecimalDigitsInputFilter implements InputFilter {

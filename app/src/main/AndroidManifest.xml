@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.GameScreen"
+            android:label="@string/game_activity"
+            android:parentActivityName=".Activity.CharacterSelector"></activity>
         <activity
             android:name=".Activity.CharacterEditor"
-            android:parentActivityName=".Activity.CharacterSelector"
-            android:label="@string/character_activity"/>
+            android:label="@string/character_activity"
+            android:parentActivityName=".Activity.CharacterSelector" />
         <activity
             android:name=".Activity.CharacterSelector"
             android:label="@string/character_selector_activity_name"

@@ -45,4 +45,8 @@
     <string name="delete">Borrar</string>
     <string name="choose_icon">Elige un icono</string>
     <string name="cant_less_1_item">No puede haber menos de 1 personaje :c</string>
+    <string name="cant_more_5_items">No puedes tener mas de 5 personajes :c</string>
+    <string name="cant_start_in_field">El personaje no puede iniciar, TERRENO NO PERIMITIDO, modifique los valores o seleccione otro personaje</string>
+    <string name="cant_finish_in_field">El personaje no puede finalizar, TERRENO NO PERIMITIDO, modifique los valores o seleccione otro personaje</string>
+    <string name="game_activity">Juego</string>
 </resources>
