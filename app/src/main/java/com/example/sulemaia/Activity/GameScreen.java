@@ -98,6 +98,7 @@ public class GameScreen extends AppCompatActivity {
                 et.setText(String.valueOf(mapValues[i][j]));
                 et.setTextSize(8f);
                 et.setGravity(Gravity.CENTER);
+                et.setBackgroundColor(colors.get(mapValues[i][j]));
                 et.setOnClickListener(buttonActions);
                 tableRow.addView(et, new TableRow.LayoutParams(tlTableMap.getWidth()/mapValues[0].length,
                         tlTableMap.getHeight() / (mapValues.length + 1)));

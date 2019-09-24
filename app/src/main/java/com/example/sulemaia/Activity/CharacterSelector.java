@@ -48,7 +48,12 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_selector);
 
-        // TODO: necesitamos mas iconos para los personajes, pienso que unos 10 estarian bien
+        /* TODO: necesitamos mas iconos para los personajes, pienso que unos 10 estarian bien, te recomiendo cambirles el color de fondo antes de agregarlas para que no tengas que cambiar la misma imagen 6 veces xdxd
+         TODO: sobre los mismos iconos, cambiales el color de fondo, al color background_color definido en colors.xml
+         TODO: las imagenes las consigues en la carpeta drawable, te recomiendo photoshop xd, abres la imagen y sobre ella lo cambias, si vez que son muchas imagenes del mismo tipo en carpetas diferentes, estan asi por que son para cada tamaño de pantalla, es mucha lata, srry
+         TODO: instala las extenciones que te mande, con una agregas iconos oficiales de google mas facil, y con la otra importas las imagenes al proyecto (las adapta a los distintos tipos de pantalla automaticamente) si no sabes instalar plugings busca como xD
+         TODO: borra todos los todo conforme los vayas realizando xdxdxdxdxdxdxdxd
+        */
         Constants.characterIcons = new Drawable[]{
                 getDrawable(R.drawable.calamar),
                 getDrawable(R.drawable.cabra),
