@@ -20,18 +20,6 @@
             app:cardElevation="8dp">
 
 
-            <TextView
-                android:id="@+id/tv_text_not_selected_file"
-                android:layout_width="wrap_content"
-                android:layout_height="450dp"
-                android:layout_margin="5dp"
-                android:background="@color/backgroundGrayColor"
-                android:gravity="center"
-                android:maxLines="2"
-                android:text="@string/not_selected_file"
-                android:textAlignment="center"
-                android:textSize="@dimen/text_not_selected_file_textsize" />
-
             <TableLayout
                 android:id="@+id/tl_game_table_map"
                 android:layout_width="match_parent"
@@ -40,10 +28,10 @@
                 android:layout_margin="5dp"
                 android:orientation="vertical"
                 android:shrinkColumns="*"
-                android:stretchColumns="*">
+                android:stretchColumns="*"
+                >
 
             </TableLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout

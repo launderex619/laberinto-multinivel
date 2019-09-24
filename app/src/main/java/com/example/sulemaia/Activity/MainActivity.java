@@ -212,13 +212,9 @@ public class MainActivity extends AppCompatActivity {
         //creacion de las filas
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(MainActivity.this);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
             tableRow.setGravity(Gravity.CENTER);
             if (i == 0) {
                 TableRow tableRowT = new TableRow(MainActivity.this);
-                tableRowT.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
                 tableRowT.setGravity(Gravity.CENTER);
                 for (int j = 0; j <= mapValues[i].length; j++) {
                     TextView tv = new TextView(MainActivity.this);
@@ -226,21 +222,23 @@ public class MainActivity extends AppCompatActivity {
                     tv.setTextSize(8f);
                     tv.setGravity(Gravity.CENTER);
                     tableRowT.addView(tv, new TableRow.LayoutParams(
-                            TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)
+                            tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getHeight() / (mapValues.length + 1)
                     ));
                 }
                 tlTableMap.addView(tableRowT);
             }
             //creacion de los Buttons de cada columna
             for (int j = 0; j < mapValues[i].length; j++) {
-                //TODO: revisar por que carajos deja de servir si le quito el && i != 0
-                if (j == 0 && i != 0) {
+                if (j == 0) {
                     TextView tv = new TextView(MainActivity.this);
                     tv.setText(String.valueOf(i));
                     tv.setTextSize(8f);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(
-                            TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)));
+                            tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getHeight() / (mapValues.length + 1)
+                    ));
                 }
                 Button btn = new Button(MainActivity.this);
                 LandItem item;
@@ -256,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
                 item.setName(names.get(mapValues[i][j]));
                 btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / (mapValues.length + 1)
+                        tlTableMap.getWidth()/mapValues[0].length,
+                        tlTableMap.getHeight() / (mapValues.length + 1)
                 ));
                 //si el elemento ya existe en la tabla agrego el btn a la lista
                 if (hashCodes.containsKey(mapValues[i][j])) {

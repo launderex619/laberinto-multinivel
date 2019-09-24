@@ -1,8 +1,6 @@
 package com.example.sulemaia.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -10,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,53 +50,61 @@ public class GameScreen extends AppCompatActivity {
         character = (CharacterItem) intent.getSerializableExtra("character");
 
         tlTableMap = findViewById(R.id.tl_game_table_map);
-        /*fabUp = findViewById(R.id.fab_game_up);
+        /*
+        fabUp = findViewById(R.id.fab_game_up);
         fabDown = findViewById(R.id.fab_game_down);
         fabLeft = findViewById(R.id.fab_game_left);
         fabRight = findViewById(R.id.fab_game_right);
-*/
+        */
         buttonActions = new ButtonActions();
-
-        createTable(Parser.getFileArray(contentFile));
-
-
+        tlTableMap.post(new Runnable() {
+            @Override
+            public void run() {
+                createTable(Parser.getFileArray(contentFile));
+            }
+        });
     }
 
     private void createTable(int[][] mapValues) {
-        //TODO: ver por que carajos esto no jala, llevo muchas horas :c
-        //creacion de las filas
-        rows = mapValues.length;
-        columns = mapValues[0].length;
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(GameScreen.this);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
             tableRow.setGravity(Gravity.CENTER);
+            if (i == 0) {
+                TableRow tableRowT = new TableRow(GameScreen.this);
+                tableRowT.setGravity(Gravity.CENTER);
+                for (int j = 0; j <= mapValues[i].length; j++) {
+                    TextView tv = new TextView(GameScreen.this);
+                    tv.setText(Parser.getLetterForInt(j));
+                    tv.setTextSize(8f);
+                    tv.setGravity(Gravity.CENTER);
+                    tableRowT.addView(tv, new TableRow.LayoutParams(tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getHeight() / (mapValues.length + 1)));
+                }
+                tlTableMap.addView(tableRowT);
+            }
             //creacion de los Buttons de cada columna
-            for (int j = 0; j < columns; j++) {
-                Button btn = new Button(GameScreen.this);
-                btn.setText(String.valueOf(mapValues[i][j]));
-                btn.setTextSize(10f);
-                btn.setGravity(Gravity.CENTER);
-                btn.setBackgroundColor(Color.BLUE);
-                /* EditText et = new EditText(context);
-                et.setHint("test");
-                et.setText("");
+            for (int j = 0; j < mapValues[i].length; j++) {
+                if (j == 0) {
+                    TextView tv = new TextView(GameScreen.this);
+                    tv.setText(String.valueOf(i));
+                    tv.setTextSize(8f);
+                    tv.setGravity(Gravity.CENTER);
+                    tableRow.addView(tv,new TableRow.LayoutParams(tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getHeight() / (mapValues.length + 1)));
+                }
+                EditText et = new EditText(GameScreen.this);
+                et.setFocusable(false);
+                et.setBackground(getDrawable(android.R.color.transparent));
                 et.setText(String.valueOf(mapValues[i][j]));
-                int color = colors.get(codes.indexOf(mapValues[i][j]));
-                et.setBackgroundColor(Color.BLUE);
-                et.setText("test");
-                et.setTextSize(10f);
+                et.setTextSize(8f);
                 et.setGravity(Gravity.CENTER);
                 et.setOnClickListener(buttonActions);
-                etLands.add(et);
-                */
-                tableRow.addView(btn, new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT, tlTableMap.getHeight() / mapValues.length
-                ));
+                tableRow.addView(et, new TableRow.LayoutParams(tlTableMap.getWidth()/mapValues[0].length,
+                        tlTableMap.getHeight() / (mapValues.length + 1)));
             }
             tlTableMap.addView(tableRow);
         }
+
     }
 
     private class ButtonActions implements View.OnClickListener {
