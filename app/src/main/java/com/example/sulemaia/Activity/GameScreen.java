@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -35,7 +36,7 @@ public class GameScreen extends AppCompatActivity {
     private ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
     private ArrayList<EditText> etLands = new ArrayList<>();
-    private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 0;
+    private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 0, mapValues[][];
     private CharacterItem character;
     private TableLayout tlTableMap;
     private FloatingActionButton fabUp, fabLeft, fabDown, fabRight;
@@ -94,6 +95,7 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void createTable(int[][] mapValues) {
+        this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(GameScreen.this);
@@ -128,13 +130,19 @@ public class GameScreen extends AppCompatActivity {
                 et.setTextSize(textSize);
                 et.setBackgroundColor(colors.get(codes.indexOf(mapValues[i][j])));
                 et.setGravity(Gravity.CENTER);
-                //et.setOnClickListener(buttonActions);
+                et.setOnClickListener(buttonActions);
                 tableRow.addView(et, new TableRow.LayoutParams(tlTableMap.getWidth() / mapValues[0].length,
                         tlTableMap.getHeight() / (mapValues.length + 1)));
             }
             tlTableMap.addView(tableRow);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onBackPressed();
+        return true;//super.onOptionsItemSelected(item);
     }
 
     private boolean isGameFinish() {
@@ -209,6 +217,11 @@ public class GameScreen extends AppCompatActivity {
                         Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
                     }
                 }
+            } else {
+                new SimpleOkDialog(GameScreen.this,
+                        getString(R.string.field_information_game_screen),
+                        ((EditText)v).getText().toString()
+                        ).build().show();
             }
         }
     }
