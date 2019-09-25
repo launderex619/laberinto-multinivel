@@ -47,4 +47,7 @@
     <string name="cant_start_in_field">El personaje no puede iniciar, TERRENO NO PERIMITIDO, modifique los valores o seleccione otro personaje</string>
     <string name="cant_finish_in_field">El personaje no puede finalizar, TERRENO NO PERIMITIDO, modifique los valores o seleccione otro personaje</string>
     <string name="game_activity">Juego</string>
+    <string name="game_over">Fin del juego</string>
+    <string name="you_finish_game">Felicidades, llegaste a la casilla final</string>
+    <string name="cant_go_to_field">No se puede pasar al campo (definido por el usuario)</string>
 </resources>

@@ -2,9 +2,9 @@ package com.example.sulemaia.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
@@ -28,19 +29,19 @@ import static com.example.sulemaia.Helper.Constants.mapValues;
 
 public class GameScreen extends AppCompatActivity {
 
+    float textSize = 8;
     private ArrayList<String> biomes = new ArrayList<>();
     private String contentFile;
     private ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
     private ArrayList<EditText> etLands = new ArrayList<>();
-    private int initialX, finalX, initialY, finalY, actualX, actualY;
+    private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 0;
     private CharacterItem character;
     private TableLayout tlTableMap;
     private FloatingActionButton fabUp, fabLeft, fabDown, fabRight;
-    private EditText board[][], lastVisited;
+    private EditText board[][];
     private ButtonActions buttonActions;
     private Drawable characterIcon;
-    float textSize = 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +81,16 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void loadBoard() {
-        lastVisited = null;
         actualX = initialX;
         actualY = initialY;
         Bitmap bitmap = ((BitmapDrawable) characterIcons[character.getIcon()]).getBitmap();
-        characterIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int)textSize*3, (int)textSize*3, true));
+        characterIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) textSize * 3, (int) textSize * 3, true));
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
-
+        board[actualY][actualX].setText(String.valueOf(actualStep));
+        board[actualY][actualX].setText("I");
+        board[actualY][actualX].setTextColor(Color.WHITE);
+        board[finalY][finalX].setText("F");
+        board[finalY][finalX].setTextColor(Color.WHITE);
     }
 
     private void createTable(int[][] mapValues) {
@@ -121,7 +125,6 @@ public class GameScreen extends AppCompatActivity {
                 board[i][j] = et;
                 et.setFocusable(false);
                 et.setBackground(getDrawable(android.R.color.transparent));
-                et.setText(String.valueOf(mapValues[i][j]));
                 et.setTextSize(textSize);
                 et.setBackgroundColor(colors.get(codes.indexOf(mapValues[i][j])));
                 et.setGravity(Gravity.CENTER);
@@ -134,29 +137,77 @@ public class GameScreen extends AppCompatActivity {
 
     }
 
+    private boolean isGameFinish() {
+        return actualX == finalX && actualY == finalY;
+    }
+
     private class ButtonActions implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if(v == fabDown){
-                if ((actualY+1) < mapValues.length) {
-                    board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+            if (v == fabDown) {
+                if ((actualY + 1) < mapValues.length) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY+1][actualX]))) {
+                        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+                        actualStep++;
+                        board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        if (isGameFinish()) {
+                            new SimpleOkDialog(GameScreen.this,
+                                    getString(R.string.game_over),
+                                    getString(R.string.you_finish_game)).build().show();
+                        }
+                    } else {
+                        Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }else if (v == fabLeft){
-                if ((actualX-1) >= 0) {
-                    board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    board[actualY][--actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+            } else if (v == fabLeft) {
+                if ((actualX - 1) >= 0) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1]))) {
+                        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        board[actualY][--actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+                        actualStep++;
+                        board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        if (isGameFinish()) {
+                            new SimpleOkDialog(GameScreen.this,
+                                    getString(R.string.game_over),
+                                    getString(R.string.you_finish_game)).build().show();
+                        }
+                    } else {
+                        Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }else if (v == fabRight){
-                if ((actualX+1) < mapValues[0].length) {
-                    board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    board[actualY][++actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+            } else if (v == fabRight) {
+                if ((actualX + 1) < mapValues[0].length) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1]))) {
+                        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        board[actualY][++actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+                        actualStep++;
+                        board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        if (isGameFinish()) {
+                            new SimpleOkDialog(GameScreen.this,
+                                    getString(R.string.game_over),
+                                    getString(R.string.you_finish_game)).build().show();
+                        }
+                    } else {
+                        Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
+                    }
                 }
 
-            }else if (v == fabUp){
-                if ((actualY-1) >= 0) {
-                    board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+            } else if (v == fabUp) {
+                if ((actualY - 1) >= 0) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY-1][actualX]))) {
+                        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+                        actualStep++;
+                        board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        if (isGameFinish()) {
+                            new SimpleOkDialog(GameScreen.this,
+                                    getString(R.string.game_over),
+                                    getString(R.string.you_finish_game)).build().show();
+                        }
+                    } else {
+                        Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         }
