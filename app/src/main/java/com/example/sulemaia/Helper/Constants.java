@@ -40,7 +40,12 @@ public class Constants {
             "Camino",
             "Bosque",
             "Lava",
-            "Tonala"
+            "Tonala",
+            "Escaleras",
+            "Pantano",
+            "Cielo Nublado",
+            "Edificaciones",
+            "Arena Movediza"
     };
     public static Drawable[] characterIcons;
     public static CharacterItem[] charactersConstant = {

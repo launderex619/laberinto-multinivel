@@ -15,13 +15,13 @@ public class Parser {
     public static final int FULL_FILE_IS_CORRECT = 0;
     public static final int INCONSISTENT_ID_QUANTITY = 1;
     public static final int INVALID_FILE_CONTENT = 2;
-    public static final int TOO_MANY_IDS = 4;
+    public static final int TOO_MANY_COLUMNS_OR_ROWS = 4;
 
     public static int isValidStringInFile(String fileContent) {
         String line;
         String[] numbers;
         int result;
-        int total = 0, localTotal = 0;
+        int total = 0, localTotal = 0, rows = 0;
         boolean exists = false;
         ArrayList<Integer> codes = new ArrayList<>();
         Pattern regPattern = Pattern.compile("\\d+");
@@ -29,12 +29,13 @@ public class Parser {
         Reader stringReader = new StringReader(fileContent);
         try(BufferedReader bufferedReader = new BufferedReader(stringReader)) {
             while ((line = bufferedReader.readLine()) != null) {
+                rows++;
                 if(line.charAt(line.length()-1) == ','){
                     return 1;
                 }
                 numbers = line.split(",");
                 if (numbers.length > 15){
-                    return 4;   ///Too many id's in the txt file.
+                    return 4;   ///Too many columns.
                 }
                 if (total == 0)
                     total = numbers.length;
@@ -63,6 +64,9 @@ public class Parser {
                     }
                     exists = false;
                 }
+            }
+            if(rows > 15){
+                return 4;   //Too many rows
             }
         } catch (IOException e) {
             e.printStackTrace();

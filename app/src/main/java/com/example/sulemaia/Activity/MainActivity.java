@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                             } else if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INVALID_FILE_CONTENT) {
                                 (new SimpleOkDialog(this, "Error", "Error en los datos del archivo"))
                                         .build().create().show();
-                            } else if(Parser.isValidStringInFile(fileDataUnFiltered) == Parser.TOO_MANY_IDS) {
-                                (new SimpleOkDialog(this, "Error", "El límite de idenficadores fue revasado. (Max = 15)"))
+                            } else if(Parser.isValidStringInFile(fileDataUnFiltered) == Parser.TOO_MANY_COLUMNS_OR_ROWS) {
+                                (new SimpleOkDialog(this, "Error", "El límite de filas o columnas fue rebasado. (Max = 15)"))
                                         .build().create().show();
                             }
                         }
