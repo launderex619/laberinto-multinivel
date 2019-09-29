@@ -94,12 +94,7 @@ public class Parser {
             return "";
         }
         else{
-            if(j < 15){
-                return letters[j-1];
-            }
-            else{
-                return "";
-            }
+            return letters[j-1];
         }
     }
 
