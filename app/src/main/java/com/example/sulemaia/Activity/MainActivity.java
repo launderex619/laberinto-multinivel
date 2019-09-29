@@ -113,10 +113,13 @@ public class MainActivity extends AppCompatActivity {
                             showMapAndElements(Parser.getFileArray(fileDataUnFiltered));
                         } else {
                             if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INCONSISTENT_ID_QUANTITY) {
-                                (new SimpleOkDialog(this, "Cantidad inconsistente de datos", null))
+                                (new SimpleOkDialog(this, "Error", "Cantidad inconsistente de datos"))
                                         .build().create().show();
                             } else if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INVALID_FILE_CONTENT) {
-                                (new SimpleOkDialog(this, "Error en los datos del archivo", null))
+                                (new SimpleOkDialog(this, "Error", "Error en los datos del archivo"))
+                                        .build().create().show();
+                            } else if(Parser.isValidStringInFile(fileDataUnFiltered) == Parser.TOO_MANY_IDS) {
+                                (new SimpleOkDialog(this, "Error", "El límite de idenficadores fue revasado. (Max = 15)"))
                                         .build().create().show();
                             }
                         }

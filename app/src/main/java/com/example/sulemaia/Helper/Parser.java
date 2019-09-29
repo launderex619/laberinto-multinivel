@@ -15,6 +15,7 @@ public class Parser {
     public static final int FULL_FILE_IS_CORRECT = 0;
     public static final int INCONSISTENT_ID_QUANTITY = 1;
     public static final int INVALID_FILE_CONTENT = 2;
+    public static final int TOO_MANY_IDS = 4;
 
     public static int isValidStringInFile(String fileContent) {
         String line;
@@ -32,6 +33,9 @@ public class Parser {
                     return 1;
                 }
                 numbers = line.split(",");
+                if (numbers.length > 15){
+                    return 4;   ///Too many id's in the txt file.
+                }
                 if (total == 0)
                     total = numbers.length;
                 localTotal = numbers.length;
@@ -84,10 +88,19 @@ public class Parser {
     }
 
     public static String getLetterForInt(int j) {
-        //TODO: SILVA, ayudame con esta funcion
-        //si es 0 regresa vacio, si es 1: a, 2: b, ... etc
-        return "a";
+        String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"};
 
+        if(j == 0){
+            return "";
+        }
+        else{
+            if(j < 15){
+                return letters[j-1];
+            }
+            else{
+                return "";
+            }
+        }
     }
 
     public static class DecimalDigitsInputFilter implements InputFilter {
