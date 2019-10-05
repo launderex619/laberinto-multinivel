@@ -1,6 +1,7 @@
 package com.example.sulemaia.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.ListPopupWindow;
 
 import android.annotation.SuppressLint;
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -92,6 +96,27 @@ public class FieldInformation extends AppCompatActivity {
         lpw.setAnchorView(etFieldName);
         lpw.setModal(true);
         lpw.setOnItemClickListener(buttonActions);
+
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START_FIELD_INFORMATION, true);
+        //checamos si es la primera vez que la aplicacion inicia:
+        if (firstStart) {
+
+            //iniciamos el tutorial
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(Constants.PREF_KEY_FIRST_START_FIELD_INFORMATION, false)
+                    .apply();
+            new TapTargetSequence(this).targets(
+                    new TapTargetHelper(this,
+                            ivFieldColor,
+                            getString(R.string.color),
+                            getString(R.string.color_description)).Create(),
+                    new TapTargetHelper(this, etFieldName,
+                            getString(R.string.field_name),
+                            getString(R.string.field_name_description)).Create()
+            ).start();
+        }
+
 
     }
 

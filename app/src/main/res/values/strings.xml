@@ -61,4 +61,17 @@
     <string name="next_page_main_activity_description">Aqui seguiras a la pagina de editor de personaje; Recuerda completar todos los campos</string>
     <string name="delete_map">Borrar mapa</string>
     <string name="delete_map_description">Aqui se reseteara el mapa a como era al iniciar la aplicacion (deberas crear uno nuevo)</string>
+    <string name="add_character_title">Agregar nuevo personaje</string>
+    <string name="add_character_description">Aqui podras crear un nuevo personaje, este se creara con contenido default, despues podras cambiarlo manualmente a tu gusto</string>
+    <string name="icon">Icono</string>
+    <string name="icon_character_description">Aqui podras cambiar la imagen de tu personaje</string>
+    <string name="delete_character_description">Aqui podras eliminar al personaje, mucho cuidado</string>
+    <string name="change_name_description">Aqui podras cambiar el nombre a tu personaje</string>
+    <string name="aply_cost_description">Si se selecciona el personaje tendra un costo de movimiento en este terreno, si no, el personaje no podra atravezarlo</string>
+    <string name="cost_description">Aqui ingresas el costo de movimiento sobre este tipo de terreno en especifico (para este personaje), siempre mayor o igual a 0</string>
+    <string name="game_description">Cuando hayas seleccionado un personaje aqui podras pasar a la pantalla de juego</string>
+    <string name="game_field">Campo de juego</string>
+    <string name="game_field_description">Si presionas en cualquier campo del juego, podras ver el texto completo o la serie de pasos que ha recibido esta casilla</string>
+    <string name="color_description">Aqui seleccionaras el color para todos los campos que tengan el mismo id</string>
+    <string name="field_name_description">Aqui puedes cambiar el nombre al terreno, esto sera para todos los de su tipo</string>
 </resources>

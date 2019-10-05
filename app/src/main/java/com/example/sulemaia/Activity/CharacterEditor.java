@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sulemaia.Adapter.CharacterEditorAdapter;
 import com.example.sulemaia.Dialog.CustomCharacterEditorDialog;
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,11 +63,46 @@ public class CharacterEditor extends AppCompatActivity {
         btnDelete.setOnClickListener(buttonActions);
         ivImage.setOnClickListener(buttonActions);
 
-        mainLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mainLayoutManager = new LinearLayoutManager(getApplicationContext()){
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                boolean firstStart = PreferenceManager.getDefaultSharedPreferences(CharacterEditor.this)
+                        .getBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_EDITOR, true);
+                //checamos si es la primera vez que la aplicacion inicia:
+                if (firstStart) {
+                    View view = mainLayoutManager.getChildAt(0);
+                    AppCompatCheckBox cbSelect = view.findViewById(R.id.cb_item_character_editor_apply);
+                    EditText etCost = view.findViewById(R.id.et_item_character_editor_cost);
+
+                    //iniciamos el tutorial
+                    PreferenceManager.getDefaultSharedPreferences(CharacterEditor.this).edit()
+                            .putBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_EDITOR, false)
+                            .apply();
+                    new TapTargetSequence(CharacterEditor.this).targets(
+                            new TapTargetHelper(CharacterEditor.this,
+                                    ivImage,
+                                    getString(R.string.icon),
+                                    getString(R.string.icon_character_description)).Create(),
+                            new TapTargetHelper(CharacterEditor.this, btnDelete,
+                                    getString(R.string.delete_character),
+                                    getString(R.string.delete_character_description)).Create(),
+                            new TapTargetHelper(CharacterEditor.this, etName,
+                                    getString(R.string.character_name),
+                                    getString(R.string.change_name_description)).Create(),
+                            new TapTargetHelper(CharacterEditor.this, cbSelect,
+                                    getString(R.string.aply_cost),
+                                    getString(R.string.aply_cost_description)).Create(),
+                            new TapTargetHelper(CharacterEditor.this, etCost,
+                                    getString(R.string.cost),
+                                    getString(R.string.cost_description)).Create()
+                    ).start();
+                }
+
+            }
+        };
         mainLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvEditor.setLayoutManager(mainLayoutManager);
         rvEditor.setAdapter(characterAdapter);
-
 
     }
 
@@ -82,7 +120,7 @@ public class CharacterEditor extends AppCompatActivity {
                 boolean canOk = true;
                 CharacterItem item = characterAdapter.getCharacterItem();
                 String name = etName.getText().toString();
-                if(name.equals("")){
+                if (name.equals("")) {
                     etName.setError(getString(R.string.not_valid_value), getDrawable(R.drawable.ic_warning_lime_24dp));
                     canOk = false;
                 } else {
@@ -140,7 +178,7 @@ public class CharacterEditor extends AppCompatActivity {
                         })
                         .setNegativeButton(getString(R.string.cancel), null)
                         .show();
-            } else if (v == ivImage){
+            } else if (v == ivImage) {
                 final CustomCharacterEditorDialog cdialog = new CustomCharacterEditorDialog();
                 final Dialog dialog = cdialog.showDialog(CharacterEditor.this);
                 Button mDialogOk = dialog.findViewById(R.id.btn_dialog_character_editor_ok);

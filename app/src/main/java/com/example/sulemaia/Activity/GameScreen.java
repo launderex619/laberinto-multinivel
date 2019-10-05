@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +19,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sulemaia.Dialog.SimpleOkDialog;
+import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
-import static com.example.sulemaia.Helper.Constants.mapValues;
 
 public class GameScreen extends AppCompatActivity {
 
@@ -82,6 +85,8 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void loadBoard() {
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, true);
         actualX = initialX;
         actualY = initialY;
         Bitmap bitmap = ((BitmapDrawable) characterIcons[character.getIcon()]).getBitmap();
@@ -92,6 +97,20 @@ public class GameScreen extends AppCompatActivity {
         board[actualY][actualX].setTextColor(Color.WHITE);
         board[finalY][finalX].setText("F");
         board[finalY][finalX].setTextColor(Color.WHITE);
+        if (firstStart) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, false)
+                    .apply();
+
+            TapTargetView.showFor(this,
+                    new TapTargetHelper(this,
+                            board[actualY][actualX],
+                            getString(R.string.game_field),
+                            getString(R.string.game_field_description)).Create(),
+                    null
+            );
+        }
+
     }
 
     private void createTable(int[][] mapValues) {
@@ -154,7 +173,7 @@ public class GameScreen extends AppCompatActivity {
         public void onClick(View v) {
             if (v == fabDown) {
                 if ((actualY + 1) < mapValues.length) {
-                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY+1][actualX]))) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
@@ -203,7 +222,7 @@ public class GameScreen extends AppCompatActivity {
 
             } else if (v == fabUp) {
                 if ((actualY - 1) >= 0) {
-                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY-1][actualX]))) {
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
@@ -220,8 +239,8 @@ public class GameScreen extends AppCompatActivity {
             } else {
                 new SimpleOkDialog(GameScreen.this,
                         getString(R.string.field_information_game_screen),
-                        ((EditText)v).getText().toString()
-                        ).build().show();
+                        ((EditText) v).getText().toString()
+                ).build().show();
             }
         }
     }

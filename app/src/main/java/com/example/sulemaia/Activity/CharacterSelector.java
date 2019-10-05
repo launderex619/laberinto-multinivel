@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -17,9 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sulemaia.Adapter.CharacterSelectorAdapter;
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Interface.iCharacterSelected;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -61,6 +66,8 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
                 getDrawable(R.drawable.tiburon),
         };
 
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_SELECTOR, true);
         Intent intent = getIntent();
         biomes.addAll(intent.getStringArrayListExtra("biomes"));
         contentFile = intent.getStringExtra("contentFile");
@@ -107,6 +114,15 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         rvCharacters.setLayoutManager(mainLayoutManager);
         rvCharacters.setAdapter(characterAdapter);
 
+        if (firstStart) {
+            TapTargetView.showFor(this,
+                    new TapTargetHelper(this,
+                            fabAddCharacter,
+                            getString(R.string.add_character_title),
+                            getString(R.string.add_character_description)).Create(),
+                    null
+            );
+        }
     }
 
     @Override
@@ -159,6 +175,8 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
     @SuppressLint("RestrictedApi")
     @Override
     public void setCharacter(int pos) {
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_SELECTOR, true);
         for (int i = 0; i < mainLayoutManager.getChildCount(); i++) {
             AppCompatCheckBox cb = mainLayoutManager.getChildAt(i).findViewById(R.id.cb_item_select_character);
             if (pos != i) {
@@ -171,6 +189,18 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
                     fabNext.setVisibility(View.GONE);
                 }
             }
+        }
+        if (firstStart) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_SELECTOR, false)
+                    .apply();
+            TapTargetView.showFor(this,
+                    new TapTargetHelper(this,
+                            fabNext,
+                            getString(R.string.game_activity),
+                            getString(R.string.game_description)).Create(),
+                    null
+            );
         }
     }
 
@@ -216,8 +246,7 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
                                     .setIcon(R.drawable.ic_warning_lime_24dp)
                                     .show();
                         }
-                    }
-                    else if (land.equals(finalNameField)){
+                    } else if (land.equals(finalNameField)) {
                         if (!item.getCanPass().get(i)) {
                             canPass = false;
                             (new SimpleOkDialog(CharacterSelector.this, getString(R.string.error),
@@ -229,7 +258,7 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
                     }
                     i++;
                 }
-                if (canPass){
+                if (canPass) {
                     Intent intent = new Intent(getApplicationContext(), GameScreen.class);
                     intent.putExtra("contentFile", contentFile);
                     intent.putExtra("character", characters.get(characterSelected));
