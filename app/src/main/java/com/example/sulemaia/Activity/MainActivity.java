@@ -32,9 +32,9 @@ import com.example.sulemaia.Adapter.MainActivityAdapter;
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
-import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -99,43 +99,12 @@ public class MainActivity extends AppCompatActivity {
             //iniciamos el tutorial
             Intent intent = new Intent(this, Tutorial.class);
             startActivityForResult(intent, Constants.REQUEST_TUTORIAL);
-      /*      TapTargetView.showFor(this,                 // `this` is an Activity
-                    TapTarget.forView(btnAddFile, getString(R.string.add_map),
-                            getString(R.string.description_add_map))
-                            // All options below are optional
-                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
-                            .titleTextColor(R.color.white)      // Specify the color of the title text
-                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
-                            .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                            .tintTarget(false)                   // Whether to tint the target view's color
-                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                            .targetRadius(60),                  // Specify the target radius (in dp)
-                    null);
-
-       */
-
+            //iniciamos la descripcion de los elementos individuales
             new TapTargetSequence(this).targets(
-                    TapTarget.forView(btnAddFile, getString(R.string.add_map),
-                            getString(R.string.description_add_map))
-                            // All options below are optional
-                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
-                            .titleTextColor(R.color.white)      // Specify the color of the title text
-                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
-                            .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                            .tintTarget(false)                   // Whether to tint the target view's color
-                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                            .targetRadius(60),                  // Specify the target radius (in dp)
-                    TapTarget.forView(tvTextSelectedMap, getString(R.string.map), getString(R.string.description_map))
-                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
-                            .titleTextColor(R.color.white)      // Specify the color of the title text
-                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
-                            .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                            .tintTarget(false)                   // Whether to tint the target view's color
-                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                            .targetRadius(60)
+                    new TapTargetHelper(this, btnAddFile, getString(R.string.add_map),
+                            getString(R.string.description_add_map)).Create(),
+                    new TapTargetHelper(this, tlTableMap, getString(R.string.map),
+                            getString(R.string.description_map)).Create()
             ).start();
         }
 
@@ -159,7 +128,31 @@ public class MainActivity extends AppCompatActivity {
                                 getString(R.string.content_file), fileDataUnFiltered))
                                 .build().create().show();
                         if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.FULL_FILE_IS_CORRECT) {
+                            int key;
+                            boolean firstStart;
                             showMapAndElements(Parser.getFileArray(fileDataUnFiltered));
+
+                            //checamos si es la primera vez que la aplicacion inicia:
+                            firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                                    .getBoolean(Constants.PREF_KEY_FIRST_START_MAIN_ACTIVITY, true);
+                            if (firstStart) {
+                                //iniciamos el tutorial
+                                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                                        .putBoolean(Constants.PREF_KEY_FIRST_START_MAIN_ACTIVITY, false)
+                                        .apply();
+                                key = Integer.parseInt(hashCodes.keySet().toArray()[0].toString());
+                                new TapTargetSequence(this).targets(
+                                        new TapTargetHelper(this,
+                                                hashCodes.get(key).get(0).getBtnItemMap(),
+                                                getString(R.string.item_field_title),
+                                                getString(R.string.item_field_description)).Create(),
+                                        new TapTargetHelper(this, btnOk, getString(R.string.next_page_main_activity),
+                                                getString(R.string.next_page_main_activity_description)).Create(),
+                                        new TapTargetHelper(this, btnCancel, getString(R.string.delete_map),
+                                                getString(R.string.delete_map_description)).Create()
+                                ).start();
+                            }
+
                         } else {
                             if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INCONSISTENT_ID_QUANTITY) {
                                 (new SimpleOkDialog(this, "Error", "Cantidad inconsistente de datos"))

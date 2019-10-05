@@ -50,6 +50,7 @@ public class Constants {
             "Arena Movediza"
     };
     public static final String PREF_KEY_FIRST_START = "com.example.sulemaia.PREF_KEY_FIRST_START";
+    public static final String PREF_KEY_FIRST_START_MAIN_ACTIVITY = "com.example.sulemaia.PREF_KEY_FIRST_START_MAIN_ACTIVITY";
     public static Drawable[] characterIcons;
     public static CharacterItem[] charactersConstant = {
             new CharacterItem(0, "Calamar", Constants.biomes[8]),

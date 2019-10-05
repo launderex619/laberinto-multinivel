@@ -55,4 +55,10 @@
     <string name="description_add_map">Aqui puedes seleccionar un mapa nuevo, este boton mostrara todos tus archivos, asi que recuerda, solo seleccionar los .txt</string>
     <string name="map">Mapa</string>
     <string name="description_map">Aqui se mostrara el mapa al momento de crearse</string>
+    <string name="item_field_title">Elemento del mapa</string>
+    <string name="item_field_description">Al dar click en cualquier terreno, se te abrira una vista nueva donde deberas elegir si es Final o Inicial, Tambien podras cambiar el color y el nombre del terreno</string>
+    <string name="next_page_main_activity">Siguiente pagina</string>
+    <string name="next_page_main_activity_description">Aqui seguiras a la pagina de editor de personaje; Recuerda completar todos los campos</string>
+    <string name="delete_map">Borrar mapa</string>
+    <string name="delete_map_description">Aqui se reseteara el mapa a como era al iniciar la aplicacion (deberas crear uno nuevo)</string>
 </resources>
