@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,8 @@ import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //instancia de elementos del xml
         hashCodes = new Hashtable<>();
         biomesInUse = new ArrayList<>();
@@ -76,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
         llItemsHolder = findViewById(R.id.ll_items_holder);
         rvWorldElements = findViewById(R.id.rv_map_items);
 
-        //clase creada por mi para recibir todos los eventos de los botones (clase = ButtonActions)
         buttonActions = new ButtonActions(this);
-
         tvActivityTitle.setText(getString(R.string.main_activity_title));
 
         //asigno los eventos escuchadores para asignar las acciones de los botones
@@ -90,13 +92,60 @@ public class MainActivity extends AppCompatActivity {
         btnOk.setVisibility(View.INVISIBLE);
         llItemsHolder.setVisibility(View.INVISIBLE);
 
+        //checamos si es la primera vez que la aplicacion inicia:
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START, true);
+        if (firstStart) {
+            //iniciamos el tutorial
+            Intent intent = new Intent(this, Tutorial.class);
+            startActivityForResult(intent, Constants.REQUEST_TUTORIAL);
+      /*      TapTargetView.showFor(this,                 // `this` is an Activity
+                    TapTarget.forView(btnAddFile, getString(R.string.add_map),
+                            getString(R.string.description_add_map))
+                            // All options below are optional
+                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
+                            .titleTextColor(R.color.white)      // Specify the color of the title text
+                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                            .tintTarget(false)                   // Whether to tint the target view's color
+                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                            .targetRadius(60),                  // Specify the target radius (in dp)
+                    null);
+
+       */
+
+            new TapTargetSequence(this).targets(
+                    TapTarget.forView(btnAddFile, getString(R.string.add_map),
+                            getString(R.string.description_add_map))
+                            // All options below are optional
+                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
+                            .titleTextColor(R.color.white)      // Specify the color of the title text
+                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                            .tintTarget(false)                   // Whether to tint the target view's color
+                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                            .targetRadius(60),                  // Specify the target radius (in dp)
+                    TapTarget.forView(tvTextSelectedMap, getString(R.string.map), getString(R.string.description_map))
+                            .titleTextSize(40)                  // Specify the size (in sp) of the title text
+                            .titleTextColor(R.color.white)      // Specify the color of the title text
+                            .descriptionTextSize(30)            // Specify the size (in sp) of the description text
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                            .tintTarget(false)                   // Whether to tint the target view's color
+                            .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                            .targetRadius(60)
+            ).start();
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == Constants.REQUEST_FILE_READ_EXTERNAL) {
+        if (requestCode == Constants.REQUEST_FILE_READ_EXTERNAL) {
+            if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     Uri fileUri = data.getData();
                     try {
@@ -118,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                             } else if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.INVALID_FILE_CONTENT) {
                                 (new SimpleOkDialog(this, "Error", "Error en los datos del archivo"))
                                         .build().create().show();
-                            } else if(Parser.isValidStringInFile(fileDataUnFiltered) == Parser.TOO_MANY_COLUMNS_OR_ROWS) {
+                            } else if (Parser.isValidStringInFile(fileDataUnFiltered) == Parser.TOO_MANY_COLUMNS_OR_ROWS) {
                                 (new SimpleOkDialog(this, "Error", "El límite de filas o columnas fue rebasado. (Max = 15)"))
                                         .build().create().show();
                             }
@@ -132,7 +181,9 @@ public class MainActivity extends AppCompatActivity {
                             getString(R.string.content_file), getString(R.string.unselected_file)))
                             .build().create().show();
                 }
-            } else if (requestCode == Constants.RESULT_FOR_FIELD_INFORMATION) {
+            }
+        } else if (requestCode == Constants.RESULT_FOR_FIELD_INFORMATION) {
+            if (resultCode == Activity.RESULT_OK) {
                 String name;
                 int color;
                 boolean isFinal, isInitial;
@@ -171,6 +222,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 rvWorldElements.getAdapter().notifyDataSetChanged();
+            }
+        } else if (requestCode == Constants.REQUEST_TUTORIAL) {
+            if (resultCode == RESULT_OK) {
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        //.putBoolean(Constants.PREF_KEY_FIRST_START, true)
+                        .putBoolean(Constants.PREF_KEY_FIRST_START, false)
+                        .apply();
+            } else {
+                //el tutorial fue cancelado, entonces se mostrara la siguiente ocacion
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        .putBoolean(Constants.PREF_KEY_FIRST_START, true)
+                        .apply();
             }
         }
     }
@@ -225,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     tv.setTextSize(8f);
                     tv.setGravity(Gravity.CENTER);
                     tableRowT.addView(tv, new TableRow.LayoutParams(
-                            tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getWidth() / mapValues[0].length,
                             tlTableMap.getHeight() / (mapValues.length + 1)
                     ));
                 }
@@ -239,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                     tv.setTextSize(8f);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(
-                            tlTableMap.getWidth()/mapValues[0].length,
+                            tlTableMap.getWidth() / mapValues[0].length,
                             tlTableMap.getHeight() / (mapValues.length + 1)
                     ));
                 }
@@ -257,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setName(names.get(mapValues[i][j]));
                 btn.setTag(item);
                 tableRow.addView(btn, new TableRow.LayoutParams(
-                        tlTableMap.getWidth()/mapValues[0].length,
+                        tlTableMap.getWidth() / mapValues[0].length,
                         tlTableMap.getHeight() / (mapValues.length + 1)
                 ));
                 //si el elemento ya existe en la tabla agrego el btn a la lista

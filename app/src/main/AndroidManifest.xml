@@ -28,7 +28,8 @@
             android:parentActivityName=".Activity.MainActivity" />
         <activity
             android:name=".Activity.Tutorial"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.Intro" />
         <activity
             android:name=".Activity.LoadScreen"
             android:label="@string/title_activity_load_screen"

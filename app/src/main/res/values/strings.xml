@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SulemaIA</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_load_screen">LoadScreen</string>
+    <string name="title_activity_load_screen">SulemaIA</string>
     <string name="add_map">Agregar nuevo mapa</string>
     <string name="not_selected_file">Archivo no seleccionado</string>
     <string name="main_activity_title">SulemitaAppMap</string>
@@ -51,4 +51,8 @@
     <string name="you_finish_game">Felicidades, llegaste a la casilla final</string>
     <string name="cant_go_to_field">No se puede pasar al campo (definido por el usuario)</string>
     <string name="field_information_game_screen">Informacion de celda</string>
+    <string name="skip_tutorial">Saltar tutorial</string>
+    <string name="description_add_map">Aqui puedes seleccionar un mapa nuevo, este boton mostrara todos tus archivos, asi que recuerda, solo seleccionar los .txt</string>
+    <string name="map">Mapa</string>
+    <string name="description_map">Aqui se mostrara el mapa al momento de crearse</string>
 </resources>
