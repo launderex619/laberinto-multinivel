@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             for (int j = 0; j < mapValues[i].length; j++) {
                 if (j == 0) {
                     TextView tv = new TextView(MainActivity.this);
-                    tv.setText(String.valueOf(i));
+                    tv.setText(String.valueOf(i+1));
                     tv.setTextSize(8f);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(
@@ -387,6 +387,8 @@ public class MainActivity extends AppCompatActivity {
                         intent.putIntegerArrayListExtra("colors", colors);
                         intent.putStringArrayListExtra("biomes", biomes);
                         intent.putIntegerArrayListExtra("codes", codes);
+                        intent.putExtra("x_Coordinate", lastItemInTablePressed.getX_Coordinate());
+                        intent.putExtra("y_Coordinate", lastItemInTablePressed.getY_Coordinate());
                         startActivity(intent);
                     } else {
                         new SimpleOkDialog(MainActivity.this, getString(R.string.error),
@@ -415,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("isFinal", lastItemInTablePressed.isFinal());
                 intent.putExtra("isInitial", lastItemInTablePressed.isInitial());
                 intent.putExtra("code", lastItemInTablePressed.getCode());
+                intent.putExtra("x_Coordinate", lastItemInTablePressed.getX_Coordinate());
+                intent.putExtra("y_Coordinate", lastItemInTablePressed.getY_Coordinate());
                 startActivityForResult(intent, Constants.RESULT_FOR_FIELD_INFORMATION);
             }
         }

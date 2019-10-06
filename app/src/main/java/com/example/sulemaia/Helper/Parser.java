@@ -92,7 +92,7 @@ public class Parser {
     }
 
     public static String getLetterForInt(int j) {
-        String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"};
+        String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"};
 
         if(j == 0){
             return "";

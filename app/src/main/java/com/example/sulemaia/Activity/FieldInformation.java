@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.LandItem;
 import com.example.sulemaia.R;
@@ -50,6 +51,9 @@ public class FieldInformation extends AppCompatActivity {
     private ArrayList<String> biomesInUse;
     private int color;
     private String name;
+    private TextView cell;
+    private String cellPos = "";
+    private int cell_x_Pos, cell_y_Pos;
     private int code;
     private boolean isFinal;
     private boolean isInitial;
@@ -70,6 +74,7 @@ public class FieldInformation extends AppCompatActivity {
         cbIsInitial = findViewById(R.id.cb_field_initial);
         cbIsFinal = findViewById(R.id.cb_field_final);
         fabOk = findViewById(R.id.fab_ok);
+        cell = findViewById(R.id.cell_name);
 
         biomesInUse = fieldObject.getStringArrayListExtra("biomesInUse");
         color = fieldObject.getIntExtra("color", 0);
@@ -77,9 +82,13 @@ public class FieldInformation extends AppCompatActivity {
         name = fieldObject.getStringExtra("name");
         isInitial = fieldObject.getBooleanExtra("isInitial", false);
         isFinal = fieldObject.getBooleanExtra("isFinal", false);
+        cell_x_Pos = 1 + fieldObject.getIntExtra("x_Coordinate",3);
+        cell_y_Pos = 1 + fieldObject.getIntExtra("y_Coordinate",3);
         ivFieldColor.setImageDrawable(new ColorDrawable(color));
         tvId.setText(String.valueOf(code));
         etFieldName.setText(name);
+        cellPos = "Celda: " + Parser.getLetterForInt(cell_x_Pos) + ", " + cell_y_Pos;
+        cell.setText(cellPos);
 
         validBiomes = getValidBiomes();
 

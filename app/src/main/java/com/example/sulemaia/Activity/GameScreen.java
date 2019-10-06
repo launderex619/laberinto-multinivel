@@ -39,7 +39,7 @@ public class GameScreen extends AppCompatActivity {
     private ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
     private ArrayList<EditText> etLands = new ArrayList<>();
-    private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 0, mapValues[][];
+    private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 1, mapValues[][];
     private CharacterItem character;
     private TableLayout tlTableMap;
     private FloatingActionButton fabUp, fabLeft, fabDown, fabRight;
@@ -92,10 +92,10 @@ public class GameScreen extends AppCompatActivity {
         Bitmap bitmap = ((BitmapDrawable) characterIcons[character.getIcon()]).getBitmap();
         characterIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) textSize * 3, (int) textSize * 3, true));
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
-        board[actualY][actualX].setText(String.valueOf(actualStep));
-        board[actualY][actualX].setText("I");
+        //board[actualY][actualX].setText(String.valueOf(actualStep));
+        board[actualY][actualX].setText("I. " + ", " + actualStep);
         board[actualY][actualX].setTextColor(Color.WHITE);
-        board[finalY][finalX].setText("F");
+        board[finalY][finalX].setText("F. ");
         board[finalY][finalX].setTextColor(Color.WHITE);
         if (firstStart) {
             PreferenceManager.getDefaultSharedPreferences(this).edit()
@@ -136,7 +136,7 @@ public class GameScreen extends AppCompatActivity {
             for (int j = 0; j < mapValues[i].length; j++) {
                 if (j == 0) {
                     TextView tv = new TextView(GameScreen.this);
-                    tv.setText(String.valueOf(i));
+                    tv.setText(String.valueOf(i+1));
                     tv.setTextSize(textSize);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(tlTableMap.getWidth() / mapValues[0].length,

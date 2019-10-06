@@ -31,7 +31,6 @@ public class LandItem {
         color = 0;
         position = pos;
     }
-
     public Button getBtnItemMap() {
         return btnItemMap;
     }
@@ -95,5 +94,13 @@ public class LandItem {
     public void setColor(int color) {
         this.color = color;
         btnItemMap.setBackgroundColor(color);
+    }
+
+    public int getX_Coordinate(){
+        return position.x;
+    }
+
+    public int getY_Coordinate(){
+        return position.y;
     }
 }
