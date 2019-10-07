@@ -33,7 +33,7 @@ import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 public class GameScreen extends AppCompatActivity {
 
-    float textSize = 8;
+    float textSize;
     private ArrayList<String> biomes = new ArrayList<>();
     private String contentFile;
     private ArrayList<Integer> colors = new ArrayList<>();
@@ -114,6 +114,8 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void createTable(int[][] mapValues) {
+        textSize = (mapValues[0].length > mapValues.length) ?
+                Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length) ;
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
         for (int i = 0; i < mapValues.length; i++) {

@@ -102,6 +102,13 @@ public class Parser {
         }
     }
 
+    public static float getTextSizeForMap(int length) {
+        float maxSize = 40f;
+        float maxLength = 17f;
+
+        return maxSize -((maxSize /maxLength) * (--length));
+    }
+
     public static class DecimalDigitsInputFilter implements InputFilter {
 
         Pattern mPattern, nPattern;

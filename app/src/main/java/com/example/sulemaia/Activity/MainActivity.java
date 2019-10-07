@@ -268,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
     private void createTable(int[][] mapValues) {
         Hashtable<Integer, String> names = new Hashtable<>();
         int counter = 0;
+        float textSize = (mapValues[0].length > mapValues.length) ?
+                Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length) ;
         //creacion de las filas
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(MainActivity.this);
@@ -278,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int j = 0; j <= mapValues[i].length; j++) {
                     TextView tv = new TextView(MainActivity.this);
                     tv.setText(Parser.getLetterForInt(j));
-                    tv.setTextSize(8f);
+                    tv.setTextSize(textSize);
                     tv.setGravity(Gravity.CENTER);
                     tableRowT.addView(tv, new TableRow.LayoutParams(
                             tlTableMap.getWidth() / mapValues[0].length,
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 if (j == 0) {
                     TextView tv = new TextView(MainActivity.this);
                     tv.setText(String.valueOf(i+1));
-                    tv.setTextSize(8f);
+                    tv.setTextSize(textSize);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(
                             tlTableMap.getWidth() / mapValues[0].length,
@@ -302,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 Button btn = new Button(MainActivity.this);
                 LandItem item;
                 btn.setText(String.valueOf(mapValues[i][j]));
-                btn.setTextSize(8f);
+                btn.setTextSize(textSize);
                 btn.setGravity(Gravity.CENTER);
                 btn.setOnClickListener(buttonActions);
                 item = new LandItem(btn, mapValues[i][j], new Point(j, i));
