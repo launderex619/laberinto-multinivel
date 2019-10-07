@@ -143,6 +143,7 @@ public class GameScreen extends AppCompatActivity {
                             tlTableMap.getHeight() / (mapValues.length + 1)));
                 }
                 EditText et = new EditText(GameScreen.this);
+                et.setTag("" + j + ", " +  Parser.getLetterForInt(j));
                 board[i][j] = et;
                 et.setFocusable(false);
                 et.setBackground(getDrawable(android.R.color.transparent));
@@ -238,7 +239,8 @@ public class GameScreen extends AppCompatActivity {
                 }
             } else {
                 new SimpleOkDialog(GameScreen.this,
-                        getString(R.string.field_information_game_screen),
+                        getString(R.string.field_information_game_screen) + "\n" +
+                                v.getTag().toString(),
                         ((EditText) v).getText().toString()
                 ).build().show();
             }
