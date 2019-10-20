@@ -55,6 +55,7 @@ public class Constants {
     public static final String PREF_KEY_FIRST_START_CHARACTER_SELECTOR = "com.example.sulemaia.PREF_KEY_FIRST_START_CHARACTER_SELECTOR";
     public static final String PREF_KEY_FIRST_START_GAME_SCREEN = "com.example.sulemaia.PREF_KEY_FIRST_START_GAME_SCREEN";
     public static final String PREF_KEY_FIRST_START_FIELD_INFORMATION = "com.example.sulemaia.PREF_KEY_FIRST_START_FIELD_INFORMATION";
+    public static final int BLACK_COLOR = 0xFF000000;
     public static Drawable[] characterIcons;
     public static CharacterItem[] charactersConstant = {
             new CharacterItem(0, "Calamar", Constants.biomes[8]),

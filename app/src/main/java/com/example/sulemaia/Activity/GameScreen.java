@@ -1,10 +1,14 @@
 package com.example.sulemaia.Activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -23,6 +27,7 @@ import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.CharacterItem;
+import com.example.sulemaia.Model.PathTree;
 import com.example.sulemaia.R;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,6 +51,7 @@ public class GameScreen extends AppCompatActivity {
     private EditText board[][];
     private ButtonActions buttonActions;
     private Drawable characterIcon;
+    private PathTree tree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +86,43 @@ public class GameScreen extends AppCompatActivity {
             public void run() {
                 createTable(Parser.getFileArray(contentFile));
                 loadBoard();
+                initTreeAndColors();
             }
         });
+    }
+
+    private void initTreeAndColors() {
+        tree = new PathTree(new PathTree.Node(
+                board[actualY][actualX].getTag().toString(),
+                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
+                String.valueOf(actualStep))
+        );
+        setFieldsColors(actualY, actualX);
+    }
+
+    private void setFieldsColors(int y, int x) {
+        //middle
+        setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
+        //up
+        if (y - 1 >= 0) {
+            setFieldColor(y - 1, x, colors.get(codes.indexOf(mapValues[y - 1][x])));
+        }
+        //down
+        if (y + 1 < board.length) {
+            setFieldColor(y + 1, x, colors.get(codes.indexOf(mapValues[y + 1][x])));
+        }
+        //left
+        if (x - 1 >= 0) {
+            setFieldColor(y, x - 1, colors.get(codes.indexOf(mapValues[y][x - 1])));
+        }
+        //right
+        if (x + 1 < board[0].length) {
+            setFieldColor(y, x + 1, colors.get(codes.indexOf(mapValues[y][x + 1])));
+        }
+    }
+
+    private void setFieldColor(int y, int x, int color) {
+        board[y][x].setBackgroundColor(color);
     }
 
     private void loadBoard() {
@@ -92,7 +133,6 @@ public class GameScreen extends AppCompatActivity {
         Bitmap bitmap = ((BitmapDrawable) characterIcons[character.getIcon()]).getBitmap();
         characterIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) textSize * 3, (int) textSize * 3, true));
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
-        //board[actualY][actualX].setText(String.valueOf(actualStep));
         board[actualY][actualX].setText("I. " + ", " + actualStep);
         board[actualY][actualX].setTextColor(Color.WHITE);
         board[finalY][finalX].setText("F. ");
@@ -115,7 +155,7 @@ public class GameScreen extends AppCompatActivity {
 
     private void createTable(int[][] mapValues) {
         textSize = (mapValues[0].length > mapValues.length) ?
-                Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length) ;
+                Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
         for (int i = 0; i < mapValues.length; i++) {
@@ -138,19 +178,20 @@ public class GameScreen extends AppCompatActivity {
             for (int j = 0; j < mapValues[i].length; j++) {
                 if (j == 0) {
                     TextView tv = new TextView(GameScreen.this);
-                    tv.setText(String.valueOf(i+1));
+                    tv.setText(String.valueOf(i + 1));
                     tv.setTextSize(textSize);
                     tv.setGravity(Gravity.CENTER);
                     tableRow.addView(tv, new TableRow.LayoutParams(tlTableMap.getWidth() / mapValues[0].length,
                             tlTableMap.getHeight() / (mapValues.length + 1)));
                 }
                 EditText et = new EditText(GameScreen.this);
-                et.setTag("" + j + ", " +  Parser.getLetterForInt(j));
+                et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
                 board[i][j] = et;
                 et.setFocusable(false);
                 et.setBackground(getDrawable(android.R.color.transparent));
                 et.setTextSize(textSize);
-                et.setBackgroundColor(colors.get(codes.indexOf(mapValues[i][j])));
+                //et.setBackgroundColor(colors.get(codes.indexOf(mapValues[i][j])));
+                et.setBackgroundColor(Constants.BLACK_COLOR);
                 et.setGravity(Gravity.CENTER);
                 et.setOnClickListener(buttonActions);
                 tableRow.addView(et, new TableRow.LayoutParams(tlTableMap.getWidth() / mapValues[0].length,
@@ -171,52 +212,76 @@ public class GameScreen extends AppCompatActivity {
         return actualX == finalX && actualY == finalY;
     }
 
+    private void finishGame() {
+        tree.endTree();
+        new SimpleOkDialog(GameScreen.this,
+                getString(R.string.game_over),
+                getString(R.string.you_finish_game)).build().show();
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("label",tree.getDotTree());
+        clipboard.setPrimaryClip(clip);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%0A%7D"));
+        startActivity(browserIntent);
+    }
+
     private class ButtonActions implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             if (v == fabDown) {
+                //down
                 if ((actualY + 1) < mapValues.length) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        setFieldsColors(actualY, actualX);
+                        tree.addDown(new PathTree.Node(
+                                board[actualY][actualX].getTag().toString(),
+                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
+                                String.valueOf(actualStep)));
                         if (isGameFinish()) {
-                            new SimpleOkDialog(GameScreen.this,
-                                    getString(R.string.game_over),
-                                    getString(R.string.you_finish_game)).build().show();
+                            finishGame();
                         }
                     } else {
                         Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
                     }
                 }
             } else if (v == fabLeft) {
+                //left
                 if ((actualX - 1) >= 0) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][--actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        setFieldsColors(actualY, actualX);
+                        tree.addLeft(new PathTree.Node(
+                                board[actualY][actualX].getTag().toString(),
+                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
+                                String.valueOf(actualStep)));
                         if (isGameFinish()) {
-                            new SimpleOkDialog(GameScreen.this,
-                                    getString(R.string.game_over),
-                                    getString(R.string.you_finish_game)).build().show();
+                            finishGame();
                         }
                     } else {
                         Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
                     }
                 }
             } else if (v == fabRight) {
+                //right
                 if ((actualX + 1) < mapValues[0].length) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][++actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        setFieldsColors(actualY, actualX);
+                        tree.addRight(new PathTree.Node(
+                                board[actualY][actualX].getTag().toString(),
+                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
+                                String.valueOf(actualStep)));
                         if (isGameFinish()) {
-                            new SimpleOkDialog(GameScreen.this,
-                                    getString(R.string.game_over),
-                                    getString(R.string.you_finish_game)).build().show();
+                            finishGame();
                         }
                     } else {
                         Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();
@@ -224,16 +289,20 @@ public class GameScreen extends AppCompatActivity {
                 }
 
             } else if (v == fabUp) {
+                //up
                 if ((actualY - 1) >= 0) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
+                        setFieldsColors(actualY, actualX);
+                        tree.addUp(new PathTree.Node(
+                                board[actualY][actualX].getTag().toString(),
+                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
+                                String.valueOf(actualStep)));
                         if (isGameFinish()) {
-                            new SimpleOkDialog(GameScreen.this,
-                                    getString(R.string.game_over),
-                                    getString(R.string.you_finish_game)).build().show();
+                            finishGame();
                         }
                     } else {
                         Toast.makeText(GameScreen.this, getString(R.string.cant_go_to_field), Toast.LENGTH_LONG).show();

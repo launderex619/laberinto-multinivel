@@ -74,6 +74,7 @@ public class Parser {
         return 0;
         ///txt correcto.
     }
+
     public static int[][] getFileArray(String fileDataUnFiltered) {
         int[][] mapValues;
         int i = 0, j = 0;
