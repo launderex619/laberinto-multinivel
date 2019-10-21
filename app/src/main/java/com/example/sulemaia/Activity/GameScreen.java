@@ -217,10 +217,9 @@ public class GameScreen extends AppCompatActivity {
         new SimpleOkDialog(GameScreen.this,
                 getString(R.string.game_over),
                 getString(R.string.you_finish_game)).build().show();
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("label",tree.getDotTree());
-        clipboard.setPrimaryClip(clip);
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%0A%7D"));
+        String urlTree ="https://dreampuf.github.io/GraphvizOnline/#" +
+                tree.getDotTree().replace("\n", "%0A");
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTree));
         startActivity(browserIntent);
     }
 

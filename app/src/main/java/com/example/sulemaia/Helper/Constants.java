@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 
 import com.example.sulemaia.Model.CharacterItem;
 
+import java.util.Hashtable;
+
 public class Constants {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL = 1;
     public static final int REQUEST_FILE_READ_EXTERNAL = 2;
@@ -62,5 +64,10 @@ public class Constants {
             new CharacterItem(1, "Cabra", Constants.biomes[12]),
             new CharacterItem(2, "Mariposa", Constants.biomes[14]),
     };
+    public static final Hashtable asciiTable = new Hashtable<String, String>(){{
+        put(" ", "%20");
+        put("\n", "%0A");
+        put("\t", "%09");
 
+    }};
 }
