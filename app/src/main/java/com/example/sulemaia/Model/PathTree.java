@@ -15,64 +15,109 @@ public class PathTree {
         this.lastNode = anchor;
     }
 
-    public void addLeft(Node node){
+    public void addLeft(Node node, boolean isCharacterMoving){
         //si ya poseo un nodo a la izquierda solo le agrego el paso en el que voy
         if(lastNode.getLeft() != null){
-            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getLeft().getName(), node.getStep());
-            lastNode = lastNode.getLeft();
-            lastNode.setStep(node.getStep());
+            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getLeft().getName(), String.valueOf(node.getCost()));
+            //Si el personaje se esta moviendo de casilla, actualizamos last node. Si no, quiere decir que solo vamos a expandir los nodos adyacentes.
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                lastNode = lastNode.getLeft();
+                lastNode.setStep(node.getStep());
+            }
         }
         else{
-            graphVizHelper.addNodeCost(node.getName(), String.valueOf(node.getCost()));
-            graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), node.getStep());
-            lastNode.setLeft(node);
-            node.setFather(lastNode);
-            lastNode = lastNode.getLeft();
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setLeft(node);
+                node.setFather(lastNode);
+                lastNode = lastNode.getLeft();
+            }
+            else{
+                //graphVizHelper.addNodeStep(node.getName(), "");
+                //graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setLeft(node);
+                node.setFather(lastNode);
+            }
         }
     }
-    public void addRight(Node node){
+    public void addRight(Node node, boolean isCharacterMoving){
         //si ya poseo un nodo a la derecha solo le agrego el paso en el que voy
         if(lastNode.getRight() != null){
-            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getRight().getName(), node.getStep());
-            lastNode = lastNode.getRight();
-            lastNode.setStep(node.getStep());
+            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getRight().getName(), String.valueOf(node.getCost()));
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                lastNode = lastNode.getRight();
+                lastNode.setStep(node.getStep());
+            }
         }
         else{
-            graphVizHelper.addNodeCost(node.getName(), String.valueOf(node.getCost()));
-            graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), node.getStep());
-            lastNode.setRight(node);
-            node.setFather(lastNode);
-            lastNode = lastNode.getRight();
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setRight(node);
+                node.setFather(lastNode);
+                lastNode = lastNode.getRight();
+            }
+            else{
+                //graphVizHelper.addNodeStep(node.getName(), "");
+                //graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setRight(node);
+                node.setFather(lastNode);
+            }
         }
     }
-    public void addUp(Node node){
+    public void addUp(Node node, boolean isCharacterMoving){
         //si ya poseo un nodo arriba solo le agrego el paso en el que voy
         if(lastNode.getUp() != null){
-            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getUp().getName(), node.getStep());
-            lastNode = lastNode.getUp();
-            lastNode.setStep(node.getStep());
+            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getUp().getName(), String.valueOf(node.getCost()));
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                lastNode = lastNode.getUp();
+                lastNode.setStep(node.getStep());
+            }
         }
         else{
-            graphVizHelper.addNodeCost(node.getName(), String.valueOf(node.getCost()));
-            graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), node.getStep());
-            lastNode.setUp(node);
-            node.setFather(lastNode);
-            lastNode = lastNode.getUp();
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setUp(node);
+                node.setFather(lastNode);
+                lastNode = lastNode.getUp();
+            }
+            else{
+                //graphVizHelper.addNodeStep(node.getName(), "");
+                //graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setUp(node);
+                node.setFather(lastNode);
+            }
         }
     }
-    public void addDown(Node node){
+    public void addDown(Node node, boolean isCharacterMoving){
         //si ya poseo un nodo abajo solo le agrego el paso en el que voy
         if(lastNode.getDown() != null){
-            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getDown().getName(), node.getStep());
-            lastNode = lastNode.getDown();
-            lastNode.setStep(node.getStep());
+            graphVizHelper.addConectorWithLabel(lastNode.name, lastNode.getDown().getName(), String.valueOf(node.getCost()));
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                lastNode = lastNode.getDown();
+                lastNode.setStep(node.getStep());
+            }
         }
         else{
-            graphVizHelper.addNodeCost(node.getName(), String.valueOf(node.getCost()));
-            graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), node.getStep());
-            lastNode.setDown(node);
-            node.setFather(lastNode);
-            lastNode = lastNode.getDown();
+            if(isCharacterMoving){
+                graphVizHelper.addNodeStep(node.getName(), node.getStep());
+                graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setDown(node);
+                node.setFather(lastNode);
+                lastNode = lastNode.getDown();
+            }
+            else{
+                //graphVizHelper.addNodeStep(node.getName(), "");
+                //graphVizHelper.addConectorWithLabel(lastNode.name, node.getName(), String.valueOf(node.getCost()));
+                lastNode.setDown(node);
+                node.setFather(lastNode);
+            }
         }
     }
 
@@ -99,7 +144,7 @@ public class PathTree {
         private Node up;
         private Node down;
         private Node left;
-        private Node rigth;
+        private Node right;
         private Node father;
         private StringBuilder step;
         private String name;
@@ -109,7 +154,7 @@ public class PathTree {
             this.up = null;
             this.down = null;
             this.left = null;
-            this.rigth = null;
+            this.right = null;
             this.step = new StringBuilder(step);
             this.name = name;
             this.cost = cost;
@@ -164,11 +209,11 @@ public class PathTree {
         }
 
         private Node getRight() {
-            return rigth;
+            return right;
         }
 
-        private void setRight(Node rigth) {
-            this.rigth = rigth;
+        private void setRight(Node right) {
+            this.right = right;
         }
 
         private Node getFather() {

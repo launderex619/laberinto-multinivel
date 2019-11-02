@@ -30,10 +30,6 @@ import java.io.InputStreamReader;
  *    gv.addln("A -> C;");
  *    gv.addln(gv.end_graph());
  *    System.out.println(gv.getDotSource());
- *
- *    String type = "gif";
- *    File out = new File("out." + type);   // out.gif in this example
- *    gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), type ), out );
  * </pre>
  * </dd>
  *
@@ -87,12 +83,12 @@ public class GraphViz {
     }
 
     /**
-     * Adds to a node the current given cost
+     * Adds to a node the current given step
      * @param node Node to describe
-     * @param cost current cost of the node that will be displayed
+     * @param step current step of the node that will be displayed
      */
-    public void addNodeCost(String node, String cost){
-        add("\"" + node + "\"" + "[xlabel = \"" + cost + "\"]");
+    public void addNodeStep(String node, String step){
+        add("\"" + node + "\"" + "[xlabel = \"" + step + "\"]");
         addln();
     }
 

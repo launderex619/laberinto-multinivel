@@ -31,23 +31,23 @@ public class Parser {
             while ((line = bufferedReader.readLine()) != null) {
                 rows++;
                 if(line.charAt(line.length()-1) == ','){
-                    return 1;
+                    return INCONSISTENT_ID_QUANTITY;
                 }
                 numbers = line.split(",");
                 if (numbers.length > 15){
-                    return 4;   ///Too many columns.
+                    return TOO_MANY_COLUMNS_OR_ROWS;
                 }
                 if (total == 0)
                     total = numbers.length;
                 localTotal = numbers.length;
 
                 if (total != localTotal)
-                    return 1;
+                    return INCONSISTENT_ID_QUANTITY;
                 ///Numero inconsistente de datos entre cada fila.
                 for (String a : numbers) {
                     match = regPattern.matcher(a);
                     if (!match.matches()) {
-                        return 2;
+                        return INVALID_FILE_CONTENT;
                         ///En lugar de un numero, tenemos un dato erroneo, e.g.:
                         ///float, char, negative, comas juntas.
                     } else {
@@ -66,12 +66,12 @@ public class Parser {
                 }
             }
             if(rows > 15){
-                return 4;   //Too many rows
+                return TOO_MANY_COLUMNS_OR_ROWS;   //Too many rows
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0;
+        return FULL_FILE_IS_CORRECT;
         ///txt correcto.
     }
 
