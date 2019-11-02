@@ -270,13 +270,13 @@ public class GameScreen extends AppCompatActivity {
                 //down
                 if ((actualY + 1) < mapValues.length) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX]))) {
-                        if((actualX - 1) >= 0) {
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualY - 1) >= 0) {
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
                             expandUp(false);
                         }
-                        if((actualX + 1) < mapValues[0].length) {
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
                             expandRight(false);
                         }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -289,17 +289,15 @@ public class GameScreen extends AppCompatActivity {
                                 board[actualY][actualX].getTag().toString(),
                                 character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
                                 String.valueOf(actualStep)), true);
-                        /////////////////////////////////////////////////////
-                        if((actualX - 1) >= 0) {
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualX + 1) < mapValues[0].length) {
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
                             expandRight(false);
                         }
-                        if((actualY + 1) < mapValues.length){
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
-                        /////////////////////////////////////////////////////
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -311,13 +309,13 @@ public class GameScreen extends AppCompatActivity {
                 //left
                 if ((actualX - 1) >= 0) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1]))) {
-                        if((actualY - 1) >= 0) {
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
                             expandUp(false);
                         }
-                        if((actualX + 1) < mapValues[0].length) {
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
                             expandRight(false);
                         }
-                        if((actualY + 1) < mapValues.length) {
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -330,17 +328,15 @@ public class GameScreen extends AppCompatActivity {
                                 board[actualY][actualX].getTag().toString(),
                                 character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
                                 String.valueOf(actualStep)), true);
-                        ///////////////////////////////////////////////////////////
-                        if((actualY - 1) >= 0) {
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
                             expandUp(false);
                         }
-                        if((actualX - 1) >= 0){
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualY + 1) < mapValues.length) {
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
-                        ///////////////////////////////////////////////////////////
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -352,13 +348,13 @@ public class GameScreen extends AppCompatActivity {
                 //right
                 if ((actualX + 1) < mapValues[0].length) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1]))) {
-                        if((actualX - 1) >= 0) {
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualY - 1) >= 0) {
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
                             expandUp(false);
                         }
-                        if((actualY + 1) < mapValues.length) {
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -371,17 +367,15 @@ public class GameScreen extends AppCompatActivity {
                                 board[actualY][actualX].getTag().toString(),
                                 character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
                                 String.valueOf(actualStep)), true);
-                        //////////////////////////////////////////////////////////
-                        if((actualX + 1) < mapValues[0].length){
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))){
                             expandRight(false);
                         }
-                        if((actualY - 1) >= 0) {
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
                             expandUp(false);
                         }
-                        if((actualY + 1) < mapValues.length) {
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
-                        //////////////////////////////////////////////////////////
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -394,13 +388,13 @@ public class GameScreen extends AppCompatActivity {
                 //up
                 if ((actualY - 1) >= 0) {
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX]))) {
-                        if((actualX - 1) >= 0) {
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualX + 1) < mapValues[0].length) {
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
                             expandRight(false);
                         }
-                        if((actualY + 1) < mapValues.length) {
+                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
                             expandDown(false);
                         }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -413,17 +407,15 @@ public class GameScreen extends AppCompatActivity {
                                 board[actualY][actualX].getTag().toString(),
                                 character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
                                 String.valueOf(actualStep)), true);
-                        ///////////////////////////////////////////////////////////
-                        if((actualX - 1) >= 0) {
+                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
                             expandLeft(false);
                         }
-                        if((actualY - 1) >= 0){
+                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))){
                             expandUp(false);
                         }
-                        if((actualX + 1) < mapValues[0].length) {
+                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
                             expandRight(false);
                         }
-                        ///////////////////////////////////////////////////////////
                         if (isGameFinish()) {
                             finishGame();
                         }
