@@ -36,6 +36,8 @@ import java.io.InputStreamReader;
  * </dl>
  *
  * @author Laszlo Szathmary (<a href="jabba.laci@gmail.com">jabba.laci@gmail.com</a>)
+ * @author Carlos Carvajal (Modificaciones al codigo original)
+ * @author Alejandro Silva (Modificaciones al codigo original)
  * @version v0.1, 2003/12/04 (December) -- first release
  */
 public class GraphViz {
@@ -96,10 +98,10 @@ public class GraphViz {
      * Adds a conector from given node to given node adding a label in the conector
      * @param from Initial node
      * @param to Final node
-     * @param step Value to be placed
+     * @param cost Value to be placed
      */
-    public void addConectorWithLabel(String from, String to, String step){
-        add("\"" + from +"\""+ " -> " + "\"" + to + "\"" + "[label = \"" + step +  "\"]");
+    public void addConectorWithLabel(String from, String to, String cost){
+        add("\"" + from +"\""+ " -> " + "\"" + to + "\"" + "[label = \"" + cost +  "\"]");
         addln();
     }
 
@@ -109,7 +111,7 @@ public class GraphViz {
      * @return A string to open a graph.
      */
     public void start_graph() {
-        add("digraph G {\nconcentrate=true\nforcelabels=true;\n");
+        add("strict digraph G {\nconcentrate=true\nforcelabels=true\n");
     }
 
     /**
@@ -121,4 +123,20 @@ public class GraphViz {
         add("}");
     }
 
+    /**
+     * Changes the color of the initial node to green
+     * @param name initial node name
+     */
+    public void setInitial(String name) {
+        add("\"" + name +"\" [shape=circle, style=filled, fillcolor=green]");
+        addln();
+    }
+    /**
+     * Changes the color of the final node to red
+     * @param name final node name
+     */
+    public void setFinal(String name) {
+        add("\"" + name +"\" [shape=circle, style=filled, fillcolor=red]");
+        addln();
+    }
 } // end of class GraphViz

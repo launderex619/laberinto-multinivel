@@ -1,8 +1,5 @@
 package com.example.sulemaia.Activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -43,15 +40,16 @@ public class GameScreen extends AppCompatActivity {
     private String contentFile;
     private ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
-    private ArrayList<EditText> etLands = new ArrayList<>();
     private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 1, mapValues[][];
     private CharacterItem character;
     private TableLayout tlTableMap;
     private FloatingActionButton fabUp, fabLeft, fabDown, fabRight;
     private EditText board[][];
+    private PathTree.Node nodes[][];
     private ButtonActions buttonActions;
     private Drawable characterIcon;
     private PathTree tree;
+    private enum MOVEMENT_CODES {DOWN, UP, LEFT, RIGHT, NONE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,44 +90,41 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void initTreeAndColors() {
-        tree = new PathTree(new PathTree.Node(
-                board[actualY][actualX].getTag().toString(),
-                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                String.valueOf(actualStep))
-        );
-        setFieldsColors(actualY, actualX);
-        if((actualX - 1) >= 0) {
-            expandLeft(false);
+        nodes[actualY][actualX].setStep(actualStep);
+        tree = new PathTree(nodes[actualY][actualX]);
+        tree.setInitial(nodes[actualY][actualX]);
+        for (int i = 0; i < mapValues.length; i++) {
+            for (int j = 0; j < mapValues[0].length; j++) {
+                if (!character.getCanPass().get(codes.indexOf(mapValues[i][j]))) {
+                    tree.addNodeToInvalidNodes(nodes[i][j]);
+                }
+            }
         }
-        if((actualY - 1) >= 0) {
-            expandUp(false);
-        }
-        if((actualX + 1) < mapValues[0].length) {
-            expandRight(false);
-        }
-        if((actualY + 1) < mapValues.length) {
-            expandDown(false);
-        }
+        setAdyacentFieldsAndColor(actualY, actualX);
     }
 
-    private void setFieldsColors(int y, int x) {
+    private void setAdyacentFieldsAndColor(int y, int x) {
         //middle
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
         //up
         if (y - 1 >= 0) {
             setFieldColor(y - 1, x, colors.get(codes.indexOf(mapValues[y - 1][x])));
+            tree.addNode(nodes[y][x], nodes[y-1][x]);
         }
         //down
         if (y + 1 < board.length) {
             setFieldColor(y + 1, x, colors.get(codes.indexOf(mapValues[y + 1][x])));
+            tree.addNode(nodes[y][x], nodes[y+1][x]);
         }
         //left
         if (x - 1 >= 0) {
             setFieldColor(y, x - 1, colors.get(codes.indexOf(mapValues[y][x - 1])));
+            tree.addNode(nodes[y][x], nodes[y][x-1]);
         }
         //right
         if (x + 1 < board[0].length) {
             setFieldColor(y, x + 1, colors.get(codes.indexOf(mapValues[y][x + 1])));
+            tree.addNode(nodes[y][x], nodes[y][x+1]);
         }
     }
 
@@ -170,6 +165,8 @@ public class GameScreen extends AppCompatActivity {
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
+        nodes = new PathTree.Node[mapValues.length][mapValues[0].length];
+
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(GameScreen.this);
             tableRow.setGravity(Gravity.CENTER);
@@ -199,6 +196,9 @@ public class GameScreen extends AppCompatActivity {
                 EditText et = new EditText(GameScreen.this);
                 et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
                 board[i][j] = et;
+                nodes[i][j] = new PathTree.Node(et.getTag().toString(),
+                        character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),
+                        character.getCanPass().get(codes.indexOf(mapValues[i][j])));
                 et.setFocusable(false);
                 et.setBackground(getDrawable(android.R.color.transparent));
                 et.setTextSize(textSize);
@@ -225,42 +225,15 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void finishGame() {
+        tree.setFinal(nodes[actualY][actualX]);
         tree.endTree();
         new SimpleOkDialog(GameScreen.this,
                 getString(R.string.game_over),
                 getString(R.string.you_finish_game)).build().show();
-        String urlTree ="https://dreampuf.github.io/GraphvizOnline/#" +
+        String urlTree = "https://dreampuf.github.io/GraphvizOnline/#" +
                 tree.getDotTree().replace("\n", "%0A");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTree));
         startActivity(browserIntent);
-    }
-
-    public void expandDown(boolean isCharacterMoving){
-        tree.addDown(new PathTree.Node(
-                board[actualY+1][actualX].getTag().toString(),
-                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                String.valueOf(actualStep)), isCharacterMoving);
-    }
-
-    public void expandUp(boolean isCharacterMoving){
-        tree.addUp(new PathTree.Node(
-                board[actualY-1][actualX].getTag().toString(),
-                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                String.valueOf(actualStep)), isCharacterMoving);
-    }
-
-    public void expandLeft(boolean isCharacterMoving){
-        tree.addLeft(new PathTree.Node(
-                board[actualY][actualX-1].getTag().toString(),
-                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                String.valueOf(actualStep)), isCharacterMoving);
-    }
-
-    public void expandRight(boolean isCharacterMoving){
-        tree.addRight(new PathTree.Node(
-                board[actualY][actualX+1].getTag().toString(),
-                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                String.valueOf(actualStep)), isCharacterMoving);
     }
 
     private class ButtonActions implements View.OnClickListener {
@@ -269,35 +242,14 @@ public class GameScreen extends AppCompatActivity {
             if (v == fabDown) {
                 //down
                 if ((actualY + 1) < mapValues.length) {
+                    setAdyacentFieldsAndColor(actualY+1, actualX);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX]))) {
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
-                            expandUp(false);
-                        }
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
-                            expandRight(false);
-                        }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
+                        nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        setFieldsColors(actualY, actualX);
-                        //addDown(true);
-                        tree.addDown(new PathTree.Node(
-                                board[actualY][actualX].getTag().toString(),
-                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                                String.valueOf(actualStep)), true);
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
-                            expandRight(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
+                        tree.addMovement(nodes[actualY-1][actualX], nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -308,35 +260,14 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabLeft) {
                 //left
                 if ((actualX - 1) >= 0) {
-                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1]))) {
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
-                            expandUp(false);
-                        }
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
-                            expandRight(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
+                    setAdyacentFieldsAndColor(actualY, actualX-1);
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX-1]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][--actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
+                        nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        setFieldsColors(actualY, actualX);
-                        //addLeft(true);
-                        tree.addLeft(new PathTree.Node(
-                                board[actualY][actualX].getTag().toString(),
-                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                                String.valueOf(actualStep)), true);
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
-                            expandUp(false);
-                        }
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
+                        tree.addMovement(nodes[actualY][actualX+1], nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -347,35 +278,14 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabRight) {
                 //right
                 if ((actualX + 1) < mapValues[0].length) {
-                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1]))) {
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
-                            expandUp(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
+                    setAdyacentFieldsAndColor(actualY, actualX+1);
+                    if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX+1]))) {
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][++actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
+                        nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        setFieldsColors(actualY, actualX);
-                        //addRight(true);
-                        tree.addRight(new PathTree.Node(
-                                board[actualY][actualX].getTag().toString(),
-                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                                String.valueOf(actualStep)), true);
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))){
-                            expandRight(false);
-                        }
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))) {
-                            expandUp(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
+                        tree.addMovement(nodes[actualY][actualX-1], nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -387,35 +297,14 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabUp) {
                 //up
                 if ((actualY - 1) >= 0) {
+                    setAdyacentFieldsAndColor(actualY-1, actualX);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX]))) {
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
-                            expandRight(false);
-                        }
-                        if(((actualY + 1) < mapValues.length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX])))) {
-                            expandDown(false);
-                        }
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
+                        nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        setFieldsColors(actualY, actualX);
-                        //addUp(true);
-                        tree.addUp(new PathTree.Node(
-                                board[actualY][actualX].getTag().toString(),
-                                character.getLandsCosts().get(codes.indexOf(mapValues[actualY][actualX])),
-                                String.valueOf(actualStep)), true);
-                        if(((actualX - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX - 1])))) {
-                            expandLeft(false);
-                        }
-                        if(((actualY - 1) >= 0) && (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX])))){
-                            expandUp(false);
-                        }
-                        if(((actualX + 1) < mapValues[0].length) && (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX + 1])))) {
-                            expandRight(false);
-                        }
+                        tree.addMovement(nodes[actualY+1][actualX], nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
