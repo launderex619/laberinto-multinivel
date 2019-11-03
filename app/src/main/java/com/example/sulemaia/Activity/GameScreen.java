@@ -242,8 +242,8 @@ public class GameScreen extends AppCompatActivity {
             if (v == fabDown) {
                 //down
                 if ((actualY + 1) < mapValues.length) {
-                    setAdyacentFieldsAndColor(actualY+1, actualX);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY + 1][actualX]))) {
+                        setAdyacentFieldsAndColor(actualY+1, actualX);
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[++actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
@@ -260,8 +260,8 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabLeft) {
                 //left
                 if ((actualX - 1) >= 0) {
-                    setAdyacentFieldsAndColor(actualY, actualX-1);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX-1]))) {
+                        setAdyacentFieldsAndColor(actualY, actualX-1);
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][--actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
@@ -278,8 +278,8 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabRight) {
                 //right
                 if ((actualX + 1) < mapValues[0].length) {
-                    setAdyacentFieldsAndColor(actualY, actualX+1);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY][actualX+1]))) {
+                        setAdyacentFieldsAndColor(actualY, actualX+1);
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[actualY][++actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;
@@ -297,8 +297,8 @@ public class GameScreen extends AppCompatActivity {
             } else if (v == fabUp) {
                 //up
                 if ((actualY - 1) >= 0) {
-                    setAdyacentFieldsAndColor(actualY-1, actualX);
                     if (character.getCanPass().get(codes.indexOf(mapValues[actualY - 1][actualX]))) {
+                        setAdyacentFieldsAndColor(actualY-1, actualX);
                         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         board[--actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
                         actualStep++;

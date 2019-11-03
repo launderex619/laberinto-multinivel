@@ -21,7 +21,7 @@ public class PathTree {
     }
 
     /**
-     * this method add a node to an inaccessible list nodes
+     * this method adds a node to a list of inaccessible nodes
      * @param node node to set inaccessible
      */
     public void addNodeToInvalidNodes(Node node){
@@ -29,7 +29,7 @@ public class PathTree {
     }
 
     /**
-     * This method adds a child in the specified node, if the father already has that node
+     * This method adds a child to the specified node. If the father already has that node,
      * child is not added
      *
      * @param father parent node
