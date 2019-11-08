@@ -249,7 +249,7 @@ public class GameScreen extends AppCompatActivity {
                         actualStep++;
                         nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        tree.addMovement(nodes[actualY-1][actualX], nodes[actualY][actualX]);
+                        tree.addMovement(nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -267,7 +267,7 @@ public class GameScreen extends AppCompatActivity {
                         actualStep++;
                         nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        tree.addMovement(nodes[actualY][actualX+1], nodes[actualY][actualX]);
+                        tree.addMovement(nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -285,7 +285,7 @@ public class GameScreen extends AppCompatActivity {
                         actualStep++;
                         nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        tree.addMovement(nodes[actualY][actualX-1], nodes[actualY][actualX]);
+                        tree.addMovement(nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }
@@ -304,7 +304,7 @@ public class GameScreen extends AppCompatActivity {
                         actualStep++;
                         nodes[actualY][actualX].setStep(actualStep);
                         board[actualY][actualX].setText(board[actualY][actualX].getText() + "," + actualStep);
-                        tree.addMovement(nodes[actualY+1][actualX], nodes[actualY][actualX]);
+                        tree.addMovement(nodes[actualY][actualX]);
                         if (isGameFinish()) {
                             finishGame();
                         }

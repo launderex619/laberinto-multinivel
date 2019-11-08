@@ -4,12 +4,15 @@ import com.example.sulemaia.Helper.GraphViz;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 public class PathTree {
 
     private Node anchor;
     private GraphViz graphVizHelper;
     private HashSet<Node> visitedNodes;
+    private HashSet<Node> visitedInExpanded;
+    private ArrayList<Node> expansionOrder;
 
     public PathTree(Node anchor) {
         this.graphVizHelper = new GraphViz();
@@ -18,6 +21,10 @@ public class PathTree {
         this.anchor.setFather(anchor);
         visitedNodes = new HashSet<>();
         visitedNodes.add(anchor);
+        expansionOrder = new ArrayList<>();
+        visitedInExpanded = new HashSet<>();
+        expansionOrder.add(anchor);
+        visitedInExpanded.add(anchor);
     }
 
     /**
@@ -39,21 +46,19 @@ public class PathTree {
         if(exists(child)){
             return;
         }
-        visitedNodes.add(child);
-        graphVizHelper.addConectorWithLabel(father.name, child.getName(),
-                String.valueOf(child.getCost()));
         father.addChild(child);
+        visitedNodes.add(child);
     }
 
     /**
      * Create a step movement between father and child
-     * @param father initial node
      * @param child final node
      */
-    public void addMovement(Node father, Node child){
-        graphVizHelper.addConectorWithLabel(father.name, child.getName(),
-                String.valueOf(child.getCost()));
-        graphVizHelper.addNodeStep(child.getName(), child.getStep());
+    public void addMovement(Node child){
+//        graphVizHelper.addConectorWithLabel(father.name, child.getName(),
+//                String.valueOf(child.getCost()));
+//        graphVizHelper.addNodeStep(child.getName(), child.getStep());
+        expansionOrder.add(child);
     }
 
     public boolean exists(Node child) {
@@ -61,9 +66,40 @@ public class PathTree {
     }
 
     public void endTree() {
+        for(int i = 1; i < expansionOrder.size()-1; i++){
+            if(!expansionOrder.get(i-1).getChildren().contains(expansionOrder.get(i))){
+                expansionOrder.get(i).getFather().getChildren().remove(expansionOrder.get(i));
+                expansionOrder.get(i).setFather(expansionOrder.get(i-1));
+                expansionOrder.get(i-1).addChild(expansionOrder.get(i));
+            }
+        }
+        expansionOrder.get(expansionOrder.size()-1).getFather().getChildren().remove(expansionOrder.get(expansionOrder.size()-1));
+        expansionOrder.get(expansionOrder.size()-2).addChild(expansionOrder.get(expansionOrder.size()-1));
+        for(int i = 0; i < expansionOrder.size()-1; i++){
+            drawTree(expansionOrder.get(i));
+        }
+        graphVizHelper.addNodeStep(expansionOrder.get(expansionOrder.size()-1).getName(),
+                expansionOrder.get(expansionOrder.size()-1).getStep());
         graphVizHelper.end_graph();
     }
 
+    private void drawTree(Node node) {
+        //if(node.getFather() != node){
+            for(Node child : node.getChildren()){
+                if(!visitedInExpanded.contains(child)){
+//                    if(child.getFather() != node){
+//                        child.getFather().getChildren().remove(child);
+//                        child.setFather(node);
+//                    }
+                    graphVizHelper.addConectorWithLabel(node.getName(), child.getName(),
+                            String.valueOf(node.getCost()));
+                }
+                visitedInExpanded.add(child);
+            }
+            graphVizHelper.addNodeStep(node.getName(), node.getStep());
+            visitedInExpanded.add(node);
+        //}
+    }
     public String getDotTree() {
         return graphVizHelper.getDotSource();
     }
