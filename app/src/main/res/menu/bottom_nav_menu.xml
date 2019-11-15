@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_uniform_cost"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_uniform_cost" />
+
+    <item
+        android:id="@+id/nav_first_the_best"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_first_the_best" />
+
+    <item
+        android:id="@+id/nav_a_star"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_a_star" />
+
+</menu>

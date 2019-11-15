@@ -11,9 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.GameScreen"
+        <activity
+            android:name=".Activity.SearchAlgorithms"
+            android:label="@string/title_activity_search_algorithms"
+            android:parentActivityName=".Activity.ExpansionDetails"/>
+        <activity
+            android:name=".Activity.ExpansionDetails"
+            android:label="@string/title_activity_expansion_details"
+            android:parentActivityName=".Activity.CharacterSelector" />
+        <activity
+            android:name=".Activity.GameScreen"
             android:label="@string/game_activity"
-            android:parentActivityName=".Activity.CharacterSelector"></activity>
+            android:parentActivityName=".Activity.CharacterSelector" />
         <activity
             android:name=".Activity.CharacterEditor"
             android:label="@string/character_activity"

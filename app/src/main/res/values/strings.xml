@@ -74,4 +74,17 @@
     <string name="game_field_description">Si presionas en cualquier casilla del juego, podrás ver el texto completo y la serie de pasos que ha recibido la misma.</string>
     <string name="color_description">Aquí seleccionarás el color para todos los campos que tengan el mismo id.</string>
     <string name="field_name_description">Aquí puedes seleccionar distintos nombres para el terreno.</string>
+    <string name="title_activity_expansion_details">ExpansionDetails</string>
+    <string name="start_algorithms">Iniciar algoritmos de busqueda</string>
+    <string name="start_game_manual">Iniciar juego manual</string>
+    <string name="title_activity_search_algorithms">SearchAlgorithms</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_uniform_cost">Coste uniforme</string>
+    <string name="title_first_the_best">Primero el mejor</string>
+    <string name="title_a_star">A*</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

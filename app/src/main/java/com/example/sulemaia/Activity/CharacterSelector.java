@@ -259,7 +259,7 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
                     i++;
                 }
                 if (canPass) {
-                    Intent intent = new Intent(getApplicationContext(), GameScreen.class);
+                    Intent intent = new Intent(getApplicationContext(), ExpansionDetails.class);
                     intent.putExtra("contentFile", contentFile);
                     intent.putExtra("character", characters.get(characterSelected));
                     intent.putExtra("initialX", initialX);
