@@ -106,18 +106,15 @@ public class GraphViz {
     }
 
     /**
-     * Returns a string that is used to start a graph.
-     *
-     * @return A string to open a graph.
+     * Initialize the tree syntax
      */
     public void start_graph() {
         add("strict digraph G {\nconcentrate=true\nforcelabels=true\n");
     }
 
     /**
-     * Returns a string that is used to end a graph.
+     * Adds a instruction to end the tree
      *
-     * @return A string to close a graph.
      */
     public void end_graph() {
         add("}");

@@ -29,7 +29,7 @@ public class Tutorial extends IntroActivity {
             "¡Bienvenido a la app!",
             "Configurando el juego",
             "Configurando los personajes",
-            "Área de juego"
+            "Area de juego"
     };
 
     @Override
