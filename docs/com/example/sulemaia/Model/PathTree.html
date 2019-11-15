@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>com.example.sulemaia.Model.PathTree</li>
+<li>com.example.sulemaia.Model.PathManualTree</li>
 </ul>
 </li>
 </ul>
@@ -148,7 +148,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#PathTree-com.example.sulemaia.Model.PathTree.Node-">PathTree</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;anchor)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#PathTree-com.example.sulemaia.Model.PathManualTree.Node-">PathTree</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;anchor)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -167,20 +167,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addMovement-com.example.sulemaia.Model.PathTree.Node-">addMovement</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;child)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addMovement-com.example.sulemaia.Model.PathManualTree.Node-">addMovement</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;child)</code>
 <div class="block">Create a step movement between father and child</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addNode-com.example.sulemaia.Model.PathTree.Node-com.example.sulemaia.Model.PathTree.Node-">addNode</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;father,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addNode-com.example.sulemaia.Model.PathManualTree.Node-com.example.sulemaia.Model.PathManualTree.Node-">addNode</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;father,
        <a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;child)</code>
 <div class="block">This method adds a child to the specified node.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addNodeToInvalidNodes-com.example.sulemaia.Model.PathTree.Node-">addNodeToInvalidNodes</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#addNodeToInvalidNodes-com.example.sulemaia.Model.PathManualTree.Node-">addNodeToInvalidNodes</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>
 <div class="block">this method adds a node to a list of inaccessible nodes</div>
 </td>
 </tr>
@@ -190,7 +190,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#exists-com.example.sulemaia.Model.PathTree.Node-">exists</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;child)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#exists-com.example.sulemaia.Model.PathManualTree.Node-">exists</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;child)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -198,11 +198,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#setFinal-com.example.sulemaia.Model.PathTree.Node-">setFinal</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#setFinal-com.example.sulemaia.Model.PathManualTree.Node-">setFinal</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#setInitial-com.example.sulemaia.Model.PathTree.Node-">setInitial</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/sulemaia/Model/PathTree.html#setInitial-com.example.sulemaia.Model.PathManualTree.Node-">setInitial</a></span>(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -226,7 +226,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="PathTree-com.example.sulemaia.Model.PathTree.Node-">
+<a name="PathTree-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -243,7 +243,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addNodeToInvalidNodes-com.example.sulemaia.Model.PathTree.Node-">
+<a name="addNodeToInvalidNodes-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -257,7 +257,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="addNode-com.example.sulemaia.Model.PathTree.Node-com.example.sulemaia.Model.PathTree.Node-">
+<a name="addNode-com.example.sulemaia.Model.PathManualTree.Node-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -274,7 +274,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="addMovement-com.example.sulemaia.Model.PathTree.Node-">
+<a name="addMovement-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -288,7 +288,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="exists-com.example.sulemaia.Model.PathTree.Node-">
+<a name="exists-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -315,7 +315,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDotTree()</pre>
 </li>
 </ul>
-<a name="setInitial-com.example.sulemaia.Model.PathTree.Node-">
+<a name="setInitial-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -324,7 +324,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <pre>public&nbsp;void&nbsp;setInitial(<a href="../../../../com/example/sulemaia/Model/PathTree.Node.html" title="class in com.example.sulemaia.Model">PathTree.Node</a>&nbsp;node)</pre>
 </li>
 </ul>
-<a name="setFinal-com.example.sulemaia.Model.PathTree.Node-">
+<a name="setFinal-com.example.sulemaia.Model.PathManualTree.Node-">
 <!--   -->
 </a>
 <ul class="blockListLast">

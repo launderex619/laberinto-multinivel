@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class PathTree {
+public class PathManualTree {
 
     private Node anchor;
     private GraphViz graphVizHelper;
@@ -14,7 +14,7 @@ public class PathTree {
     private HashSet<Node> visitedInExpanded;
     private ArrayList<Node> expansionOrder;
 
-    public PathTree(Node anchor) {
+    public PathManualTree(Node anchor) {
         this.graphVizHelper = new GraphViz();
         this.graphVizHelper.start_graph();
         this.anchor = anchor;

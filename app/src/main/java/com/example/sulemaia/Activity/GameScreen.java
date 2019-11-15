@@ -24,7 +24,7 @@ import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.CharacterItem;
-import com.example.sulemaia.Model.PathTree;
+import com.example.sulemaia.Model.PathManualTree;
 import com.example.sulemaia.R;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,11 +45,12 @@ public class GameScreen extends AppCompatActivity {
     private TableLayout tlTableMap;
     private FloatingActionButton fabUp, fabLeft, fabDown, fabRight;
     private EditText board[][];
-    private PathTree.Node nodes[][];
+    private PathManualTree.Node nodes[][];
     private ButtonActions buttonActions;
     private Drawable characterIcon;
-    private PathTree tree;
+    private PathManualTree tree;
     private enum MOVEMENT_CODES {DOWN, UP, LEFT, RIGHT, NONE};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class GameScreen extends AppCompatActivity {
         fabRight.setOnClickListener(buttonActions);
         fabLeft.setOnClickListener(buttonActions);
         fabDown.setOnClickListener(buttonActions);
+
         tlTableMap.post(new Runnable() {
             @Override
             public void run() {
@@ -91,7 +93,7 @@ public class GameScreen extends AppCompatActivity {
 
     private void initTreeAndColors() {
         nodes[actualY][actualX].setStep(actualStep);
-        tree = new PathTree(nodes[actualY][actualX]);
+        tree = new PathManualTree(nodes[actualY][actualX]);
         tree.setInitial(nodes[actualY][actualX]);
         for (int i = 0; i < mapValues.length; i++) {
             for (int j = 0; j < mapValues[0].length; j++) {
@@ -165,7 +167,7 @@ public class GameScreen extends AppCompatActivity {
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
-        nodes = new PathTree.Node[mapValues.length][mapValues[0].length];
+        nodes = new PathManualTree.Node[mapValues.length][mapValues[0].length];
 
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(GameScreen.this);
@@ -196,7 +198,7 @@ public class GameScreen extends AppCompatActivity {
                 EditText et = new EditText(GameScreen.this);
                 et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
                 board[i][j] = et;
-                nodes[i][j] = new PathTree.Node(et.getTag().toString(),
+                nodes[i][j] = new PathManualTree.Node(et.getTag().toString(),
                         character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),
                         character.getCanPass().get(codes.indexOf(mapValues[i][j])));
                 et.setFocusable(false);

@@ -27,7 +27,7 @@ public class ExpansionDetails extends AppCompatActivity {
     private Button btn_start_algorithms, btn_start_manual;
     private ImageButton btn_down, btn_up, btn_left, btn_right;
     private TextView slots[], tv_start_algorithms;
-    private ArrayList<Character> expansionOrder;
+    private ArrayList<String> expansionOrder;
     private Boolean state[][] = {{true, true, true, true}, {false, false, false, false}};
     Intent intent;
 
@@ -68,7 +68,7 @@ public class ExpansionDetails extends AppCompatActivity {
     }
 
     private class ButtonActions implements View.OnClickListener {
-        private static final char DOWN = 'd', UP = 'u', LEFT = 'l', RIGHT = 'r';
+        private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
         @Override
         public void onClick(View v) {
             if (v == btn_down) {
@@ -121,6 +121,7 @@ public class ExpansionDetails extends AppCompatActivity {
             }
             else if (v == btn_start_algorithms){
                 intent.setClass(getApplicationContext(), SearchAlgorithms.class);
+                intent.putStringArrayListExtra("expansionOrder", expansionOrder);
                 startActivity(intent);
             }
         }

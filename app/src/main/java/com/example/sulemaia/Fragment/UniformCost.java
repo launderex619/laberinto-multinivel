@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,24 +15,26 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.sulemaia.Activity.GameScreen;
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.Model.CharacterItem;
-import com.example.sulemaia.Model.PathTree;
+import com.example.sulemaia.Model.PathManualTree;
 import com.example.sulemaia.R;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
@@ -39,20 +42,26 @@ import static com.example.sulemaia.Helper.Constants.characterIcons;
  * A simple {@link Fragment} subclass.
  */
 public class UniformCost extends Fragment {
-
+    private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
     float textSize;
     private ArrayList<String> biomes = new ArrayList<>();
-    private String contentFile;
+    private ArrayList<String> expansionOrder = new ArrayList<>();
+    private String contentFile, updateTimeText;
     private ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Integer> codes = new ArrayList<>();
     private int initialX, finalX, initialY, finalY, actualX, actualY, actualStep = 1, mapValues[][];
+    private long updateTime = 0;
     private CharacterItem character;
     private TableLayout tlTableMap;
     private EditText board[][];
-    private PathTree.Node nodes[][];
+    private PathManualTree.Node nodes[][];
     private ButtonActions buttonActions;
     private Drawable characterIcon;
-    private PathTree tree;
+    private PathManualTree tree;
+    private Button btnStartAlgorithm;
+    private TextView tvRefreshRate;
+    private SeekBar sbRefreshBar;
+    private ResolverUniformCostThread resolverUniformCostThread;
 
     public UniformCost() {
         // Required empty public constructor
@@ -67,6 +76,7 @@ public class UniformCost extends Fragment {
         View view = inflater.inflate(R.layout.fragment_uniform_cost, container, false);
         Bundle bundle = getArguments();
         biomes.addAll(bundle.getStringArrayList("biomes"));
+        expansionOrder.addAll(bundle.getStringArrayList("expansionOrder"));
         contentFile = bundle.getString("contentFile");
         colors.addAll(bundle.getIntegerArrayList("colors"));
         codes.addAll(bundle.getIntegerArrayList("codes"));
@@ -75,10 +85,17 @@ public class UniformCost extends Fragment {
         initialY = bundle.getInt("initialY", 0);
         finalY = bundle.getInt("finalY", 0);
         character = (CharacterItem) bundle.getSerializable("character");
-
+        btnStartAlgorithm = view.findViewById(R.id.btn_start_algorithm);
+        tvRefreshRate = view.findViewById(R.id.tv_refresh_rate);
+        sbRefreshBar = view.findViewById(R.id.sb_refresh_bar);
         tlTableMap = view.findViewById(R.id.tl_game_table_map);
-
+        updateTimeText = tvRefreshRate.getText().toString();
+        tvRefreshRate.setText(updateTimeText + ": " + (2 + updateTime) + "ms");
+        resolverUniformCostThread = new ResolverUniformCostThread();
         buttonActions = new ButtonActions();
+        btnStartAlgorithm.setOnClickListener(buttonActions);
+        sbRefreshBar.setOnSeekBarChangeListener(buttonActions);
+
         tlTableMap.post(new Runnable() {
             @Override
             public void run() {
@@ -93,7 +110,7 @@ public class UniformCost extends Fragment {
 
     private void initTreeAndColors() {
         nodes[actualY][actualX].setStep(actualStep);
-        tree = new PathTree(nodes[actualY][actualX]);
+        tree = new PathManualTree(nodes[actualY][actualX]);
         tree.setInitial(nodes[actualY][actualX]);
         for (int i = 0; i < mapValues.length; i++) {
             for (int j = 0; j < mapValues[0].length; j++) {
@@ -108,25 +125,41 @@ public class UniformCost extends Fragment {
     private void setAdyacentFieldsAndColor(int y, int x) {
         //middle
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
-        //up
-        if (y - 1 >= 0) {
-            setFieldColor(y - 1, x, colors.get(codes.indexOf(mapValues[y - 1][x])));
-            tree.addNode(nodes[y][x], nodes[y-1][x]);
+        for (String direction : expansionOrder) {
+            expandInDirection(direction, y, x);
         }
-        //down
-        if (y + 1 < board.length) {
-            setFieldColor(y + 1, x, colors.get(codes.indexOf(mapValues[y + 1][x])));
-            tree.addNode(nodes[y][x], nodes[y+1][x]);
-        }
-        //left
-        if (x - 1 >= 0) {
-            setFieldColor(y, x - 1, colors.get(codes.indexOf(mapValues[y][x - 1])));
-            tree.addNode(nodes[y][x], nodes[y][x-1]);
-        }
-        //right
-        if (x + 1 < board[0].length) {
-            setFieldColor(y, x + 1, colors.get(codes.indexOf(mapValues[y][x + 1])));
-            tree.addNode(nodes[y][x], nodes[y][x+1]);
+    }
+
+    private void expandInDirection(String direction, int y, int x) {
+        switch (direction) {
+            case UP:
+                //up
+                if (y - 1 >= 0) {
+                    setFieldColor(y - 1, x, colors.get(codes.indexOf(mapValues[y - 1][x])));
+                    tree.addNode(nodes[y][x], nodes[y - 1][x]);
+                }
+                break;
+            case DOWN:
+                //down
+                if (y + 1 < board.length) {
+                    setFieldColor(y + 1, x, colors.get(codes.indexOf(mapValues[y + 1][x])));
+                    tree.addNode(nodes[y][x], nodes[y + 1][x]);
+                }
+                break;
+            case LEFT:
+                //left
+                if (x - 1 >= 0) {
+                    setFieldColor(y, x - 1, colors.get(codes.indexOf(mapValues[y][x - 1])));
+                    tree.addNode(nodes[y][x], nodes[y][x - 1]);
+                }
+                break;
+            case RIGHT:
+                //right
+                if (x + 1 < board[0].length) {
+                    setFieldColor(y, x + 1, colors.get(codes.indexOf(mapValues[y][x + 1])));
+                    tree.addNode(nodes[y][x], nodes[y][x + 1]);
+                }
+                break;
         }
     }
 
@@ -167,7 +200,7 @@ public class UniformCost extends Fragment {
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
-        nodes = new PathTree.Node[mapValues.length][mapValues[0].length];
+        nodes = new PathManualTree.Node[mapValues.length][mapValues[0].length];
 
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(getContext());
@@ -198,7 +231,7 @@ public class UniformCost extends Fragment {
                 EditText et = new EditText(getContext());
                 et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
                 board[i][j] = et;
-                nodes[i][j] = new PathTree.Node(et.getTag().toString(),
+                nodes[i][j] = new PathManualTree.Node(et.getTag().toString(),
                         character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),
                         character.getCanPass().get(codes.indexOf(mapValues[i][j])));
                 et.setFocusable(false);
@@ -215,14 +248,79 @@ public class UniformCost extends Fragment {
         }
 
     }
-    private class ButtonActions implements View.OnClickListener {
+
+    private class ButtonActions implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
         @Override
         public void onClick(View v) {
-            new SimpleOkDialog(getContext(),
-                    getString(R.string.field_information_game_screen) + "\n" +
-                            v.getTag().toString(),
-                    ((EditText) v).getText().toString()
-            ).build().show();
+            if (v == btnStartAlgorithm) {
+                resolverUniformCostThread.execute();
+            } else {
+                new SimpleOkDialog(getContext(),
+                        getString(R.string.field_information_game_screen) + "\n" +
+                                v.getTag().toString(),
+                        ((EditText) v).getText().toString()
+                ).build().show();
+            }
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            updateTime = (2 + progress) * (progress);
+            tvRefreshRate.setText(updateTimeText + ": " + updateTime + "ms");
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
+
+    private class ResolverUniformCostThread extends AsyncTask<Void, Integer, Void> {
+        private PriorityQueue<PathManualTree.Node> expandedNodes;
+        private HashSet<PathManualTree.Node> visitedNodes;
+
+        ResolverUniformCostThread(){
+            expandedNodes = new PriorityQueue<>(
+                    225, //225 because max size is 15 rows times 15 columns so 15*15=225
+                    new Comparator<PathManualTree.Node>() {
+                        @Override
+                        public int compare(PathManualTree.Node o1, PathManualTree.Node o2) {
+                            return Float.compare(o1.getCost(), o2.getCost());
+                        }
+                    });
+            visitedNodes = new HashSet<>(225);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //code for pre execute the thread
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (int i = 0; i < 101; i++) {
+                publishProgress(i); //this calls onPogressUpdateMethod ;)
+                try {
+                    Thread.sleep(updateTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // code that runs when thread finishes
         }
     }
 }
