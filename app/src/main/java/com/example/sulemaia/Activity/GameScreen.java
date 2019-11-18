@@ -196,7 +196,7 @@ public class GameScreen extends AppCompatActivity {
                             tlTableMap.getHeight() / (mapValues.length + 1)));
                 }
                 EditText et = new EditText(GameScreen.this);
-                et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
+                et.setTag("" + Parser.getLetterForInt(j + 1) + ", " + (i + 1));
                 board[i][j] = et;
                 nodes[i][j] = new PathManualTree.Node(et.getTag().toString(),
                         character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),

@@ -91,7 +91,6 @@ public class UniformCost extends Fragment {
         tlTableMap = view.findViewById(R.id.tl_game_table_map);
         updateTimeText = tvRefreshRate.getText().toString();
         tvRefreshRate.setText(updateTimeText + ": " + (2 + updateTime) + "ms");
-        resolverUniformCostThread = new ResolverUniformCostThread();
         buttonActions = new ButtonActions();
         btnStartAlgorithm.setOnClickListener(buttonActions);
         sbRefreshBar.setOnSeekBarChangeListener(buttonActions);
@@ -229,7 +228,7 @@ public class UniformCost extends Fragment {
                             tlTableMap.getHeight() / (mapValues.length + 1)));
                 }
                 EditText et = new EditText(getContext());
-                et.setTag("" + (i + 1) + ", " + Parser.getLetterForInt(j + 1));
+                et.setTag("" + Parser.getLetterForInt(j + 1) + ", " + (i + 1));
                 board[i][j] = et;
                 nodes[i][j] = new PathManualTree.Node(et.getTag().toString(),
                         character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),
@@ -253,6 +252,7 @@ public class UniformCost extends Fragment {
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
+                resolverUniformCostThread = new ResolverUniformCostThread();
                 resolverUniformCostThread.execute();
             } else {
                 new SimpleOkDialog(getContext(),
