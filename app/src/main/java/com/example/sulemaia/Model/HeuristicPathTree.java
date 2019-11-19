@@ -24,7 +24,7 @@ public class HeuristicPathTree {
      * @param child  child node
      */
     public void addNode(Node father, Node child) {
-        if( child == null || father == null){
+        if (child == null || father == null) {
             return;
         }
         father.addChild(child);
@@ -36,27 +36,32 @@ public class HeuristicPathTree {
 
     /**
      * Create a step movement between father and child
+     *
      * @param child final node
      */
-    public void addMovementAccumulative(Node child){
+    public void addMovementAccumulative(Node child) {
         graphVizHelper.addConectorWithLabel(child.getFather().getName(), child.getName(),
                 String.valueOf(child.getAccumulative()));
         graphVizHelper.addNodeStep(child.getName(), child.getStep());
     }
+
     /**
      * Create a step movement between father and child
+     *
      * @param child final node
      */
-    public void addMovementRemaining(Node child){
+    public void addMovementRemaining(Node child) {
         graphVizHelper.addConectorWithLabel(child.getFather().getName(), child.getName(),
                 String.valueOf(child.getRemaining()));
         graphVizHelper.addNodeStep(child.getName(), child.getStep());
     }
+
     /**
      * Create a step movement between father and child
+     *
      * @param child final node
      */
-    public void addMovementAll(Node child){
+    public void addMovementAll(Node child) {
         graphVizHelper.addConectorWithLabel(child.getFather().getName(), child.getName(),
                 child.getAccumulative() + " + " + child.getRemaining() + " = " +
                         (child.getAccumulative() + child.getRemaining()));
@@ -108,7 +113,7 @@ public class HeuristicPathTree {
             return accessible;
         }
 
-        public boolean isFinal(int y, int x){
+        public boolean isFinal(int y, int x) {
             return (x == posX && y == posY);
         }
 
@@ -118,7 +123,7 @@ public class HeuristicPathTree {
 
         private boolean accessible;
 
-        public Node(String name, float cost, boolean accessible) {
+        public Node(String name, float cost, boolean accessible, int y, int x) {
             this.children = new ArrayList<>(4); //4 por que no puede tener mas de 4 hijos de momento
             this.accessible = accessible;
             this.step = new StringBuilder();
@@ -126,6 +131,8 @@ public class HeuristicPathTree {
             this.cost = cost;
             this.accumulative = 0f;
             this.remaining = Float.MAX_VALUE;
+            this.posY = y;
+            this.posX = x;
         }
 
 

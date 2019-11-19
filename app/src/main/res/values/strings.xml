@@ -90,4 +90,5 @@
     <string name="start_algorithm">Iniciar algoritmo de busqueda</string>
     <string name="refresh_rate">Tiempo de actualizacion</string>
     <string name="choose_distance_measure_type">Elige el tipo de medida para el algoritmo</string>
+    <string name="path_not_found">Camino no encontrado</string>
 </resources>
