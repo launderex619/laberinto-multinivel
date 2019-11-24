@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * <dl>
@@ -46,6 +48,10 @@ public class GraphViz {
      * The source of the graph written in dot language.
      */
     private StringBuilder graph = new StringBuilder();
+    /**
+     * Set made to avoid repetitions.
+     */
+    private HashSet<String> lines = new HashSet<>();
 
     /**
      * Constructor: creates a new GraphViz object that will contain
@@ -90,8 +96,11 @@ public class GraphViz {
      * @param step current step of the node that will be displayed
      */
     public void addNodeStep(String node, String step){
-        add("\"" + node + "\"" + "[xlabel = \"" + step + "\"]");
-        addln();
+        String line = "\"" + node + "\"" + "[xlabel = \"" + step + "\"]" + "\n";
+        if(!lines.contains(line)){
+            lines.add(line);
+            add(line);
+        }
     }
 
     /**
@@ -101,8 +110,11 @@ public class GraphViz {
      * @param cost Value to be placed
      */
     public void addConectorWithLabel(String from, String to, String cost){
-        add("\"" + from +"\""+ " -> " + "\"" + to + "\"" + "[label = \"" + cost +  "\"]");
-        addln();
+        String line ="\"" + from +"\""+ " -> " + "\"" + to + "\"" + "[label = \"" + cost +  "\"]" + "\n";
+        if(!lines.contains(line)){
+            lines.add(line);
+            add(line);
+        }
     }
 
     /**

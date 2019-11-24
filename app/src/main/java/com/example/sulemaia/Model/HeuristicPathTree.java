@@ -7,6 +7,9 @@ import java.util.HashSet;
 
 public class HeuristicPathTree {
 
+    public static final int UNIFORM_COST = 0;
+    public static final int FIRST_BEST = 1;
+    public static final int A_STAR = 2;
     private Node anchor;
     private GraphViz graphVizHelper;
     private Node lastNode;
@@ -40,9 +43,6 @@ public class HeuristicPathTree {
         }
         father.addChild(child);
         child.setFather(father);
-        graphVizHelper.addConectorWithLabel(father.getName(), child.getName(),
-                String.valueOf(father.getCost()));
-        graphVizHelper.addNodeStep(father.getName(), father.getStep());
     }
 
     /**
@@ -81,20 +81,6 @@ public class HeuristicPathTree {
 
 
     public void endTree() {
-//        for(int i = 1; i < expansionOrder.size()-1; i++){
-//            if(!expansionOrder.get(i-1).getChildren().contains(expansionOrder.get(i))){
-//                expansionOrder.get(i).getFather().getChildren().remove(expansionOrder.get(i));
-//                expansionOrder.get(i).setFather(expansionOrder.get(i-1));
-//                expansionOrder.get(i-1).addChild(expansionOrder.get(i));
-//            }
-//        }
-//        expansionOrder.get(expansionOrder.size()-1).getFather().getChildren().remove(expansionOrder.get(expansionOrder.size()-1));
-//        expansionOrder.get(expansionOrder.size()-2).addChild(expansionOrder.get(expansionOrder.size()-1));
-//        for(int i = 0; i < expansionOrder.size()-1; i++){
-//            drawTree(expansionOrder.get(i));
-//        }
-//        graphVizHelper.addNodeStep(expansionOrder.get(expansionOrder.size()-1).getName(),
-//                expansionOrder.get(expansionOrder.size()-1).getStep());
         graphVizHelper.end_graph();
     }
 
@@ -112,6 +98,7 @@ public class HeuristicPathTree {
 
     public void setLastNode(Node lastNode) {
         this.lastNode = lastNode;
+
     }
 
     public Node getFinalNode() {
@@ -120,6 +107,32 @@ public class HeuristicPathTree {
 
     public Node getAnchor() {
         return anchor;
+    }
+
+    private void createDotTree(int expansionAlgorithm) {
+        switch (expansionAlgorithm) {
+            case UNIFORM_COST:
+
+                break;
+            case FIRST_BEST:
+                inOrderFirst(anchor);
+                break;
+            case A_STAR:
+                break;
+        }
+    }
+
+    private void inOrderFirst(Node father) {
+        for (Node child : father.getChildren()) {
+            addMovementRemaining(child);
+        }
+        for (Node child : father.getChildren()) {
+            inOrderFirst(child);
+        }
+    }
+
+    public void drawDotTree(int expansionAlgorithm) {
+        createDotTree(expansionAlgorithm);
     }
 
     public static class Node {
@@ -131,19 +144,6 @@ public class HeuristicPathTree {
         private int posY, posX;
         private float accumulative;
         private float remaining;
-
-        public boolean isAccessible() {
-            return accessible;
-        }
-
-        public boolean isFinal(int y, int x) {
-            return (x == posX && y == posY);
-        }
-
-        public void setAccessible(boolean accessible) {
-            this.accessible = accessible;
-        }
-
         private boolean accessible;
 
         public Node(String name, float cost, boolean accessible, int y, int x) {
@@ -156,6 +156,18 @@ public class HeuristicPathTree {
             this.remaining = Float.MAX_VALUE;
             this.posY = y;
             this.posX = x;
+        }
+
+        public boolean isAccessible() {
+            return this.accessible;
+        }
+
+        public boolean isFinal(int y, int x) {
+            return (x == posX && y == posY);
+        }
+
+        public void setAccessible(boolean accessible) {
+            this.accessible = accessible;
         }
 
 

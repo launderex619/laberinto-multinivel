@@ -25,6 +25,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
     private HeuristicPathTree tree;
     private int measureMode;
     private int lastY, lastX;
+    private int actualStep = 1;
 
     public ResolverFirstBestThread(HeuristicPathTree.Node[][] nodes,
                                    ArrayList<String> expansionOrder,
@@ -50,17 +51,21 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         int finalX = lastX = values[3];
         //code for pre execute the thread
         iMethods.setColorToField(initialY, initialX);
-        getNodesNextStep(initialY, initialX, expandedNodes, visitedNodes);
+        visitedNodes.add(nodes[initialY][initialX]);
+        getNodesNextStep(nodes[initialY][initialX], expandedNodes, visitedNodes);
         tree.setAnchor(nodes[initialY][initialX]);
+        tree.setInitial(nodes[initialY][initialX]);
 
         // mientras la cola no este vacia
         while (expandedNodes.size() > 0) {
             HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
+            actualNode.setStep(actualStep++);
             //evaluamos el nodo
             if (actualNode == nodes[finalY][finalX]) {
                 publishProgress(actualNode);
                 expandedNodes.clear();
                 tree.setLastNode(actualNode);
+                tree.setFinal(actualNode);
                 return tree;
             }
             //lo agregamos al set de visitados
@@ -68,7 +73,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
             //agregamos a los hijos
             //expandedNodes.addAll(getNodesNextStep(actualNode.getPosY(), actualNode.getPosX(), expandedNodes, visitedNodes));.
             publishProgress(actualNode);
-            getNodesNextStep(actualNode.getPosY(), actualNode.getPosX(), expandedNodes, visitedNodes);
+            getNodesNextStep(actualNode, expandedNodes, visitedNodes);
             try {
                 Thread.sleep(updateTime);
             } catch (InterruptedException e) {
@@ -88,12 +93,18 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
     @Override
     protected void onPostExecute(HeuristicPathTree heuristicPathTree) {
         super.onPostExecute(heuristicPathTree);
+        heuristicPathTree.drawDotTree(HeuristicPathTree.FIRST_BEST);
+        heuristicPathTree.endTree();
         iMethods.drawPath(heuristicPathTree);
     }
 
 
     private void getNodesNextStep(
-            int y, int x, ArrayList<HeuristicPathTree.Node> expandedNodes, HashSet<HeuristicPathTree.Node> visitedNodes) {
+            HeuristicPathTree.Node node,
+            ArrayList<HeuristicPathTree.Node> expandedNodes,
+            HashSet<HeuristicPathTree.Node> visitedNodes) {
+        int y = node.getPosY();
+        int x = node.getPosX();
         for (String direction : expansionOrder) {
             HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
             //area for fitness
@@ -104,24 +115,31 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
                 }
             }
         }
+        
         Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
             @Override
             public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
                 return Float.compare(o1.getRemaining(), o2.getRemaining());
             }
         });
+//        Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
+//            @Override
+//            public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
+//                return Float.compare(o1.getCost(), o2.getCost());
+//            }
+//        });
         //return nodes;
     }
 
     private void setFitness(HeuristicPathTree.Node response) {
         float distance = 0f;
-        switch (measureMode){
+        switch (measureMode) {
             case EUCLIDIANA:
-                distance = (float) Math.sqrt(Math.pow(lastX - response.getPosX(), 2)+Math.pow(lastY - response.getPosY(), 2));
+                distance = (float) Math.sqrt(Math.pow(lastX - response.getPosX(), 2) + Math.pow(lastY - response.getPosY(), 2));
                 response.setRemaining(distance);
                 break;
             case MANHATTAN:
-                distance = (float)(Math.abs(response.getPosX() - lastX) + Math.abs(response.getPosY() - lastY));
+                distance = (float) (Math.abs(response.getPosX() - lastX) + Math.abs(response.getPosY() - lastY));
                 response.setRemaining(distance);
                 break;
         }
@@ -138,6 +156,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
                         return null;
                     }
                     if (!nodes[y - 1][x].isAccessible()) {
+                        visitedNodes.add(nodes[y - 1][x]);
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y - 1][x]);
@@ -152,6 +171,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
                         return null;
                     }
                     if (!nodes[y + 1][x].isAccessible()) {
+                        visitedNodes.add(nodes[y + 1][x]);
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y + 1][x]);
@@ -166,6 +186,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
                         return null;
                     }
                     if (!nodes[y][x - 1].isAccessible()) {
+                        visitedNodes.add(nodes[y][x - 1]);
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y][x - 1]);
@@ -180,6 +201,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
                         return null;
                     }
                     if (!nodes[y][x + 1].isAccessible()) {
+                        visitedNodes.add(nodes[y][x + 1]);
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y][x + 1]);

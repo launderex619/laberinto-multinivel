@@ -1,11 +1,14 @@
 package com.example.sulemaia.Fragment;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -120,17 +123,9 @@ public class FirstBest extends Fragment implements iFirstTheBest {
             public void run() {
                 createTable(Parser.getFileArray(contentFile));
                 loadBoard();
-                initTreeAndColors();
             }
         });
         return view;
-    }
-
-
-    private void initTreeAndColors() {
-        nodes[actualY][actualX].setStep(actualStep);
-        tree = new HeuristicPathTree(nodes[actualY][actualX]);
-        tree.setInitial(nodes[actualY][actualX]);
     }
 
     private void setFieldColor(int y, int x, int color) {
@@ -281,7 +276,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
 
     @Override
     public void drawPath(HeuristicPathTree heuristicPathTree) {
-        if( heuristicPathTree == null){
+        if (heuristicPathTree == null) {
             return;
         }
 
@@ -291,6 +286,22 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         while (node != heuristicPathTree.getAnchor()) {
             node = node.getFather();
             board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
+        }
+        new SimpleOkDialog(getContext(),
+                getString(R.string.game_over),
+                getString(R.string.you_finish_game)).build().show();
+        String urlTree = "https://dreampuf.github.io/GraphvizOnline/#" +
+                heuristicPathTree.getDotTree().replace("\n", "%0A");
+
+        if(urlTree.length()/1024 < 1024){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTree));
+            startActivity(browserIntent);
+        }
+       else {
+            Toast.makeText(getContext(), "Hubo un error al abrir la pagina web, DEMACIADA INFORMACION. URL copiada al portapapeles", Toast.LENGTH_SHORT).show();
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", urlTree);
+            clipboard.setPrimaryClip(clip);
         }
     }
 
