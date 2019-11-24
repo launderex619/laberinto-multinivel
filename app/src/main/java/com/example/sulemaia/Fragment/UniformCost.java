@@ -252,8 +252,8 @@ public class UniformCost extends Fragment {
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
-                resolverUniformCostThread = new ResolverUniformCostThread();
-                resolverUniformCostThread.execute();
+                //resolverUniformCostThread = new ResolverUniformCostThread();
+                //resolverUniformCostThread.execute();
             } else {
                 new SimpleOkDialog(getContext(),
                         getString(R.string.field_information_game_screen) + "\n" +

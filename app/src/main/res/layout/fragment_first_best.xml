@@ -52,6 +52,7 @@
                             android:textAlignment="center"
                             />
 
+
                     </LinearLayout>
 
                     <TableLayout
@@ -89,16 +90,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btn_start_algorithm"
-                        style="@style/AppTheme.Button"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
-                        android:text="@string/start_algorithm" />
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+
+                        <Button
+                            android:id="@+id/btn_start_algorithm"
+                            style="@style/AppTheme.Button"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:text="@string/start_algorithm" />
+                    </LinearLayout>
 
                 </LinearLayout>
 

@@ -32,9 +32,11 @@ import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
+import com.example.sulemaia.Interface.iFirstTheBest;
 import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.Model.HeuristicPathTree;
 import com.example.sulemaia.R;
+import com.example.sulemaia.Thread.ResolverFirstBestThread;
 import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
@@ -48,11 +50,7 @@ import static com.example.sulemaia.Helper.Constants.characterIcons;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FirstBest extends Fragment {
-    private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
-    private static final int MANHATTAN = 0;
-    private static final int EUCLIDIANA = 1;
-
+public class FirstBest extends Fragment implements iFirstTheBest {
     float textSize;
     private ArrayList<String> biomes = new ArrayList<>();
     private ArrayList<String> expansionOrder = new ArrayList<>();
@@ -72,7 +70,6 @@ public class FirstBest extends Fragment {
     private Button btnStartAlgorithm;
     private TextView tvRefreshRate;
     private SeekBar sbRefreshBar;
-    private FirstBest.ResolverFirstBestThread resolverFirstBestThread;
     private Spinner spMeasureType;
     private int pathColor = 0xFFFF0000;
 
@@ -134,10 +131,6 @@ public class FirstBest extends Fragment {
         nodes[actualY][actualX].setStep(actualStep);
         tree = new HeuristicPathTree(nodes[actualY][actualX]);
         tree.setInitial(nodes[actualY][actualX]);
-    }
-
-    private void setColorToField(int y, int x) {
-        setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 
     private void setFieldColor(int y, int x, int color) {
@@ -232,9 +225,28 @@ public class FirstBest extends Fragment {
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
-                resolverFirstBestThread = new FirstBest.ResolverFirstBestThread();
-                resolverFirstBestThread.execute();
-                resolverFirstBestThread.onPostExecute(null);
+
+                ColorPickerPopup color = new ColorPickerPopup.Builder(getContext())
+                        .initialColor(Color.RED) // Set initial color
+                        .enableBrightness(true) // Enable brightness slider or not
+                        .enableAlpha(false) // Enable alpha slider or not
+                        .okTitle("Aceptar")
+                        .cancelTitle("Cancelar")
+                        .showIndicator(true)
+                        .showValue(true)
+                        .build();
+                color.show(new ColorPickerPopup.ColorPickerObserver() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        pathColor = color;
+                        (new ResolverFirstBestThread(nodes,
+                                expansionOrder,
+                                updateTime,
+                                FirstBest.this,
+                                measureMode))
+                                .execute(initialY, initialX, finalY, finalX);
+                    }
+                });
             } else {
                 new SimpleOkDialog(getContext(),
                         getString(R.string.field_information_game_screen) + "\n" +
@@ -261,188 +273,38 @@ public class FirstBest extends Fragment {
         }
     }
 
-    private void showFailureMessage() {
+    @Override
+    public void showFailureMessage() {
         (new SimpleOkDialog(getContext(), getString(R.string.error),
-                getString(R.string.path_not_found))).build();
+                getString(R.string.path_not_found))).build().show();
     }
-    private void drawPath() {
-        HeuristicPathTree.Node path = nodes[finalY][finalX];
 
-        new ColorPickerPopup.Builder(getContext())
-                .initialColor(Color.RED) // Set initial color
-                .enableBrightness(true) // Enable brightness slider or not
-                .enableAlpha(false) // Enable alpha slider or not
-                .okTitle("Aceptar")
-                .cancelTitle("Cancelar")
-                .showIndicator(true)
-                .showValue(true)
-                .build()
-                .show(new ColorPickerPopup.ColorPickerObserver() {
-                    @Override
-                    public void onColorPicked(int color) {
-                        pathColor = color;
-                    }
-                });
-        while (path != nodes[initialY][initialY]){
-            board[path.getPosY()][path.getPosX()].setBackgroundColor(pathColor);
+    @Override
+    public void drawPath(HeuristicPathTree heuristicPathTree) {
+        if( heuristicPathTree == null){
+            return;
+        }
+
+        HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
+
+        board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
+        while (node != heuristicPathTree.getAnchor()) {
+            node = node.getFather();
+            board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         }
     }
 
-    private void getNodesNextStep(
-            int y, int x, ArrayList<HeuristicPathTree.Node> expandedNodes, HashSet<HeuristicPathTree.Node> visitedNodes) {
-        //middle
-        //PriorityQueue<HeuristicPathTree.Node> nodes = new PriorityQueue<>(4);
-        for (String direction : expansionOrder) {
-            HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
-            if (response != null) {
-                if (!expandedNodes.contains(response)) {
-                    expandedNodes.add(response);
-                }
-            }
-        }
-        Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
-            @Override
-            public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
-                return Float.compare(o1.getCost(), o2.getCost());
-            }
-        });
-        //return nodes;
-    }
-
-    private HeuristicPathTree.Node expandInDirection(String direction, int y, int x,
-                                                     HashSet<HeuristicPathTree.Node> visitedNodes) {
-        switch (direction) {
-            case UP:
-                //up
-                if (y - 1 >= 0) {
-                    setColorToField(y - 1, x);
-                    if (visitedNodes.contains(nodes[y - 1][x])) {
-                        return null;
-                    }
-                    if (!nodes[y - 1][x].isAccessible()) {
-                        return null;
-                    }
-                    tree.addNode(nodes[y][x], nodes[y - 1][x]);
-                    return nodes[y - 1][x];
-                }
-                break;
-            case DOWN:
-                //down
-                if (y + 1 < board.length) {
-                    setColorToField(y + 1, x);
-                    if (visitedNodes.contains(nodes[y + 1][x])) {
-                        return null;
-                    }
-                    if (!nodes[y + 1][x].isAccessible()) {
-                        return null;
-                    }
-                    tree.addNode(nodes[y][x], nodes[y + 1][x]);
-                    return nodes[y + 1][x];
-                }
-                break;
-            case LEFT:
-                //left
-                if (x - 1 >= 0) {
-                    setColorToField(y, x - 1);
-                    if (visitedNodes.contains(nodes[y][x - 1])) {
-                        return null;
-                    }
-                    if (!nodes[y][x - 1].isAccessible()) {
-                        return null;
-                    }
-                    tree.addNode(nodes[y][x], nodes[y][x - 1]);
-                    return nodes[y][x - 1];
-                }
-                break;
-            case RIGHT:
-                //right
-                if (x + 1 < board[0].length) {
-                    setColorToField(y, x + 1);
-                    if (visitedNodes.contains(nodes[y][x + 1])) {
-                        return null;
-                    }
-                    if (!nodes[y][x + 1].isAccessible()) {
-                        return null;
-                    }
-                    tree.addNode(nodes[y][x], nodes[y][x + 1]);
-                    return nodes[y][x + 1];
-                }
-                break;
-        }
-        return null;
-    }
-
-    private class ResolverFirstBestThread extends AsyncTask<Void, HeuristicPathTree.Node, Void> {
-        private ArrayList<HeuristicPathTree.Node> expandedNodes;
-        private HashSet<HeuristicPathTree.Node> visitedNodes;
-        private boolean isPathFounded;
-
-        ResolverFirstBestThread() {
-//            expandedNodes = new PriorityQueue<>(
-//                    225, //225 because max size is 15 rows times 15 columns so 15*15=225
-//                    new Comparator<HeuristicPathTree.Node>() {
-//                        @Override
-//                        public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
-//                            return Float.compare(o2.getCost(), o1.getCost());
-//                        }
-//                    });
-            expandedNodes = new ArrayList<>(225);
-            visitedNodes = new HashSet<>(225);
-            isPathFounded = false;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            //code for pre execute the thread
-            setColorToField(initialY, initialX);
-            //expandedNodes.addAll(getNodesNextStep(initialY, initialX, expandedNodes, visitedNodes));.
-            getNodesNextStep(initialY, initialX, expandedNodes, visitedNodes);
-            //expandedNodes.
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // mientras la cola no este vacia
-            while (expandedNodes.size() > 0) {
-                HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
-                //evaluamos el nodo
-                if (actualNode == nodes[finalY][finalX]) {
-                    // do stuff to end the thread, we reach the final node
-                    isPathFounded = true;
-                    publishProgress(actualNode);
-                    break;
-                }
-                //lo agregamos al set de visitados
-                visitedNodes.add(actualNode);
-                //agregamos a los hijos
-                //expandedNodes.addAll(getNodesNextStep(actualNode.getPosY(), actualNode.getPosX(), expandedNodes, visitedNodes));.
-                publishProgress(actualNode);
-                getNodesNextStep(actualNode.getPosY(), actualNode.getPosX(), expandedNodes, visitedNodes);
-                try {
-                    Thread.sleep(updateTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(HeuristicPathTree.Node... values) {
-            moveCharacter(values[0].getPosY(), values[0].getPosX());
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            drawPath();
-        }
-    }
-
-    private void moveCharacter(int posY, int posX) {
+    @Override
+    public void moveCharacter(int posY, int posX) {
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         actualY = posY;
         actualX = posX;
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+    }
+
+    @Override
+    public void setColorToField(int y, int x) {
+        setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 
 

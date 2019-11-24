@@ -9,10 +9,21 @@ public class HeuristicPathTree {
 
     private Node anchor;
     private GraphViz graphVizHelper;
+    private Node lastNode;
 
     public HeuristicPathTree(Node anchor) {
         this.graphVizHelper = new GraphViz();
         this.graphVizHelper.start_graph();
+        this.anchor = anchor;
+        this.anchor.setFather(anchor);
+    }
+
+    public HeuristicPathTree() {
+        this.graphVizHelper = new GraphViz();
+        this.graphVizHelper.start_graph();
+    }
+
+    public void setAnchor(Node anchor) {
         this.anchor = anchor;
         this.anchor.setFather(anchor);
     }
@@ -97,6 +108,18 @@ public class HeuristicPathTree {
 
     public void setFinal(Node node) {
         graphVizHelper.setFinal(node.getName());
+    }
+
+    public void setLastNode(Node lastNode) {
+        this.lastNode = lastNode;
+    }
+
+    public Node getFinalNode() {
+        return lastNode;
+    }
+
+    public Node getAnchor() {
+        return anchor;
     }
 
     public static class Node {
