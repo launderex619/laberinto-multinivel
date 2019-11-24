@@ -58,10 +58,12 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
                     holder.etCost.setText("");
                     holder.etCost.setHint("N/A");
                     holder.etCost.setEnabled(false);
+                    characterItem.getCanPass().set(position, false);
                 } else {
                     holder.etCost.setText(String.format("%.2f", characterItem.getLandsCosts().get(position)));
                     holder.etCost.setHint(activity.getString(R.string.cost));
                     holder.etCost.setEnabled(true);
+                    characterItem.getCanPass().set(position, true);
                 }
             }
         });

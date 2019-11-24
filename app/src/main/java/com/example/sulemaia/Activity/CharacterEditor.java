@@ -141,14 +141,8 @@ public class CharacterEditor extends AppCompatActivity {
                             if (cost < 0) {
                                 etCost.setError(getString(R.string.not_valid_value), getDrawable(android.R.drawable.ic_dialog_alert));
                                 canOk = false;
-                            } else {
-                                item.getCanPass().set(i, true);
-                                item.getLandsCosts().set(i, cost);
                             }
                         }
-                    } else {
-                        item.getCanPass().set(i, false);
-                        item.getLandsCosts().set(i, 0.00f);
                     }
                 }
                 if (canOk) {
