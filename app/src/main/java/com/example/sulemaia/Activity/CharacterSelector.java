@@ -32,6 +32,10 @@ import java.util.Arrays;
 
 import static com.example.sulemaia.Helper.Constants.charactersConstant;
 
+/**
+ * Activity to select a Character from the 3 default ones,
+ * or create up to 5 new ones.
+ */
 public class CharacterSelector extends AppCompatActivity implements iCharacterSelected {
 
     private FloatingActionButton fabAddCharacter, fabNext;
@@ -49,6 +53,16 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
 
     @SuppressLint("RestrictedApi")
     @Override
+
+    /**
+     * We obtain each character icon into <B>Constants</B> from
+     * the ones preloaded into the code (in this version, 10 characters),
+     * obtain all the previous information (biomes, content file, etc...) from the Intent,
+     * configure each characteristic of each player on default,
+     * add the necessary buttons and views, and finally check if its the first time
+     * starting the app, so we can show the interactive tutorial.
+     * @param Bundle String bundle from the previous instance.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_selector);
@@ -126,6 +140,14 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
     }
 
     @Override
+
+    /**
+     * We control the deletion of characters, not making it able to have less than one.
+     * Also, we get a control over the costs of the lands related to the characters.
+     * @param requestCode requestCode == 4 for Constants.RESULT_FOR_CHARACTER_EDITOR success.
+     * @param resultCode resultCode == -1 for Activity.RESULT_OK success.
+     * @param Nullable Intent data. Previous Intent could be == null.
+     */
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -167,6 +189,10 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
     }
 
     @Override
+    /**
+     * Method called by system.
+     * It just returns to rhe previous activity.
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
@@ -174,6 +200,12 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
 
     @SuppressLint("RestrictedApi")
     @Override
+    /**
+     * We can logically add a new character to the list.
+     * Also, if its the fist time starting the app, we can show the
+     * interactive tutorial.
+     * @param pos to process the position of the character we are analyzing.
+     */
     public void setCharacter(int pos) {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_SELECTOR, true);
@@ -204,8 +236,20 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         }
     }
 
+    /**
+     * Class to implement the actions related to each button.
+     */
     private class ButtonActions implements View.OnClickListener {
         @Override
+        /**
+         * Floating action buttons.
+         * If View == AddCharacter we configure each characteristic of the player,
+         * and check to see the user wont try to create more than five, which is the limit.
+         * If View == Next, we check that not the initial tile, nor the final tile are of those
+         * terrains through which the character is not able to pass. Finally, we get all the
+         * information into the intent for the next activity.
+         * @param View View of the button clicked.
+         */
         public void onClick(View v) {
             if (v == fabAddCharacter) {
                 if (characters.size() < 5) {
