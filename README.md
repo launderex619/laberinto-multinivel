@@ -71,8 +71,9 @@ Fill out the following items:
         * Directory Name : The name of your project
 
 5. Open the project
-        * You will be prompted with a message asking you would like to open the project in Android Studio. Click Yes
-	* The project will now open in Android Studio
+	* You will be prompted with a message asking you would like to open the project in Android Studio. 
+	Click Yes.
+	* The project will now open in Android Studio 
   
 ## Autors
 * Carlos Carvajal Vazquez
