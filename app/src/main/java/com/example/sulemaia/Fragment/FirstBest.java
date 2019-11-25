@@ -151,9 +151,9 @@ public class FirstBest extends Fragment implements iFirstTheBest {
 
             TapTargetView.showFor(getActivity(),
                     new TapTargetHelper(getActivity(),
-                            board[actualY][actualX],
-                            getString(R.string.game_field),
-                            getString(R.string.game_field_description)).Create(),
+                            spMeasureType,
+                            getString(R.string.measure_type_algorithm),
+                            getString(R.string.measure_type_algorithm_description)).Create(),
                     null
             );
         }

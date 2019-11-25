@@ -2,13 +2,7 @@ package com.example.sulemaia.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +11,24 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sulemaia.Helper.Constants;
+import com.example.sulemaia.Helper.TapTargetHelper;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import java.util.ArrayList;
 
 
 public class ExpansionDetails extends AppCompatActivity {
     private static final int SLOT_QUANTITY = 4;
+    Intent intent;
     private Button btn_start_algorithms, btn_start_manual;
     private ImageButton btn_down, btn_up, btn_left, btn_right;
     private TextView slots[], tv_start_algorithms;
     private ArrayList<String> expansionOrder;
     private Boolean state[][] = {{true, true, true, true}, {false, false, false, false}};
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,37 @@ public class ExpansionDetails extends AppCompatActivity {
         btn_up.setOnClickListener(buttonActions);
         btn_start_algorithms.setOnClickListener(buttonActions);
         btn_start_manual.setOnClickListener(buttonActions);
+
+
+        boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_KEY_FIRST_START_EXPANSION_DETAILS, true);
+        //checamos si es la primera vez que la aplicacion inicia:
+        if (firstStart) {
+            //iniciamos el tutorial
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putBoolean(Constants.PREF_KEY_FIRST_START_EXPANSION_DETAILS, false)
+                    .apply();
+            new TapTargetSequence(this).targets(
+                    new TapTargetHelper(this,
+                            slots[0],
+                            getString(R.string.slot_position),
+                            getString(R.string.slot_position_description)).Create(),
+                    new TapTargetHelper(this,
+                            btn_down,
+                            getString(R.string.expansion_order_title_button),
+                            getString(R.string.expansion_order_description_button)).Create(),
+                    new TapTargetHelper(this,
+                            tv_start_algorithms,
+                            getString(R.string.start_algorithm),
+                            getString(R.string.start_algorithm_description)).Create(),
+                    new TapTargetHelper(this,
+                    btn_start_manual,
+                    getString(R.string.start_algorithm),
+                    getString(R.string.start_manual_algorithm_description)).Create()
+            ).start();
+        }
+
+
     }
 
     @Override
@@ -69,6 +99,7 @@ public class ExpansionDetails extends AppCompatActivity {
 
     private class ButtonActions implements View.OnClickListener {
         private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
+
         @Override
         public void onClick(View v) {
             if (v == btn_down) {
@@ -114,12 +145,10 @@ public class ExpansionDetails extends AppCompatActivity {
                     btn_start_algorithms.setVisibility(View.VISIBLE);
                     tv_start_algorithms.setVisibility(View.GONE);
                 }
-            }
-            else if (v == btn_start_manual){
+            } else if (v == btn_start_manual) {
                 intent.setClass(getApplicationContext(), GameScreen.class);
                 startActivity(intent);
-            }
-            else if (v == btn_start_algorithms){
+            } else if (v == btn_start_algorithms) {
                 intent.setClass(getApplicationContext(), SearchAlgorithms.class);
                 intent.putStringArrayListExtra("expansionOrder", expansionOrder);
                 startActivity(intent);

@@ -37,6 +37,7 @@ import com.example.sulemaia.Thread.ResolverUniformCostThread;
 import com.example.sulemaia.Model.HeuristicPathTree;
 import com.example.sulemaia.Model.PathManualTree;
 import com.example.sulemaia.R;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class UniformCost extends Fragment implements iUniformCost {
 
     private void loadBoard() {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(getContext())
-                .getBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, true);
+                .getBoolean(Constants.PREF_KEY_FIRST_START_UNIFORM_COST_SCREEN, true);
         actualX = initialX;
         actualY = initialY;
         Bitmap bitmap = ((BitmapDrawable) characterIcons[character.getIcon()]).getBitmap();
@@ -134,16 +135,22 @@ public class UniformCost extends Fragment implements iUniformCost {
         board[finalY][finalX].setTextColor(Color.WHITE);
         if (firstStart) {
             PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
-                    .putBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, false)
+                    .putBoolean(Constants.PREF_KEY_FIRST_START_UNIFORM_COST_SCREEN, false)
                     .apply();
-
-            TapTargetView.showFor(getActivity(),
-                    new TapTargetHelper(getActivity(),
+            new TapTargetSequence(getActivity()).targets(
+                    new TapTargetHelper(getContext(),
                             board[actualY][actualX],
                             getString(R.string.game_field),
                             getString(R.string.game_field_description)).Create(),
-                    null
-            );
+                    new TapTargetHelper(getContext(),
+                            sbRefreshBar,
+                            getString(R.string.actualization_time),
+                            getString(R.string.actualization_time_description)).Create(),
+                    new TapTargetHelper(getContext(),
+                            btnStartAlgorithm,
+                            getString(R.string.start_algorithm),
+                            getString(R.string.start_algorithm_game)).Create()
+            ).start();
         }
 
     }
