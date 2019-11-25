@@ -23,8 +23,7 @@ Podemos en teoría empezar a programar ahora. Sin embargo, utilizamos para nuest
 
 3. Inicie sesión con su cuenta de GitHub.
 
-4. Rellene el formulario Clone Repository Clone
-Complete los siguientes elementos
+4. Rellene el formulario Clone Repository Clone : Complete los siguientes elementos
 	* Vcs Repository URL: La URL de tu repositorio en GitHub
 	* Parent Directory : El directorio local donde desea almacenar este proyecto.
 	* Directory Name : El nombre de tu proyecto
@@ -63,12 +62,11 @@ En theory, we can begin to code now. However, we are using for our application a
 
 3. Enter your GitHub credentials. Then click Login
 
-4. Fill out the Clone Repository form and click Clone
-Fill out the following items:
-        * Vcs Repository URL: The URL of your repository on GitHub
+4. Fill out the Clone Repository form and click Clone : Fill out the following items
+	* Vcs Repository URL: The URL of your repository on GitHub
         * Parent Directory : The local directory where you want to store this project
         * Directory Name : The name of your project
-
+	
 5. Open the project
 	* You will be prompted with a message asking you would like to open the project in Android Studio. 
 	Click Yes.
