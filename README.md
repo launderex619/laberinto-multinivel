@@ -64,8 +64,8 @@ En theory, we can begin to code now. However, we are using for our application a
 
 4. Fill out the Clone Repository form and click Clone : Fill out the following items
 	* Vcs Repository URL: The URL of your repository on GitHub
-        * Parent Directory : The local directory where you want to store this project
-        * Directory Name : The name of your project
+	* Parent Directory : The local directory where you want to store this project
+	* Directory Name : The name of your project
 	
 5. Open the project
 	* You will be prompted with a message asking you would like to open the project in Android Studio. 
