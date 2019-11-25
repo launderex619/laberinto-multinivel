@@ -91,4 +91,15 @@
     <string name="refresh_rate">Tiempo de actualizacion</string>
     <string name="choose_distance_measure_type">Elige el tipo de medida para el algoritmo</string>
     <string name="path_not_found">Camino no encontrado</string>
+    <string name="slot_position">Orden de casilla</string>
+    <string name="slot_position_description">Aqui se muestra el orden de expansion del arbol y el algoritmo. Los numeros representan el orden de prioridad.</string>
+    <string name="expansion_order_title_button">Boton de orden de expansion.</string>
+    <string name="expansion_order_description_button">Al presionar el boton definiras el orden de expansion explicado previamente, ten cuidado en elegir el orden que desees.</string>
+    <string name="start_algorithm_description">Se habilitara una vez elijas el algoritmo de busqueda, aqui se ejecuta el algoritmo automatico.</string>
+    <string name="start_manual_algorithm_description">Aqui puedes jugar manualmente :3, no utiliza ningun algoritmo en especifico.</string>
+    <string name="actualization_time">Tiempo de actualizacion</string>
+    <string name="actualization_time_description">Aqui defines el tiempo entre saltos al momento de ejecutar el algoritmo.</string>
+    <string name="start_algorithm_game">Al presionar aqui, iniciara el algoritmo.</string>
+    <string name="measure_type_algorithm">Tipo de medida.</string>
+    <string name="measure_type_algorithm_description">Elige el tipo de medida que desees.</string>
 </resources>
