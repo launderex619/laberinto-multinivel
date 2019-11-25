@@ -1,10 +1,13 @@
 package com.example.sulemaia.Fragment;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -18,15 +21,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sulemaia.Dialog.SimpleOkDialog;
 import com.example.sulemaia.Helper.Constants;
 import com.example.sulemaia.Helper.Parser;
 import com.example.sulemaia.Helper.TapTargetHelper;
+import com.example.sulemaia.Interface.iUniformCost;
 import com.example.sulemaia.Model.CharacterItem;
+import com.example.sulemaia.Thread.ResolverUniformCostThread;
+import com.example.sulemaia.Model.HeuristicPathTree;
 import com.example.sulemaia.Model.PathManualTree;
 import com.example.sulemaia.R;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -36,12 +44,14 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
+import top.defaults.colorpicker.ColorPickerPopup;
+
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UniformCost extends Fragment {
+public class UniformCost extends Fragment implements iUniformCost {
     private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
     float textSize;
     private ArrayList<String> biomes = new ArrayList<>();
@@ -54,14 +64,14 @@ public class UniformCost extends Fragment {
     private CharacterItem character;
     private TableLayout tlTableMap;
     private EditText board[][];
-    private PathManualTree.Node nodes[][];
-    private ButtonActions buttonActions;
+    private HeuristicPathTree.Node nodes[][];
+    private UniformCost.ButtonActions buttonActions;
     private Drawable characterIcon;
-    private PathManualTree tree;
+    private HeuristicPathTree tree;
     private Button btnStartAlgorithm;
     private TextView tvRefreshRate;
     private SeekBar sbRefreshBar;
-    private ResolverUniformCostThread resolverUniformCostThread;
+    private int pathColor = 0xFFFF0000;
 
     public UniformCost() {
         // Required empty public constructor
@@ -91,7 +101,7 @@ public class UniformCost extends Fragment {
         tlTableMap = view.findViewById(R.id.tl_game_table_map);
         updateTimeText = tvRefreshRate.getText().toString();
         tvRefreshRate.setText(updateTimeText + ": " + (2 + updateTime) + "ms");
-        buttonActions = new ButtonActions();
+        buttonActions = new UniformCost.ButtonActions();
         btnStartAlgorithm.setOnClickListener(buttonActions);
         sbRefreshBar.setOnSeekBarChangeListener(buttonActions);
 
@@ -100,69 +110,13 @@ public class UniformCost extends Fragment {
             public void run() {
                 createTable(Parser.getFileArray(contentFile));
                 loadBoard();
-                initTreeAndColors();
+                //initTreeAndColors();
             }
         });
         return view;
     }
 
-
-    private void initTreeAndColors() {
-        nodes[actualY][actualX].setStep(actualStep);
-        tree = new PathManualTree(nodes[actualY][actualX]);
-        tree.setInitial(nodes[actualY][actualX]);
-        for (int i = 0; i < mapValues.length; i++) {
-            for (int j = 0; j < mapValues[0].length; j++) {
-                if (!character.getCanPass().get(codes.indexOf(mapValues[i][j]))) {
-                    tree.addNodeToInvalidNodes(nodes[i][j]);
-                }
-            }
-        }
-        setAdyacentFieldsAndColor(actualY, actualX);
-    }
-
-    private void setAdyacentFieldsAndColor(int y, int x) {
-        //middle
-        setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
-        for (String direction : expansionOrder) {
-            expandInDirection(direction, y, x);
-        }
-    }
-
-    private void expandInDirection(String direction, int y, int x) {
-        switch (direction) {
-            case UP:
-                //up
-                if (y - 1 >= 0) {
-                    setFieldColor(y - 1, x, colors.get(codes.indexOf(mapValues[y - 1][x])));
-                    tree.addNode(nodes[y][x], nodes[y - 1][x]);
-                }
-                break;
-            case DOWN:
-                //down
-                if (y + 1 < board.length) {
-                    setFieldColor(y + 1, x, colors.get(codes.indexOf(mapValues[y + 1][x])));
-                    tree.addNode(nodes[y][x], nodes[y + 1][x]);
-                }
-                break;
-            case LEFT:
-                //left
-                if (x - 1 >= 0) {
-                    setFieldColor(y, x - 1, colors.get(codes.indexOf(mapValues[y][x - 1])));
-                    tree.addNode(nodes[y][x], nodes[y][x - 1]);
-                }
-                break;
-            case RIGHT:
-                //right
-                if (x + 1 < board[0].length) {
-                    setFieldColor(y, x + 1, colors.get(codes.indexOf(mapValues[y][x + 1])));
-                    tree.addNode(nodes[y][x], nodes[y][x + 1]);
-                }
-                break;
-        }
-    }
-
-    private void setFieldColor(int y, int x, int color) {
+    private void setFieldColor(int y, int x, int color){
         board[y][x].setBackgroundColor(color);
     }
 
@@ -199,7 +153,7 @@ public class UniformCost extends Fragment {
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
         this.mapValues = mapValues;
         board = new EditText[mapValues.length][mapValues[0].length];
-        nodes = new PathManualTree.Node[mapValues.length][mapValues[0].length];
+        nodes = new HeuristicPathTree.Node[mapValues.length][mapValues[0].length];
 
         for (int i = 0; i < mapValues.length; i++) {
             TableRow tableRow = new TableRow(getContext());
@@ -230,9 +184,11 @@ public class UniformCost extends Fragment {
                 EditText et = new EditText(getContext());
                 et.setTag("" + Parser.getLetterForInt(j + 1) + ", " + (i + 1));
                 board[i][j] = et;
-                nodes[i][j] = new PathManualTree.Node(et.getTag().toString(),
+                nodes[i][j] = new HeuristicPathTree.Node(et.getTag().toString(),
                         character.getLandsCosts().get(codes.indexOf(mapValues[i][j])),
-                        character.getCanPass().get(codes.indexOf(mapValues[i][j])));
+                        character.getCanPass().get(codes.indexOf(mapValues[i][j])),
+                        i,
+                        j);
                 et.setFocusable(false);
                 et.setBackground(getActivity().getDrawable(android.R.color.transparent));
                 et.setTextSize(textSize);
@@ -252,8 +208,26 @@ public class UniformCost extends Fragment {
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
-                //resolverUniformCostThread = new ResolverUniformCostThread();
-                //resolverUniformCostThread.execute();
+                ColorPickerPopup color = new ColorPickerPopup.Builder(getContext())
+                        .initialColor(Color.RED) // Set initial color
+                        .enableBrightness(true) // Enable brightness slider or not
+                        .enableAlpha(false) // Enable alpha slider or not
+                        .okTitle("Aceptar")
+                        .cancelTitle("Cancelar")
+                        .showIndicator(true)
+                        .showValue(true)
+                        .build();
+                color.show(new ColorPickerPopup.ColorPickerObserver() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        pathColor = color;
+                        (new ResolverUniformCostThread(nodes,
+                                expansionOrder,
+                                updateTime,
+                                UniformCost.this))
+                                .execute(initialY, initialX, finalY, finalX);
+                    }
+                });
             } else {
                 new SimpleOkDialog(getContext(),
                         getString(R.string.field_information_game_screen) + "\n" +
@@ -280,47 +254,53 @@ public class UniformCost extends Fragment {
         }
     }
 
-    private class ResolverUniformCostThread extends AsyncTask<Void, Integer, Void> {
-        private PriorityQueue<PathManualTree.Node> expandedNodes;
-        private HashSet<PathManualTree.Node> visitedNodes;
+    @Override
+    public void showFailureMessage(){
+        (new SimpleOkDialog(getContext(), getString(R.string.error),
+                getString(R.string.path_not_found))).build().show();
+    }
 
-        ResolverUniformCostThread(){
-            expandedNodes = new PriorityQueue<>(
-                    225, //225 because max size is 15 rows times 15 columns so 15*15=225
-                    new Comparator<PathManualTree.Node>() {
-                        @Override
-                        public int compare(PathManualTree.Node o1, PathManualTree.Node o2) {
-                            return Float.compare(o1.getCost(), o2.getCost());
-                        }
-                    });
-            visitedNodes = new HashSet<>(225);
+    @Override
+    public void drawPath(HeuristicPathTree heuristicPathTree){
+        if(heuristicPathTree == null){
+            return;
         }
 
-        @Override
-        protected void onPreExecute() {
-            //code for pre execute the thread
-        }
+        HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            for (int i = 0; i < 101; i++) {
-                publishProgress(i); //this calls onPogressUpdateMethod ;)
-                try {
-                    Thread.sleep(updateTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
+        board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
+        while (node != heuristicPathTree.getAnchor()) {
+            node = node.getFather();
+            board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         }
+        new SimpleOkDialog(getContext(),
+                getString(R.string.game_over),
+                getString(R.string.you_finish_game)).build().show();
+        String urlTree = "https://dreampuf.github.io/GraphvizOnline/#" +
+                heuristicPathTree.getDotTree().replace("\n", "%0A");
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
+        if(urlTree.length()/1024 < 1024){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTree));
+            startActivity(browserIntent);
         }
+        else {
+            Toast.makeText(getContext(), "Hubo un error al abrir la pagina web, DEMASIADA INFORMACION. URL copiada al portapapeles", Toast.LENGTH_SHORT).show();
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", urlTree);
+            clipboard.setPrimaryClip(clip);
+        }
+    }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            // code that runs when thread finishes
-        }
+    @Override
+    public void moveCharacter(int posY, int posX){
+        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        actualY = posY;
+        actualX = posX;
+        board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
+    }
+
+    @Override
+    public void setColorToField(int y, int x){
+        setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 }

@@ -112,7 +112,7 @@ public class HeuristicPathTree {
     private void createDotTree(int expansionAlgorithm) {
         switch (expansionAlgorithm) {
             case UNIFORM_COST:
-
+                inOrderFirst(anchor);
                 break;
             case FIRST_BEST:
                 inOrderFirst(anchor);

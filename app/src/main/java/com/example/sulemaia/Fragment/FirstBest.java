@@ -298,7 +298,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
             startActivity(browserIntent);
         }
        else {
-            Toast.makeText(getContext(), "Hubo un error al abrir la pagina web, DEMACIADA INFORMACION. URL copiada al portapapeles", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Hubo un error al abrir la pagina web, DEMASIADA INFORMACION. URL copiada al portapapeles", Toast.LENGTH_SHORT).show();
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", urlTree);
             clipboard.setPrimaryClip(clip);
