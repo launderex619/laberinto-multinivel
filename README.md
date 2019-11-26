@@ -1,6 +1,14 @@
 ### Versión en español
+>[Click here to go to the english version of this .readme.](###English-version)
 
 # Laberinto Multinivel
+
+## Indice
+* [Descripción](##Descripción)
+* [Instalación](##Instalación)
+* [Uso](##Uso)
+* [Documentación](##Documentación)
+* [Autores](##Autores)
 
 ## Descripción
 Laberinto Multinivel es un aplicación Android que permite ya sea jugar en el laberinto de su elección o resolver un laberinto de forma automática y luego estudiar pasos de resolución.
@@ -34,11 +42,16 @@ Podemos en teoría empezar a programar ahora. Sin embargo, utilizamos para nuest
 	* El proyecto ahora se abrirá en Android Studio
 	
 ## Uso
-![maze](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/maze.jpg)
-![character selection](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/characters.jpg)
-![resolving manually](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/moving_in_maze.jpg)
-![choice of order](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/order.jpg)
-![tree generation](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/tree.jpg)
+<img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
+--- | --- | --- 
+texte1 | texte2 | texte3
+
+<img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
+--- | --- 
+texte4 | texte5
+## Documentación
+Puede encontrar toda la documentación de la aplicación [aquí](https://launderex619.github.io/laberinto-multinivel/).
+
 ## Autores
 * Carlos Carvajal Vazquez
 * Jose Alejandro Silva Moya
@@ -46,6 +59,13 @@ Podemos en teoría empezar a programar ahora. Sin embargo, utilizamos para nuest
 * César Perrin-Cocon
 
 ### English version
+
+## Indice
+* [Description](##Description)
+* [Instalation](##Instalation )
+* [Usage](##Usage)
+* [Documentation](##Documentation)
+* [Autors](##Autors)
 
 # Multilevel Labyrinth
 
@@ -78,12 +98,17 @@ En theory, we can begin to code now. However, we are using for our application a
 	Click Yes.
 	* The project will now open in Android Studio 
 
-## Uso
-![maze](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/maze.jpg)
-![character selection](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/characters.jpg)
-![resolving manually](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/moving_in_maze.jpg)
-![choice of order](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/order.jpg)
-![tree generation](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/tree.jpg)
+## Usage
+<img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
+--- | --- | --- 
+texte1 | texte2 | texte3
+
+<img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
+--- | --- 
+texte4 | texte5
+
+## Documentation
+You can find all the documentation about our application [here](https://launderex619.github.io/laberinto-multinivel/)
 
 ## Autors
 * Carlos Carvajal Vazquez
