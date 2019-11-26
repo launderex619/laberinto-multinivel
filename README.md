@@ -41,6 +41,9 @@ Podemos en teoría empezar a programar ahora. Sin embargo, utilizamos para nuest
 	Haz clic en Sí.
 	* El proyecto ahora se abrirá en Android Studio
 	
+### Instalación sin Android Studio
+Si no desea instalar Android Studio pero aún desea probar nuestra aplicación, puede obtenerla directamente en su dispositivo Android utilizando el APK que puede encontrar [aquí] (https://github.com/launderex619/laberinto-multinivel/blob/master/sulemitaIA.apk).
+
 ## Uso
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
@@ -50,7 +53,7 @@ texte1 | texte2 | texte3
 --- | --- 
 texte4 | texte5
 ## Documentación
-Puede encontrar toda la documentación de la aplicación [aquí](https://launderex619.github.io/laberinto-multinivel/).
+Puede encontrar toda la documentación de la aplicación [aquí] (https://launderex619.github.io/laberinto-multinivel/).
 
 ## Autores
 * Carlos Carvajal Vazquez
@@ -98,6 +101,9 @@ En theory, we can begin to code now. However, we are using for our application a
 	Click Yes.
 	* The project will now open in Android Studio 
 
+### Installation without Android Studio
+If you don't want to install Android Studio but still want to test our application, you can directly get it to your android device by using the APK you can fin [here](https://github.com/launderex619/laberinto-multinivel/blob/master/sulemitaIA.apk).
+
 ## Usage
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
@@ -108,7 +114,7 @@ texte1 | texte2 | texte3
 texte4 | texte5
 
 ## Documentation
-You can find all the documentation about our application [here](https://launderex619.github.io/laberinto-multinivel/)
+You can find all the documentation about our application [here] (https://launderex619.github.io/laberinto-multinivel/)
 
 ## Autors
 * Carlos Carvajal Vazquez
