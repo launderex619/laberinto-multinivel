@@ -13,6 +13,10 @@ import com.example.sulemaia.R;
 import java.io.File;
 
 /**
+ * <h1>
+ *  Initial class
+ * </h1>
+ * <br>
  * Class for the load screen of the app.
  */
 public class LoadScreen extends AppCompatActivity {

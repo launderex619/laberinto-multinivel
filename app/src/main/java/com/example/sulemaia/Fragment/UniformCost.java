@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.preference.PreferenceManager;
@@ -73,6 +74,7 @@ public class UniformCost extends Fragment implements iUniformCost {
     private TextView tvRefreshRate;
     private SeekBar sbRefreshBar;
     private int pathColor = 0xFFFF0000;
+    private ResolverUniformCostThread thread;
 
     /**
      * Empty constructor.
@@ -270,13 +272,14 @@ public class UniformCost extends Fragment implements iUniformCost {
                     @Override
                     public void onColorPicked(int color) {
                         pathColor = color;
-                        (new ResolverUniformCostThread(nodes,
+                        thread = new ResolverUniformCostThread(nodes,
                                 expansionOrder,
                                 updateTime,
-                                UniformCost.this))
-                                .execute(initialY, initialX, finalY, finalX);
+                                UniformCost.this);
+                        thread.execute(initialY, initialX, finalY, finalX);
                     }
                 });
+                btnStartAlgorithm.setVisibility(View.GONE);
             } else {
                 new SimpleOkDialog(getContext(),
                         getString(R.string.field_information_game_screen) + "\n" +
@@ -294,7 +297,7 @@ public class UniformCost extends Fragment implements iUniformCost {
          */
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            updateTime = (2 + progress) * (progress);
+            updateTime = (5 * progress);
             tvRefreshRate.setText(updateTimeText + ": " + updateTime + "ms");
         }
 
@@ -321,7 +324,7 @@ public class UniformCost extends Fragment implements iUniformCost {
      * Method to show a failure message in case the algorithm is not able to reach the final tile.
      */
     @Override
-    public void showFailureMessage(){
+    public synchronized void showFailureMessage(){
         (new SimpleOkDialog(getContext(), getString(R.string.error),
                 getString(R.string.path_not_found))).build().show();
     }
@@ -329,17 +332,17 @@ public class UniformCost extends Fragment implements iUniformCost {
     /**
      * Method to control the whole drawing of the path once the algorithm finishes.
      * Also, the user gets the constructor URL for the tree, and gets redirected to the git
-     * repository in which the actual tree gets drawn by another code.
+     * page in which the actual tree gets drawn using DOT code.
      * @param heuristicPathTree the tree from which all the information is taken.
      */
     @Override
-    public void drawPath(HeuristicPathTree heuristicPathTree){
+    public synchronized void drawPath(HeuristicPathTree heuristicPathTree){
         if(heuristicPathTree == null){
             return;
         }
 
         HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
-
+        putNodesInfo(node);
         board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         while (node != heuristicPathTree.getAnchor()) {
             node = node.getFather();
@@ -363,13 +366,18 @@ public class UniformCost extends Fragment implements iUniformCost {
         }
     }
 
+    private void putNodesInfo(HeuristicPathTree.Node node) {
+        //using info for Uniform Cost, this will be different for each algorithm
+        //aqui pon tu cagadero x2 (copia el mio, pero usando los tuyos, tu me entiendes :V)
+    }
+
     /**
      * For the update on the movement of the character, for logically and in the UI.
      * @param posY Y actual coordinate.
      * @param posX X actual coordinate.
      */
     @Override
-    public void moveCharacter(int posY, int posX){
+    public synchronized void moveCharacter(int posY, int posX){
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         actualY = posY;
         actualX = posX;
@@ -382,7 +390,19 @@ public class UniformCost extends Fragment implements iUniformCost {
      * @param x X coordinate.
      */
     @Override
-    public void setColorToField(int y, int x){
+    public synchronized void setColorToField(int y, int x){
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
+    }
+
+    @Override
+    public synchronized void onStop() {
+        stopThread();
+        super.onStop();
+    }
+
+    private void stopThread() {
+        if (thread != null && (thread.getStatus() == AsyncTask.Status.RUNNING || thread.getStatus() == AsyncTask.Status.PENDING)) {
+            thread.cancel(true);
+        }
     }
 }

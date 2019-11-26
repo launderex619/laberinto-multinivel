@@ -14,6 +14,9 @@ import com.example.sulemaia.Model.CharacterItem;
 import com.example.sulemaia.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -46,14 +49,27 @@ public class SearchAlgorithms extends AppCompatActivity {
     }
 
     /**
-     * Method called by system on back button pressed.
+     * Method called by user on back button pressed.
      * @param item activity item related to the context.
      * @return a true value.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //getSupportFragmentManager().getPrimaryNavigationFragment().onStop();
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        fragments.get(0).onStop();
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Method called by user on back button pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        fragments.get(0).onStop();
+        super.onBackPressed();
     }
 
     /**
@@ -82,6 +98,8 @@ public class SearchAlgorithms extends AppCompatActivity {
                     selectedFragment.setArguments(intent.getExtras());
                     break;
             }
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            fragments.get(0).onStop();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     selectedFragment).commit();
             return true;

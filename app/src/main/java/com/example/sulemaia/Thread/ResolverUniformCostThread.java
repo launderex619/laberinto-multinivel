@@ -1,6 +1,7 @@
 package com.example.sulemaia.Thread;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.sulemaia.Interface.iUniformCost;
 import com.example.sulemaia.Model.HeuristicPathTree;
@@ -26,7 +27,7 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
     public ResolverUniformCostThread(HeuristicPathTree.Node[][] nodes,
                                      ArrayList<String> expansionOrder,
                                      long updateTime,
-                                     iUniformCost iMethods){
+                                     iUniformCost iMethods) {
 
         this.nodes = nodes;
         this.iMethods = iMethods;
@@ -39,7 +40,7 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
     }
 
     @Override
-    protected HeuristicPathTree doInBackground(Integer... values){
+    protected HeuristicPathTree doInBackground(Integer... values) {
         int initialY = values[0];
         int initialX = values[1];
         int finalY = lastY = values[2];
@@ -50,14 +51,17 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         getNodesNextStep(nodes[initialY][initialX], expandedNodes, visitedNodes);
         tree.setAnchor(nodes[initialY][initialX]);
         tree.setInitial(nodes[initialY][initialX]);
-
+        Log.i("doInBackground start", "doInBackground: started");
         //while queue not empty...
-        while(expandedNodes.size() > 0){
+        while (expandedNodes.size() > 0) {
+            if (isCancelled()) {
+                break;
+            }
             HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
             actualNode.setStep(actualStep++);
 
             //Evaluate if actualNode is finalNode.
-            if(actualNode == nodes[finalY][finalX]){
+            if (actualNode == nodes[finalY][finalX]) {
                 publishProgress(actualNode);
                 expandedNodes.clear();
                 tree.setLastNode(actualNode);
@@ -71,10 +75,10 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
             publishProgress(actualNode);
             getNodesNextStep(actualNode, expandedNodes, visitedNodes);
 
-            try{
+            try {
                 Thread.sleep(updateTime);
-            }   catch (InterruptedException e){
-                    e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         iMethods.showFailureMessage();
@@ -82,13 +86,13 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
     }
 
     @Override
-    protected void onProgressUpdate(HeuristicPathTree.Node... values){
+    protected void onProgressUpdate(HeuristicPathTree.Node... values) {
         super.onProgressUpdate(values);
         iMethods.moveCharacter(values[0].getPosY(), values[0].getPosX());
     }
 
     @Override
-    protected  void onPostExecute(HeuristicPathTree heuristicPathTree){
+    protected void onPostExecute(HeuristicPathTree heuristicPathTree) {
         super.onPostExecute(heuristicPathTree);
         heuristicPathTree.drawDotTree(HeuristicPathTree.UNIFORM_COST);
         heuristicPathTree.endTree();
@@ -97,29 +101,36 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
 
     private void getNodesNextStep(HeuristicPathTree.Node node,
                                   ArrayList<HeuristicPathTree.Node> expandedNodes,
-                                  HashSet<HeuristicPathTree.Node> visitedNodes){
+                                  HashSet<HeuristicPathTree.Node> visitedNodes) {
 
         int y = node.getPosY();
         int x = node.getPosX();
-        for(String direction : expansionOrder){
+        for (String direction : expansionOrder) {
             HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
-            if(response != null){
-                if(!expandedNodes.contains(response)){
+            if (response != null) {
+                if (!expandedNodes.contains(response)) {
+                    setFitness(response);
                     expandedNodes.add(response);
                 }
             }
         }
 
-        Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>(){
+        Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
             @Override
-            public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2){
+            public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
                 return Float.compare(o1.getAccumulative(), o2.getAccumulative());
             }
         });
     }
 
+
+    private void setFitness(HeuristicPathTree.Node response) {
+        // aqui pon tu cagadero xd
+        //response.setRemaining();
+    }
+
     private HeuristicPathTree.Node expandInDirection(String direction, int y, int x,
-                                                     HashSet<HeuristicPathTree.Node> visitedNodes){
+                                                     HashSet<HeuristicPathTree.Node> visitedNodes) {
 
         switch (direction) {
             case UP:

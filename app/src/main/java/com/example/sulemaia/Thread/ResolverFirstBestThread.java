@@ -58,6 +58,9 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
 
         // mientras la cola no este vacia
         while (expandedNodes.size() > 0) {
+            if(isCancelled()){
+                break;
+            }
             HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
             actualNode.setStep(actualStep++);
             //evaluamos el nodo

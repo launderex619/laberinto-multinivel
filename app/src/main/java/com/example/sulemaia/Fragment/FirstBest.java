@@ -75,6 +75,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
     private SeekBar sbRefreshBar;
     private Spinner spMeasureType;
     private int pathColor = 0xFFFF0000;
+    private ResolverFirstBestThread thread;
 
     /**
      * First Best Algorithm Constructor.
@@ -273,14 +274,15 @@ public class FirstBest extends Fragment implements iFirstTheBest {
                     @Override
                     public void onColorPicked(int color) {
                         pathColor = color;
-                        (new ResolverFirstBestThread(nodes,
+                        thread = new ResolverFirstBestThread(nodes,
                                 expansionOrder,
                                 updateTime,
                                 FirstBest.this,
-                                measureMode))
-                                .execute(initialY, initialX, finalY, finalX);
+                                measureMode);
+                        thread.execute(initialY, initialX, finalY, finalX);
                     }
                 });
+                btnStartAlgorithm.setVisibility(View.GONE);
             } else {
                 new SimpleOkDialog(getContext(),
                         getString(R.string.field_information_game_screen) + "\n" +
@@ -299,7 +301,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
          */
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            updateTime = (2 + progress) * (progress);
+            updateTime = (5 * progress);
             tvRefreshRate.setText(updateTimeText + ": " + updateTime + "ms");
         }
 
@@ -326,7 +328,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
      * Show failure message in case the final tile is unreachable for any reason.
      */
     @Override
-    public void showFailureMessage() {
+    public synchronized void showFailureMessage() {
         (new SimpleOkDialog(getContext(), getString(R.string.error),
                 getString(R.string.path_not_found))).build().show();
     }
@@ -339,13 +341,13 @@ public class FirstBest extends Fragment implements iFirstTheBest {
      * @param heuristicPathTree the tree from which the path can be processed and painted.
      */
     @Override
-    public void drawPath(HeuristicPathTree heuristicPathTree) {
+    public synchronized void drawPath(HeuristicPathTree heuristicPathTree) {
         if (heuristicPathTree == null) {
             return;
         }
 
         HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
-
+        putNodesInfo(heuristicPathTree.getAnchor());
         board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         while (node != heuristicPathTree.getAnchor()) {
             node = node.getFather();
@@ -369,13 +371,24 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         }
     }
 
+    private void putNodesInfo(HeuristicPathTree.Node node) {
+        //using info for First the best, this will be different for each algorithm
+        String text = board[node.getPosY()][node.getPosX()].getText().toString() +
+                ",\nStep: " + node.getStep() + "\n" +
+                "Remmaining: (" + node.getRemaining() + ")";
+                board[node.getPosY()][node.getPosX()].setText(text);
+        for (HeuristicPathTree.Node n : node.getChildren()){
+            putNodesInfo(n);
+        }
+    }
+
     /**
      * Update the position and icon of the character once it moves.
      * @param posY Actual Y position, then changed to the new one.
      * @param posX Actual X position, then changed to the new one.
      */
     @Override
-    public void moveCharacter(int posY, int posX) {
+    public synchronized void moveCharacter(int posY, int posX) {
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         actualY = posY;
         actualX = posX;
@@ -388,7 +401,7 @@ public class FirstBest extends Fragment implements iFirstTheBest {
      * @param x X coordinate.
      */
     @Override
-    public void setColorToField(int y, int x) {
+    public synchronized void setColorToField(int y, int x) {
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 
@@ -419,6 +432,18 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
+        }
+    }
+
+    @Override
+    public synchronized void onStop() {
+        stopThread();
+        super.onStop();
+    }
+
+    private void stopThread() {
+        if (thread != null && (thread.getStatus() == AsyncTask.Status.RUNNING || thread.getStatus() == AsyncTask.Status.PENDING)) {
+            thread.cancel(true);
         }
     }
 }
