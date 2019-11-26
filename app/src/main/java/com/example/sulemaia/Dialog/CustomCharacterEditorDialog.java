@@ -16,6 +16,9 @@ import com.example.sulemaia.Adapter.DialogCharacterEditorAdapter;
 import com.example.sulemaia.Interface.iDialogCharacterIconSelected;
 import com.example.sulemaia.R;
 
+/**
+ * Class to create dialogs to edit information about the characters.
+ */
 public class CustomCharacterEditorDialog implements iDialogCharacterIconSelected {
 
     private Dialog dialog;
@@ -24,6 +27,13 @@ public class CustomCharacterEditorDialog implements iDialogCharacterIconSelected
     private DialogCharacterEditorAdapter adapter;
     private LinearLayoutManager mainLayoutManager;
 
+    /**
+     * We instantiate and show a dialog each time the method is called. This contains a normal
+     * set of buttons, information like a title, an adapter, the corresponding layout, the
+     * showing of the dialog and the return of the same dialog.
+     * @param activity the final activity in the context that its called.
+     * @return a created dialog.
+     */
     public Dialog showDialog(final Activity activity) {
         dialog = new Dialog(activity);
         dialog.setCancelable(false);
@@ -44,10 +54,18 @@ public class CustomCharacterEditorDialog implements iDialogCharacterIconSelected
         return dialog;
     }
 
+    /**
+     * We get the adapter corresponding to the activity.
+     * @return an adapter.
+     */
     public DialogCharacterEditorAdapter getAdapter() {
         return adapter;
     }
 
+    /**
+     * We instantiate the basic parts of the view whenever a character icon is selected.
+     * @param pos
+     */
     @Override
     public void iconSelected(int pos) {
         for (int i = 0; i < mainLayoutManager.getChildCount(); i++) {

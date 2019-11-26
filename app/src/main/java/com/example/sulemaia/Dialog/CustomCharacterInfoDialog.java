@@ -20,8 +20,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
+/**
+ * Class to create dialogs with specific information on each character.
+ */
 public class CustomCharacterInfoDialog {
 
+    /**
+     * Initialization of each important or necessary attribute for the dialog to work,
+     * like buttons, text views, image views, and layouts.
+     * @param activity final activity for the context.
+     * @param item the character itself.
+     */
     public void showDialog(final Activity activity, CharacterItem item) {
         final Dialog dialog = new Dialog(activity);
         Button mDialogOk;
@@ -42,6 +51,10 @@ public class CustomCharacterInfoDialog {
         tvName.setText(item.getName());
         ivImage.setImageDrawable(characterIcons[item.getIcon()]);
         mDialogOk.setOnClickListener(new View.OnClickListener() {
+            /**
+             * On click outside the dialog, we dismiss it.
+             * @param v the info view.
+             */
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
