@@ -51,8 +51,6 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
     private ButtonActions buttonActions;
     private int characterSelected;
 
-    @SuppressLint("RestrictedApi")
-    @Override
 
     /**
      * We obtain each character icon into <B>Constants</B> from
@@ -61,8 +59,10 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
      * configure each characteristic of each player on default,
      * add the necessary buttons and views, and finally check if its the first time
      * starting the app, so we can show the interactive tutorial.
-     * @param Bundle String bundle from the previous instance.
+     * @param savedInstanceState
      */
+    @SuppressLint("RestrictedApi")
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_selector);
@@ -139,15 +139,14 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
         }
     }
 
-    @Override
-
     /**
      * We control the deletion of characters, not making it able to have less than one.
      * Also, we get a control over the costs of the lands related to the characters.
-     * @param requestCode requestCode == 4 for Constants.RESULT_FOR_CHARACTER_EDITOR success.
-     * @param resultCode resultCode == -1 for Activity.RESULT_OK success.
-     * @param Nullable Intent data. Previous Intent could be == null.
+     * @param requestCode == 4 for Constants.RESULT_FOR_CHARACTER_EDITOR success.
+     * @param resultCode == -1 for Activity.RESULT_OK success.
+     * @param data Previous Intent could be == null.
      */
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -188,24 +187,25 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
 
     }
 
-    @Override
     /**
      * Method called by system.
-     * It just returns to rhe previous activity.
+     * @param item Related to the menu item of the activity.
+     * @return true value for the back button pressed.
      */
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("RestrictedApi")
-    @Override
     /**
      * We can logically add a new character to the list.
      * Also, if its the fist time starting the app, we can show the
      * interactive tutorial.
      * @param pos to process the position of the character we are analyzing.
      */
+    @SuppressLint("RestrictedApi")
+    @Override
     public void setCharacter(int pos) {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(Constants.PREF_KEY_FIRST_START_CHARACTER_SELECTOR, true);
@@ -240,7 +240,6 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
      * Class to implement the actions related to each button.
      */
     private class ButtonActions implements View.OnClickListener {
-        @Override
         /**
          * Floating action buttons.
          * If View == AddCharacter we configure each characteristic of the player,
@@ -248,8 +247,9 @@ public class CharacterSelector extends AppCompatActivity implements iCharacterSe
          * If View == Next, we check that not the initial tile, nor the final tile are of those
          * terrains through which the character is not able to pass. Finally, we get all the
          * information into the intent for the next activity.
-         * @param View View of the button clicked.
+         * @param v View of the button clicked.
          */
+        @Override
         public void onClick(View v) {
             if (v == fabAddCharacter) {
                 if (characters.size() < 5) {

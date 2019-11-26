@@ -29,6 +29,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
+/**
+ * Class for the implementation of the ability to edit specs of the characters.
+ */
 public class CharacterEditor extends AppCompatActivity {
 
     private CharacterItem item;
@@ -42,6 +45,11 @@ public class CharacterEditor extends AppCompatActivity {
     private LinearLayoutManager mainLayoutManager;
     private ButtonActions buttonActions = new ButtonActions();
 
+    /**
+     * On the creation of this class and activity, we instantiate the most important
+     * aspects of the app in this context, like buttons, images, names, and editors.
+     * @param savedInstanceState the Strings bundle with the essential information.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +72,11 @@ public class CharacterEditor extends AppCompatActivity {
         ivImage.setOnClickListener(buttonActions);
 
         mainLayoutManager = new LinearLayoutManager(getApplicationContext()){
+            /**
+             * Once the layout if fully loaded, we can show the tutorial if its the first
+             * time the app is running, and set the layers and adapter.
+             * @param state the state of the recycler view.
+             */
             @Override
             public void onLayoutCompleted(RecyclerView.State state) {
                 boolean firstStart = PreferenceManager.getDefaultSharedPreferences(CharacterEditor.this)
@@ -106,14 +119,29 @@ public class CharacterEditor extends AppCompatActivity {
 
     }
 
+    /**
+     * Method called by system on back button pressed.
+     * @param item menu item corresponding to the actual activity.
+     * @return a true value.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
     }
 
+    /**
+     * Implementation if the actions depending on the button tapped.
+     */
     private class ButtonActions implements View.OnClickListener {
 
+        /**
+         * Depending on the button tapped on the activity, the resulting action
+         * changes. There is a specific process for the Ok button (load information
+         * and change activity), the delete button (free memory and delete un useful
+         * information), and ivImage (for the custom character editor dialog).
+         * @param v
+         */
         @Override
         public void onClick(View v) {
             if (v == btnOk) {

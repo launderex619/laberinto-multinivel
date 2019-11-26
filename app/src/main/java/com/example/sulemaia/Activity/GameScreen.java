@@ -33,6 +33,10 @@ import java.util.ArrayList;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
+/**
+ * Class with all the graphic implementations of the screen
+ * in which the user will actually play.
+ */
 public class GameScreen extends AppCompatActivity {
 
     float textSize;
@@ -51,7 +55,11 @@ public class GameScreen extends AppCompatActivity {
     private PathManualTree tree;
     private enum MOVEMENT_CODES {DOWN, UP, LEFT, RIGHT, NONE};
 
-
+    /**
+     * Initialization of all the basic data that the game and board will need to be playable,
+     * like biomes, colors, codes, coordinates, and buttons.
+     * @param savedInstanceState Bundle with the Strings from the previous intent.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +90,11 @@ public class GameScreen extends AppCompatActivity {
         fabDown.setOnClickListener(buttonActions);
 
         tlTableMap.post(new Runnable() {
+            /**
+             * First initialization of the board.
+             * We load the txt file with the parser, load the board,
+             * and initiate the fist step of the manual tree.
+             */
             @Override
             public void run() {
                 createTable(Parser.getFileArray(contentFile));
@@ -91,6 +104,11 @@ public class GameScreen extends AppCompatActivity {
         });
     }
 
+    /**
+     * We create the graphic tree with the first node (which is obviously the
+     * initial coordinate of the character), process the invalid nodes, and paint
+     * the adjacent tiles with the corresponding color.
+     */
     private void initTreeAndColors() {
         nodes[actualY][actualX].setStep(actualStep);
         tree = new PathManualTree(nodes[actualY][actualX]);
@@ -105,6 +123,11 @@ public class GameScreen extends AppCompatActivity {
         setAdyacentFieldsAndColor(actualY, actualX);
     }
 
+    /**
+     * We receive a coordinate and paint the adjacent fields with their corresponding color.
+     * @param y y coordinate.
+     * @param x x coordinate.
+     */
     private void setAdyacentFieldsAndColor(int y, int x) {
         //middle
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
@@ -130,10 +153,23 @@ public class GameScreen extends AppCompatActivity {
         }
     }
 
+    /**
+     * We set the corresponding color of a specific tile (actually the one in which the
+     * character is right now).
+     * @param y y coordinate.
+     * @param x x coordinate
+     * @param color color code of the tile.
+     */
     private void setFieldColor(int y, int x, int color) {
         board[y][x].setBackgroundColor(color);
     }
 
+    /**
+     * We load the board with the essential, initial and most important
+     * information, like the initial and final tile, information about
+     * any tile the user taps, and show the tutoria if its the fist
+     * time executing the app.
+     */
     private void loadBoard() {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, true);
@@ -162,6 +198,12 @@ public class GameScreen extends AppCompatActivity {
 
     }
 
+    /**
+     * We create the whole map with buttons so later on you can tap on each tile
+     * and get important information about it. Also, this creates the letters and
+     * numbers on the first column and first row.
+     * @param mapValues the whole compilation of tiles for the map.
+     */
     private void createTable(int[][] mapValues) {
         textSize = (mapValues[0].length > mapValues.length) ?
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
@@ -216,16 +258,30 @@ public class GameScreen extends AppCompatActivity {
 
     }
 
+    /**
+     * Method called by system on Back button pressed.
+     * @param item menu item corresponding to the activity.
+     * @return a true value.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
     }
 
+    /**
+     * We check if the actual coordinate in which the character is right now,
+     * is the same as the final tile, so the game would be finished.
+     * @return a true or false value.
+     */
     private boolean isGameFinish() {
         return actualX == finalX && actualY == finalY;
     }
 
+    /**
+     * When the game is finished, we deploy a message, and generate the url
+     * that creates the graphic tree on the git repository.
+     */
     private void finishGame() {
         tree.setFinal(nodes[actualY][actualX]);
         tree.endTree();
@@ -238,7 +294,19 @@ public class GameScreen extends AppCompatActivity {
         startActivity(browserIntent);
     }
 
+    /**
+     * Class that implements the functionality of the buttons in this activity.
+     */
     private class ButtonActions implements View.OnClickListener {
+        /**
+         * Depending on the button pressed (up, down, left, right), we have to check
+         * if there is any map terrain in that coordinate (if the character is not
+         * already on the bounds of the map), and also if the character can go through
+         * that specific terrain. If this is true, then we move the icon, update the
+         * coordinates and the actual step, add movement to the graphic tree, and check
+         * if the game has finished.
+         * @param v the button view pressed.
+         */
         @Override
         public void onClick(View v) {
             if (v == fabDown) {

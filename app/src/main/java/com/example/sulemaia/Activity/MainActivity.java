@@ -45,6 +45,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Random;
 
+/**
+ * Class that controls the whole main activity of the app. The brain, per-say.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnCancel;
@@ -62,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
     private LandItem finalItem;
     private ArrayList<String> biomesInUse;
 
+    /**
+     * We instantiate the most basic and necessary items so the app can work correctly,
+     * like buttons and hash sets. Also, we check if its the first time the app runs, so
+     * we can show the tutorial corresponding to this activity.
+     * @param savedInstanceState the Strings bundle from the last activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +119,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This is basically the whole parsing of the file so we can check it goes along
+     * with the limitations and specifications of the project. We show the tutorial if
+     * its the first time running the app, and also show the content of the loaded txt
+     * even if it has any kind of error.
+     * Also, we configure the initial and final tile, and show the option to skip the tutorial.
+     * Here we ask the user for archive reading permissions.
+     * @param requestCode corresponding to the "Constants" configuration.
+     * @param resultCode corresponding to the "Activity" configuration.
+     * @param data the Intent can be null.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -231,6 +251,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * We show the basic buttons, create the table, set the colors, and set
+     * the recicler view.
+     * @param mapValues that contains the values for the processing that we need to do.
+     */
     private void showMapAndElements(int[][] mapValues) {
         btnCancel.setVisibility(View.VISIBLE);
         btnOk.setVisibility(View.VISIBLE);
@@ -243,6 +268,9 @@ public class MainActivity extends AppCompatActivity {
         setReciclerViewForCodes();
     }
 
+    /**
+     * To configure the layout corresponding to the recicler view in this context.
+     */
     private void setReciclerViewForCodes() {
         LinearLayoutManager mainLayoutManager = new LinearLayoutManager(getApplicationContext());
         mainLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -252,6 +280,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * We randomly set a color for each terrain (biome), and later on the user can change
+     * it manually however he/she wants.
+     */
     private void setColorsToTable() {
         Enumeration e = hashCodes.keys();
         while (e.hasMoreElements()) {
@@ -265,6 +297,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * We create the whole set of buttons that is actually the table for view and game;
+     * also we set the letters and numbers for the first column and row.
+     * @param mapValues the values that contain the whole map for processing in the method.
+     */
     private void createTable(int[][] mapValues) {
         Hashtable<Integer, String> names = new Hashtable<>();
         int counter = 0;
@@ -331,6 +368,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Intent in which we open an archive browser and ask the user what file
+     * does he/she wants to load into the app.
+     */
     private void startIntentToReadFile() {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.setType("*/*");
@@ -338,6 +379,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(chooseFile, Constants.REQUEST_FILE_READ_EXTERNAL);
     }
 
+    /**
+     * Class with the implementation of the buttons in the app.
+     */
     private class ButtonActions implements View.OnClickListener,
             ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -347,6 +391,13 @@ public class MainActivity extends AppCompatActivity {
             this.activity = activity;
         }
 
+        /**
+         * Implementation of the action depending on the button tapped on the app
+         * (cancel button = go backwards, addFileButton = ask permision and continue
+         * with the normal app flow, okButton = load all the information that will be
+         * needed for the processes into the intent).
+         * @param v the view corresponding to the button tapped on screen by the user.
+         */
         @Override
         public void onClick(View v) {
             if (v == btnCancel) {
@@ -425,6 +476,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Check if the reading of archives permission is granted. Ask for it.
+         * @return
+         */
         private boolean isPermissionGranted() {
             if (ContextCompat.checkSelfPermission(getApplicationContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -450,6 +505,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        /**
+         * We proceed with the normal flow of the app depending of which option was selected (reading
+         * permission granted or denied).
+         * @param requestCode related to the "Constants" configuration.
+         * @param permissions related to the reading permissions, which can never be null.
+         * @param grantResults related to the granted permission, which also cant be null.
+         */
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             switch (requestCode) {

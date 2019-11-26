@@ -38,6 +38,9 @@ import java.util.HashSet;
 import de.hdodenhof.circleimageview.CircleImageView;
 import top.defaults.colorpicker.ColorPickerPopup;
 
+/**
+ * Class to obtain the information of each field/terrain.
+ */
 public class FieldInformation extends AppCompatActivity {
 
     private CircleImageView ivFieldColor;
@@ -58,6 +61,11 @@ public class FieldInformation extends AppCompatActivity {
     private boolean isFinal;
     private boolean isInitial;
 
+    /**
+     * Class to configure all the initial instances for the class to work.
+     * Also, we can activate the tutorial for the fist time the app runs.
+     * @param savedInstanceState String bundle with the instances.
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +133,12 @@ public class FieldInformation extends AppCompatActivity {
                             getString(R.string.field_name_description)).Create()
             ).start();
         }
-
-
     }
 
+    /**
+     * Method to get the list of the valid biomes in that moment.
+     * @return an Array set of strings with the valid biomes.
+     */
     private String[] getValidBiomes() {
         HashSet<String> set = new HashSet<>(Arrays.asList(Constants.biomes));
         set.removeAll(biomesInUse);
@@ -136,18 +146,37 @@ public class FieldInformation extends AppCompatActivity {
         return set.toArray(new String[set.size()]);
     }
 
+    /**
+     * Method called by system.
+     * @param item Related to the menu item of the activity.
+     * @return true value.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Class for the implementation of the buttons.
+     */
     private class ButtonActions implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
         Context context;
+
+        /**
+         * We pass and assign the context of the activity.
+         * @param context context of the correct activity.
+         */
         public ButtonActions(Context context) {
             this.context = context;
         }
 
+        /**
+         * Tap configuration so we can choose the color of a terrain,
+         * the initial and final tile fo the character, and finally
+         * the ok button to proceed with the app.
+         * @param v the corresponding with in the activity.
+         */
         @Override
         public void onClick(View v) {
             if (v == ivFieldColor) {
@@ -187,6 +216,12 @@ public class FieldInformation extends AppCompatActivity {
             }
         }
 
+        /**
+         *
+         * @param v
+         * @param event
+         * @return
+         */
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             final int DRAWABLE_RIGHT = 2;
@@ -200,6 +235,13 @@ public class FieldInformation extends AppCompatActivity {
             return false;
         }
 
+        /**
+         *
+         * @param parent
+         * @param view
+         * @param position
+         * @param id
+         */
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String item = validBiomes[position];

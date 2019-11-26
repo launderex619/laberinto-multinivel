@@ -20,7 +20,9 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import java.util.ArrayList;
 
-
+/**
+ * The instantiate of the class that gets the node expansion order from the user.
+ */
 public class ExpansionDetails extends AppCompatActivity {
     private static final int SLOT_QUANTITY = 4;
     Intent intent;
@@ -31,6 +33,11 @@ public class ExpansionDetails extends AppCompatActivity {
     private Boolean state[][] = {{true, true, true, true}, {false, false, false, false}};
 
     @Override
+    /**
+     * On the creation of the class, we have four slots for the four possible directions in which
+     * the character can move, creating an expansion order. All this works with buttons.
+     * If its the first time the app is running, we show the tutorial.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expansion_details);
@@ -91,15 +98,29 @@ public class ExpansionDetails extends AppCompatActivity {
 
     }
 
+    /**
+     * Method called by system on back button pressed.
+     * @param item menu item corresponding to the activity.
+     * @return a true value.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Implementation of the functions of the buttons.
+     */
     private class ButtonActions implements View.OnClickListener {
         private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
 
+        /**
+         * We get an order depending on the order tapped by the user on the app,
+         * and proceed depending on the selection of the automatic or manual
+         * algorithm.
+         * @param v the button view tapped.
+         */
         @Override
         public void onClick(View v) {
             if (v == btn_down) {
@@ -155,6 +176,10 @@ public class ExpansionDetails extends AppCompatActivity {
             }
         }
 
+        /**
+         * We can proceed once the last order state is implemented by the user.
+         * @return a true or false value.
+         */
         private boolean isEndingState() {
             for (int i = 0; i < SLOT_QUANTITY; i++) {
                 if (state[0][i]) {
@@ -164,6 +189,11 @@ public class ExpansionDetails extends AppCompatActivity {
             return true;
         }
 
+        /**
+         *
+         * @param first
+         * @param second
+         */
         private void switchViews(View first, View second) {
             if (second == null)
                 return;
@@ -185,6 +215,10 @@ public class ExpansionDetails extends AppCompatActivity {
             secondAnchor.addView(first, secondIndex);
         }
 
+        /**
+         * Return the position of the next available slot for the expansion order selection.
+         * @return an integer that is the position of the next slot available.
+         */
         private int getNextSlotAvailable() {
             for (int i = 0; i < SLOT_QUANTITY; i++) {
                 if (state[0][i]) {

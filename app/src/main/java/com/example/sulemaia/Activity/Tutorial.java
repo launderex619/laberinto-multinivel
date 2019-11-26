@@ -11,6 +11,10 @@ import com.example.sulemaia.R;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
+/**
+ * Class for the creation and implementation of the main tutorial that pops when the
+ * app is running for the first time, along with some images to show examples.
+ */
 public class Tutorial extends IntroActivity {
 
     private int images[] = {
@@ -32,6 +36,11 @@ public class Tutorial extends IntroActivity {
             "Area de juego"
     };
 
+    /**
+     * On the creation of the tutorial, we activate and deactivate certain buttons, for it to
+     * work accordingly to the normal flow, and show specific images with their description.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setFullscreen(true);

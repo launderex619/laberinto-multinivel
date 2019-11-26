@@ -12,9 +12,15 @@ import com.example.sulemaia.R;
 
 import java.io.File;
 
+/**
+ * Class for the load screen of the app.
+ */
 public class LoadScreen extends AppCompatActivity {
 
     @Override
+    /**
+     * We show the splash theme, create a new intent, and start the app.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);

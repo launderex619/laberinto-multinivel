@@ -18,10 +18,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+/**
+ * Class for the appropriate selection and process of each heuristic algorithm.
+ */
 public class SearchAlgorithms extends AppCompatActivity {
     Intent intent;
     Bundle bundle;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +45,26 @@ public class SearchAlgorithms extends AppCompatActivity {
                 selectedFragment).commit();
     }
 
+    /**
+     * Method called by system on back button pressed.
+     * @param item activity item related to the context.
+     * @return a true value.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;//super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Implementation of the fragments for each heuristic algorithm.
+     */
     private class NavigationListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        /**
+         * Depending of the heuristic algoritm to show, we create and load the corresponding fragment.
+         * @param menuItem
+         * @return
+         */
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             Fragment selectedFragment = null;
