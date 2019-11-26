@@ -32,7 +32,13 @@ Podemos en teoría empezar a programar ahora. Sin embargo, utilizamos para nuest
 	* Aparecerá un mensaje que le preguntará si desea abrir el proyecto en Android Studio.
 	Haz clic en Sí.
 	* El proyecto ahora se abrirá en Android Studio
-  
+	
+## Uso
+![maze](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/maze.jpg)
+![character selection](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/characters.jpg)
+![resolving manually](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/moving_in_maze.jpg)
+![choice of order](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/order.jpg)
+![tree generation](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/tree.jpg)
 ## Autores
 * Carlos Carvajal Vazquez
 * Jose Alejandro Silva Moya
@@ -71,7 +77,14 @@ En theory, we can begin to code now. However, we are using for our application a
 	* You will be prompted with a message asking you would like to open the project in Android Studio. 
 	Click Yes.
 	* The project will now open in Android Studio 
-  
+
+## Uso
+![maze](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/maze.jpg)
+![character selection](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/characters.jpg)
+![resolving manually](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/moving_in_maze.jpg)
+![choice of order](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/order.jpg)
+![tree generation](https://raw.githubusercontent.com/launderex619/laberinto-multinivel/master/tree.jpg)
+
 ## Autors
 * Carlos Carvajal Vazquez
 * Jose Alejandro Silva Moya
