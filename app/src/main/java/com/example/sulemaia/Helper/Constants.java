@@ -6,6 +6,16 @@ import com.example.sulemaia.Model.CharacterItem;
 
 import java.util.Hashtable;
 
+/**
+ * A very old class in which we have a static, pre-coded map that was used to do
+ * initial tests.
+ * Also, this has a list of options to control certain flows of the app, like the
+ * reading permissions. This class also contains all the biomes that the app can handle,
+ * so if you want to add more, you should start from here, although it wont be enough,
+ * since that is also controlled on other classes. This has the first starts flags for
+ * the tutorials and the default 3 characters that the user gets when he runs the app
+ * every time.
+ */
 public class Constants {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL = 1;
     public static final int REQUEST_FILE_READ_EXTERNAL = 2;

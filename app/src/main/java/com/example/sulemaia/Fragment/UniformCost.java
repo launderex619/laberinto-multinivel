@@ -74,11 +74,21 @@ public class UniformCost extends Fragment implements iUniformCost {
     private SeekBar sbRefreshBar;
     private int pathColor = 0xFFFF0000;
 
+    /**
+     * Empty constructor.
+     */
     public UniformCost() {
         // Required empty public constructor
     }
 
-
+    /**
+     * On create view we load all the importan information from the bundle, like the biomes,
+     * codes, colors, relevant coordinates, etc...
+     * @param inflater Layout.
+     * @param container view group.
+     * @param savedInstanceState Strings bundle for the information load.
+     * @return the view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,6 +117,10 @@ public class UniformCost extends Fragment implements iUniformCost {
         sbRefreshBar.setOnSeekBarChangeListener(buttonActions);
 
         tlTableMap.post(new Runnable() {
+            /**
+             * To run the creation, creating the table and loading the board
+             * with all the necessary information.
+             */
             @Override
             public void run() {
                 createTable(Parser.getFileArray(contentFile));
@@ -117,10 +131,20 @@ public class UniformCost extends Fragment implements iUniformCost {
         return view;
     }
 
+    /**
+     * Set the color to a specific tile.
+     * @param y Y coordinate.
+     * @param x X coordinate.
+     * @param color specific color.
+     */
     private void setFieldColor(int y, int x, int color){
         board[y][x].setBackgroundColor(color);
     }
 
+    /**
+     * Load the board with the initial information, like initial and final coordinates, and
+     * check if its the first time running the app so we can show the tutorial.
+     */
     private void loadBoard() {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getBoolean(Constants.PREF_KEY_FIRST_START_UNIFORM_COST_SCREEN, true);
@@ -155,6 +179,11 @@ public class UniformCost extends Fragment implements iUniformCost {
 
     }
 
+    /**
+     * The creation of the table with each tile as a text view and letters and numbers
+     * for the first column and row.
+     * @param mapValues the map information to process in the creation of the table.
+     */
     private void createTable(int[][] mapValues) {
         textSize = (mapValues[0].length > mapValues.length) ?
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
@@ -211,7 +240,15 @@ public class UniformCost extends Fragment implements iUniformCost {
 
     }
 
+
+    /**
+     * Implementation of the actions for each button.
+     */
     private class ButtonActions implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+        /**
+         * When we start the algorithm, we let the user select a color for the final path drawing.
+         * @param v button view.
+         */
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
@@ -225,6 +262,11 @@ public class UniformCost extends Fragment implements iUniformCost {
                         .showValue(true)
                         .build();
                 color.show(new ColorPickerPopup.ColorPickerObserver() {
+                    /**
+                     * Once the color is picked, we proceed with the actual algorithm with
+                     * the parameters that it needs.
+                     * @param color of the final path.
+                     */
                     @Override
                     public void onColorPicked(int color) {
                         pathColor = color;
@@ -244,29 +286,52 @@ public class UniformCost extends Fragment implements iUniformCost {
             }
         }
 
+        /**
+         * Change to the refresh of the process of the thread.
+         * @param seekBar for the speed of execution.
+         * @param progress for the completion of the thread.
+         * @param fromUser for the actions selected.
+         */
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             updateTime = (2 + progress) * (progress);
             tvRefreshRate.setText(updateTimeText + ": " + updateTime + "ms");
         }
 
+        /**
+         * Code not used but still needed to be instantiated for the thread to work properly.
+         * @param seekBar
+         */
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
 
         }
 
+        /**
+         * Code not used but still needed to be instantiated for the thread to work properly.
+         * @param seekBar
+         */
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
 
         }
     }
 
+    /**
+     * Method to show a failure message in case the algorithm is not able to reach the final tile.
+     */
     @Override
     public void showFailureMessage(){
         (new SimpleOkDialog(getContext(), getString(R.string.error),
                 getString(R.string.path_not_found))).build().show();
     }
 
+    /**
+     * Method to control the whole drawing of the path once the algorithm finishes.
+     * Also, the user gets the constructor URL for the tree, and gets redirected to the git
+     * repository in which the actual tree gets drawn by another code.
+     * @param heuristicPathTree the tree from which all the information is taken.
+     */
     @Override
     public void drawPath(HeuristicPathTree heuristicPathTree){
         if(heuristicPathTree == null){
@@ -298,6 +363,11 @@ public class UniformCost extends Fragment implements iUniformCost {
         }
     }
 
+    /**
+     * For the update on the movement of the character, for logically and in the UI.
+     * @param posY Y actual coordinate.
+     * @param posX X actual coordinate.
+     */
     @Override
     public void moveCharacter(int posY, int posX){
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -306,6 +376,11 @@ public class UniformCost extends Fragment implements iUniformCost {
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
     }
 
+    /**
+     * Help method to color tiles, according to a specific color code.
+     * @param y Y coordinate.
+     * @param x X coordinate.
+     */
     @Override
     public void setColorToField(int y, int x){
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));

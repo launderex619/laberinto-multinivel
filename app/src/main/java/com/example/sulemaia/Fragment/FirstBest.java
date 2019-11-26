@@ -76,11 +76,22 @@ public class FirstBest extends Fragment implements iFirstTheBest {
     private Spinner spMeasureType;
     private int pathColor = 0xFFFF0000;
 
+    /**
+     * First Best Algorithm Constructor.
+     */
     public FirstBest() {
         // Required empty public constructor
     }
 
-
+    /**
+     * To create the view. We get all the information from the bundle
+     * and load it to use it later on. Also configure the deploy selection for the
+     * measure modes.
+     * @param inflater Layout corresponding to the context.
+     * @param container The view group.
+     * @param savedInstanceState The bundle containing all the information.
+     * @return the whole view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,10 +139,20 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         return view;
     }
 
+    /**
+     * Whe receive coordinates and a color, to color a specific tile.
+     * @param y Y coordinate.
+     * @param x X coordinate.
+     * @param color Tile color.
+     */
     private void setFieldColor(int y, int x, int color) {
         board[y][x].setBackgroundColor(color);
     }
 
+    /**
+     * We load the pre-game board with information like the initial and final tile, we
+     * start the tutorial if its the first time executing the app, and finish the method.
+     */
     private void loadBoard() {
         boolean firstStart = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getBoolean(Constants.PREF_KEY_FIRST_START_GAME_SCREEN, true);
@@ -160,6 +181,11 @@ public class FirstBest extends Fragment implements iFirstTheBest {
 
     }
 
+    /**
+     * Creation of all the tiles as text views, and the first row and column containing
+     * letters and numbers.
+     * @param mapValues the values corresponding to the whole map of the board.
+     */
     private void createTable(int[][] mapValues) {
         textSize = (mapValues[0].length > mapValues.length) ?
                 Parser.getTextSizeForMap(mapValues[0].length) : Parser.getTextSizeForMap(mapValues.length);
@@ -216,7 +242,15 @@ public class FirstBest extends Fragment implements iFirstTheBest {
 
     }
 
+    /**
+     * Class to implement the button actions.
+     */
     private class ButtonActions implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+        /**
+         * Once the user chooses to start the algorithm, we let he/she choose the color to paint
+         * the final path. Or let the user obtain information on a tapped tile.
+         * @param v The view of the button tapped.
+         */
         @Override
         public void onClick(View v) {
             if (v == btnStartAlgorithm) {
@@ -231,6 +265,11 @@ public class FirstBest extends Fragment implements iFirstTheBest {
                         .showValue(true)
                         .build();
                 color.show(new ColorPickerPopup.ColorPickerObserver() {
+                    /**
+                     * Once the color is picked, we can proceed to the actual algorithm with the
+                     * corresponding needed parameters.
+                     * @param color for the path color.
+                     */
                     @Override
                     public void onColorPicked(int color) {
                         pathColor = color;
@@ -251,29 +290,54 @@ public class FirstBest extends Fragment implements iFirstTheBest {
             }
         }
 
+        /**
+         * Refresh rate from the time configured to the movement of the character, controlled
+         * by the thread.
+         * @param seekBar The speed controller.
+         * @param progress The progress of the thread itself.
+         * @param fromUser Boolean variable from the action of the user.
+         */
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             updateTime = (2 + progress) * (progress);
             tvRefreshRate.setText(updateTimeText + ": " + updateTime + "ms");
         }
 
+        /**
+         * Code not used but still needed to be instantiated for the thread to work properly.
+         * @param seekBar
+         */
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
 
         }
 
+        /**
+         * Code not used but still needed to be instantiated for the thread to work properly.
+         * @param seekBar
+         */
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
 
         }
     }
 
+    /**
+     * Show failure message in case the final tile is unreachable for any reason.
+     */
     @Override
     public void showFailureMessage() {
         (new SimpleOkDialog(getContext(), getString(R.string.error),
                 getString(R.string.path_not_found))).build().show();
     }
 
+    /**
+     * Drawing of the shortest path followed by the algorithm, just after it has finished.
+     * We show a message when the game is finished, and control possible errors if the url
+     * to the creation of the tree goes above 1mb, which is the limit of information you
+     * can pass in an intent.
+     * @param heuristicPathTree the tree from which the path can be processed and painted.
+     */
     @Override
     public void drawPath(HeuristicPathTree heuristicPathTree) {
         if (heuristicPathTree == null) {
@@ -305,6 +369,11 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         }
     }
 
+    /**
+     * Update the position and icon of the character once it moves.
+     * @param posY Actual Y position, then changed to the new one.
+     * @param posX Actual X position, then changed to the new one.
+     */
     @Override
     public void moveCharacter(int posY, int posX) {
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -313,19 +382,40 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         board[actualY][actualX].setCompoundDrawablesWithIntrinsicBounds(characterIcon, null, null, null);
     }
 
+    /**
+     * Set color field to a tile once we get its code, so the color will be correct.
+     * @param y Y coordinate.
+     * @param x X coordinate.
+     */
     @Override
     public void setColorToField(int y, int x) {
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 
 
+    /**
+     * Class that implements the usage of either Manhattan o Euclidean measure methods for the
+     * algorithm to actually work.
+     */
     private class Measures implements android.widget.AdapterView.OnItemSelectedListener {
+        /**
+         * We show a reference to the measure mode selected.
+         * @param parent parent adapter view.
+         * @param view actual view.
+         * @param position measure mode.
+         * @param id to recognize the actual process.
+         */
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             measureMode = position;
             Toast.makeText(getContext(), "measure mode: " + measureMode, Toast.LENGTH_SHORT).show();
         }
 
+        /**
+         * When no method is selected, nothing happens, since you already have one method selected
+         * by default.
+         * @param parent parent adapter view.
+         */
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 

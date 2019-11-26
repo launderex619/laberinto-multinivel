@@ -7,12 +7,22 @@ import android.view.View;
 import com.example.sulemaia.R;
 import com.getkeepsafe.taptargetview.TapTarget;
 
+/**
+ * Class implementation for the tutorials.
+ */
 public class TapTargetHelper {
     private Context context;
     private View target;
     private String title;
     private String description;
 
+    /**
+     * Designation of the basic variables for the method.
+     * @param context activity context.
+     * @param target target view.
+     * @param title tutorial title.
+     * @param description tutorial description.
+     */
     public TapTargetHelper(Context context, View target, String title, String description) {
         this.context = context;
         this.target = target;
@@ -20,6 +30,10 @@ public class TapTargetHelper {
         this.description = description;
     }
 
+    /**
+     * Creation of the tap target helper, with specific graphic characteristics.
+     * @return taptarget for view.
+     */
     public TapTarget Create(){
         return TapTarget.forView(target, title, description)
                 // All options below are optional
@@ -33,6 +47,11 @@ public class TapTargetHelper {
                 .targetRadius(60);                  // Specify the target radius (in dp)
     }
 
+    /**
+     * The same method as the last one, but with an icon; it was clearly never used.
+     * @param icon icon that was going to be shown with each tutoria point.
+     * @return taptarget for view.
+     */
     public TapTarget CreateWithIcon(Drawable icon) {
         return TapTarget.forView(target, title, description)
                 // All options below are optional
