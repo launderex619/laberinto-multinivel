@@ -1,14 +1,14 @@
 ### Versión en español
->[Click here to go to the english version of this .readme.](###english-version)
+>[Click here to go to the english version of this .readme.](#english-version)
 
 # Laberinto Multinivel
 
 ## Indic
-* [Descripción](##descripción)
-* [Instalación](##instalación)
-* [Uso](##uso)
-* [Documentación](##documentación)
-* [Autores](##autores)
+* [Descripción](#descripción)
+* [Instalación](#instalación)
+* [Uso](#uso)
+* [Documentación](#documentación)
+* [Autores](#autores)
 
 ## Descripción
 Laberinto Multinivel es un aplicación Android que permite ya sea jugar en el laberinto de su elección o resolver un laberinto de forma automática y luego estudiar pasos de resolución.
@@ -61,11 +61,11 @@ Puede encontrar toda la documentación de la aplicación [aquí](https://launder
 ### English version
 
 ## Indice
-* [Description](##description)
-* [Instalation](##instalation )
-* [Usage](##usage)
-* [Documentation](##documentation)
-* [Autors](##autors)
+* [Description](#description)
+* [Instalation](#instalation )
+* [Usage](#usage)
+* [Documentation](#documentation)
+* [Autors](#autors)
 
 # Multilevel Labyrinth
 
