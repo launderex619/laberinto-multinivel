@@ -158,7 +158,7 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
              */
             @Override
             public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
-                return Float.compare(o1.getRemaining(), o2.getRemaining());
+                return Float.compare(o1.getRemaining() + o1.getAccumulative(), o2.getRemaining() + o2.getAccumulative());
             }
         });
     }
