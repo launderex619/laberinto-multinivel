@@ -187,7 +187,7 @@ public class HeuristicPathTree {
             addMovementAccumulative(child);
         }
         for (Node child : father.getChildren()) {
-            addMovementAccumulative(child);
+            inUniformCost(child);
         }
     }
 
@@ -196,7 +196,7 @@ public class HeuristicPathTree {
             addMovementAll(child);
         }
         for (Node child : father.getChildren()) {
-            addMovementAll(child);
+            inAstar(child);
         }
     }
 
