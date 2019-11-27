@@ -157,13 +157,13 @@ public class HeuristicPathTree {
     private void createDotTree(int expansionAlgorithm) {
         switch (expansionAlgorithm) {
             case UNIFORM_COST:
-                inOrderFirst(anchor);
+                inUniformCost(anchor);
                 break;
             case FIRST_BEST:
                 inOrderFirst(anchor);
                 break;
             case A_STAR:
-                inOrderFirst(anchor);
+                inAstar(anchor);
                 break;
         }
     }
@@ -179,6 +179,24 @@ public class HeuristicPathTree {
         }
         for (Node child : father.getChildren()) {
             inOrderFirst(child);
+        }
+    }
+
+    private void inUniformCost(Node father) {
+        for (Node child : father.getChildren()) {
+            addMovementAccumulative(child);
+        }
+        for (Node child : father.getChildren()) {
+            addMovementAccumulative(child);
+        }
+    }
+
+    private void inAstar(Node father) {
+        for (Node child : father.getChildren()) {
+            addMovementAll(child);
+        }
+        for (Node child : father.getChildren()) {
+            addMovementAll(child);
         }
     }
 
