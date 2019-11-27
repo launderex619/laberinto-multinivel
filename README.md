@@ -3,10 +3,11 @@
 
 # Laberinto Multinivel
 
-## Indic
+## Indice
 * [Descripción](#descripción)
 * [Instalación](#instalación)
 * [Uso](#uso)
+* [Software de terceros](#software-de-terceros)
 * [Documentación](#documentación)
 * [Autores](#autores)
 
@@ -52,6 +53,15 @@ Interfaz de gestión de los cuadros | Interfaz de gestión de los personajes | I
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
 Interfaz de gestión de elección de prioridad de algoritmo | Página de resultados finales : Mostrar pasos y árbol
+
+## Software de terceros
+Nuestra aplicación utiliza los siguientes archivos de código abierto:
+* [Color Picker](https://github.com/duanhong169/ColorPicker) por [Hong Duan](https://github.com/duanhong169) (Apache License 2.0)
+* [Circle Image View](https://github.com/hdodenhof/CircleImageView) por [Henning Dodenhof](https://github.com/hdodenhof) (Apache License 2.0)
+* [Materiel-Intro](https://github.com/heinrichreimer/material-intro) por [Jan Heinrich Reimer](https://github.com/heinrichreimer) (MIT License)
+* [Tap Target View](https://github.com/KeepSafe/TapTargetView) por [Keep Safe](https://github.com/KeepSafe) (Apache License 2.0)
+* [Graphviz-java](https://github.com/nidi3/graphviz-java) por [Stefan Niederhauser](https://github.com/nidi3) (Apache License 2.0)
+
 ## Documentación
 Puede encontrar toda la documentación de la aplicación [aquí] (https://launderex619.github.io/laberinto-multinivel/).
 
@@ -63,10 +73,11 @@ Puede encontrar toda la documentación de la aplicación [aquí] (https://launde
 
 ### English version
 
-## Indice
+## Table of content
 * [Description](#description)
 * [Instalation](#instalation )
 * [Usage](#usage)
+* [Third Party Software](#third_party_software)
 * [Documentation](#documentation)
 * [Autors](#autors)
 
@@ -112,6 +123,14 @@ Management interface of boxes | Management interface of characters | Game interf
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
 Algorithm priority choice management interface | End Results Page : Showing Steps and Tree
+
+## Third party software
+Our application uses the following open-source files :
+* [Color Picker](https://github.com/duanhong169/ColorPicker) by [Hong Duan](https://github.com/duanhong169) (Apache License 2.0)
+* [Circle Image View](https://github.com/hdodenhof/CircleImageView) by [Henning Dodenhof](https://github.com/hdodenhof) (Apache License 2.0)
+* [Materiel-Intro](https://github.com/heinrichreimer/material-intro) by [Jan Heinrich Reimer](https://github.com/heinrichreimer) (MIT License)
+* [Tap Target View](https://github.com/KeepSafe/TapTargetView) by [Keep Safe](https://github.com/KeepSafe) (Apache License 2.0)
+* [Graphviz-java](https://github.com/nidi3/graphviz-java) by [Stefan Niederhauser](https://github.com/nidi3) (Apache License 2.0)
 
 ## Documentation
 You can find all the documentation about our application [here] (https://launderex619.github.io/laberinto-multinivel/)
