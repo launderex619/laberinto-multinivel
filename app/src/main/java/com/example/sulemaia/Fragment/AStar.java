@@ -345,7 +345,7 @@ public class AStar extends Fragment implements iAStar{
         }
 
         HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
-        putNodesInfo(node);
+        putNodesInfo(heuristicPathTree.getAnchor());
         board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         while (node != heuristicPathTree.getAnchor()) {
             node = node.getFather();
