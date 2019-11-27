@@ -22,12 +22,21 @@ import com.example.sulemaia.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Class implementation for the edition of the character.
+ */
 public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditorAdapter.Item> {
 
     private CharacterItem characterItem;
     private int resource;
     private Activity activity;
 
+    /**
+     * Constructor of the character editor.
+     * @param characterItem Character.
+     * @param resource Resource code.
+     * @param activity Activity context.
+     */
     public CharacterEditorAdapter(CharacterItem characterItem, int resource,
                                   Activity activity) {
         this.characterItem = characterItem;
@@ -35,10 +44,20 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         this.activity = activity;
     }
 
+    /**
+     * Return the character item
+     * @return Character.
+     */
     public CharacterItem getCharacterItem() {
         return characterItem;
     }
 
+    /**
+     * Method called by system on the creation of the view.
+     * @param parent View group that cant be null.
+     * @param viewType View type code.
+     * @return View as an item.
+     */
     @NonNull
     @Override
     public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +65,11 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         return new Item(view);
     }
 
+    /**
+     * Method to act over the view holder for the edition of the costs af the lands for the character.
+     * @param holder Item that cant be null.
+     * @param position Position code.
+     */
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull final Item holder, final int position) {
@@ -74,6 +98,10 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         holder.tvName.setText(characterItem.getLands().get(position));
         holder.cvImage.setImageDrawable(new ColorDrawable(characterItem.getLandsColors().get(position)));
         holder.cbSelect.setOnClickListener(new View.OnClickListener() {
+            /**
+             * On button (view) click.
+             * @param v Button tapped.
+             */
             @Override
             public void onClick(View v) {
                 if (!holder.cbSelect.isChecked()) {
@@ -97,6 +125,10 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         }
     }
 
+    /**
+     * Method to obtain the item count.
+     * @return count value.
+     */
     @Override
     public int getItemCount() {
         return characterItem.getLands().size();
@@ -109,6 +141,10 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
         public TextView tvName;
         public EditText etCost;
 
+        /**
+         * Item view of selected character.
+         * @param itemView Item view related to the character.
+         */
         public Item(@NonNull View itemView) {
             super(itemView);
             cvImage = itemView.findViewById(R.id.iv_item_character_editor_information_color);

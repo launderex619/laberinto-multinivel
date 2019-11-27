@@ -24,18 +24,33 @@ import java.util.Hashtable;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
+/**
+ * Class implementation of the main activity adapter.
+ */
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.Item> {
 
     private Hashtable<Integer, ArrayList<LandItem>> hashCodes;
     private int resource;
     private Activity mainActivity;
 
+    /**
+     * Constructor of the main activity adapter.
+     * @param hashCodes Hashtable for the codes.
+     * @param resource Resource code.
+     * @param mainActivity Activity context.
+     */
     public MainActivityAdapter(Hashtable<Integer, ArrayList<LandItem>> hashCodes, int resource, Activity mainActivity) {
         this.hashCodes = hashCodes;
         this.resource = resource;
         this.mainActivity = mainActivity;
     }
 
+    /**
+     * Take action on the view holder creation.
+     * @param parent Viewgroup parent, that cant be null.
+     * @param viewType View type code.
+     * @return view as item.
+     */
     @NonNull
     @Override
     public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,6 +58,11 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         return new Item(view);
     }
 
+    /**
+     * Take action on the view holder.
+     * @param holder Item holder, that cant be null.
+     * @param position Position code.
+     */
     @Override
     public void onBindViewHolder(@NonNull final Item holder, int position) {
         final int key = Integer.parseInt(hashCodes.keySet().toArray()[position].toString());
@@ -55,6 +75,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         holder.code.setText(code);
         holder.name.setText(name);
         holder.name.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Implementation of the clicks or taps of the buttons.
+             * @param v Button tapped.
+             */
             @Override
             public void onClick(View v) {
                 final EditText text = new EditText(mainActivity);
@@ -64,6 +88,11 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                 new AlertDialog.Builder(mainActivity)
                         .setView(text)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            /**
+                             * On click of the button, proceed as followed.
+                             * @param dialog Dialog interface.
+                             * @param which Code.
+                             */
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 for (LandItem i :hashCodes.get(key)) {
@@ -79,6 +108,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
             }
         });
         holder.color.setOnClickListener(new View.OnClickListener() {
+            /**
+             * On click of the color customization, change the color.
+             * @param v button pressed.
+             */
             @Override
             public void onClick(View v) {
                 new ColorPickerPopup.Builder(mainActivity)
@@ -91,6 +124,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                         .showValue(false)
                         .build()
                         .show(v, new ColorPickerPopup.ColorPickerObserver() {
+                            /**
+                             * On color picked, process.
+                             * @param color Color code.
+                             */
                             @Override
                             public void onColorPicked(int color) {
                                 for (LandItem i :hashCodes.get(key)) {
@@ -104,19 +141,28 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         });
     }
 
-
+    /**
+     * Get the item count.
+     * @return item count.
+     */
     @Override
     public int getItemCount() {
         return hashCodes.size();
     }
 
-
+    /**
+     * Class implementation for the recycler view.
+     */
     public class Item extends RecyclerView.ViewHolder {
 
         private ImageView color;
         private TextView name;
         private TextView code;
 
+        /**
+         * On the item creation take action.
+         * @param itemView item view, that cant be null.
+         */
         public Item(@NonNull View itemView) {
             super(itemView);
             color = itemView.findViewById(R.id.item_land_color);

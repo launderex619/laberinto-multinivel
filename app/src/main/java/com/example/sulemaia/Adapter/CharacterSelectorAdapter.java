@@ -25,6 +25,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.sulemaia.Helper.Constants.characterIcons;
 
+/**
+ * Class implementation for the character selector.
+ */
 public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSelectorAdapter.Item> {
 
     private ArrayList<CharacterItem> characterItems;
@@ -33,6 +36,13 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
     private iCharacterSelected iSelected;
 
 
+    /**
+     * Constructor of the character selector.
+     * @param iSelected Selected character.
+     * @param characterItems Items corresponding to the character.
+     * @param resource Resource code.
+     * @param activity Activity context.
+     */
     public CharacterSelectorAdapter(iCharacterSelected iSelected,
                                     ArrayList<CharacterItem> characterItems, int resource,
                                     CharacterSelector activity) {
@@ -43,6 +53,12 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
 
     }
 
+    /**
+     * Method to act over the view holder creation.
+     * @param parent Parent viewgroup.
+     * @param viewType View type code.
+     * @return The view as an item.
+     */
     @NonNull
     @Override
     public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +66,11 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
         return new Item(view);
     }
 
+    /**
+     * Method to act over the creation of the view holder.
+     * @param holder Holder item.
+     * @param position Position code.
+     */
     @Override
     public void onBindViewHolder(@NonNull Item holder, int position) {
 
@@ -63,20 +84,36 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
         holder.cbSelect.setOnClickListener(buttonActions);
     }
 
+    /**
+     * Method to get the item count.
+     * @return Item count.
+     */
     @Override
     public int getItemCount() {
         return characterItems.size();
     }
 
+    /**
+     * Class for the implementation of the buttons.
+     */
     public class ButtonActions implements View.OnClickListener {
         Item item;
         int pos;
 
+        /**
+         * Button constructor.
+         * @param holder Item holder.
+         * @param pos Position code.
+         */
         public ButtonActions(Item holder, int pos) {
             item = holder;
             this.pos = pos;
         }
 
+        /**
+         * Take action depending on which float button was tapped.
+         * @param v Button tapped.
+         */
         @Override
         public void onClick(View v) {
             if (v == item.ibInfo) {
@@ -92,6 +129,9 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
         }
     }
 
+    /**
+     * Class that implements the recyclerview.
+     */
     public class Item extends RecyclerView.ViewHolder {
 
         public CircleImageView cvImage;
@@ -101,6 +141,10 @@ public class CharacterSelectorAdapter extends RecyclerView.Adapter<CharacterSele
         public TextView tvName;
         public TextView tvMain;
 
+        /**
+         * Implementation of the item view, that cant be null.
+         * @param itemView
+         */
         public Item(@NonNull View itemView) {
             super(itemView);
             cvImage = itemView.findViewById(R.id.iv_item_image_character);
