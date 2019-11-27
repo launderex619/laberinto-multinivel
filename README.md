@@ -47,7 +47,7 @@ Si no desea instalar Android Studio pero aún desea probar nuestra aplicación, 
 ## Uso
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
-texte1 | texte2 | texte3
+Interfaz de gestión de los cuadros | Interfaz de gestión de los personajes | Interfaz de juego 
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
@@ -107,11 +107,11 @@ If you don't want to install Android Studio but still want to test our applicati
 ## Usage
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
-texte1 | texte2 | texte3
+Management interface of boxes | Management interface of characters | Game interface and movement management 
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
-texte4 | texte5
+oui oui oui | texte5
 
 ## Documentation
 You can find all the documentation about our application [here] (https://launderex619.github.io/laberinto-multinivel/)
