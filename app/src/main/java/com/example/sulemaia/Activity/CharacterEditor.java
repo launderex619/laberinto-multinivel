@@ -140,7 +140,7 @@ public class CharacterEditor extends AppCompatActivity {
          * changes. There is a specific process for the Ok button (load information
          * and change activity), the delete button (free memory and delete un useful
          * information), and ivImage (for the custom character editor dialog).
-         * @param v
+         * @param v Button view.
          */
         @Override
         public void onClick(View v) {

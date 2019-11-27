@@ -29,8 +29,10 @@ public class SearchAlgorithms extends AppCompatActivity {
     Bundle bundle;
 
     /**
-     *
-     * @param savedInstanceState
+     * Getting the initial variables available for the run of the activity, like the
+     * bundle and the intent.
+     * @param savedInstanceState Strings bundle with the most important information
+     *                           from the last activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

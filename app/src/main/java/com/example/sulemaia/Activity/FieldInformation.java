@@ -217,10 +217,10 @@ public class FieldInformation extends AppCompatActivity {
         }
 
         /**
-         *
-         * @param v
-         * @param event
-         * @return
+         * Detect the touch on the phone panel
+         * @param v The view (button, text field, etc) touched by the user.
+         * @param event The specific event in which the view is tapped.
+         * @return rather a true or false variable.
          */
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -236,11 +236,11 @@ public class FieldInformation extends AppCompatActivity {
         }
 
         /**
-         *
-         * @param parent
-         * @param view
-         * @param position
-         * @param id
+         * Relevant information related to the field, so it can be shown and processed.
+         * @param parent Adapter view.
+         * @param view tapped view.
+         * @param position position of the tapped tile.
+         * @param id id related to the view.
          */
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

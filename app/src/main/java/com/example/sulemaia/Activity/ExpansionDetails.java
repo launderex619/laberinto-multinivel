@@ -32,12 +32,13 @@ public class ExpansionDetails extends AppCompatActivity {
     private ArrayList<String> expansionOrder;
     private Boolean state[][] = {{true, true, true, true}, {false, false, false, false}};
 
-    @Override
     /**
      * On the creation of the class, we have four slots for the four possible directions in which
      * the character can move, creating an expansion order. All this works with buttons.
      * If its the first time the app is running, we show the tutorial.
+     * @param savedInstanceState The Strings bundle from the last activity.
      */
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expansion_details);
@@ -190,9 +191,9 @@ public class ExpansionDetails extends AppCompatActivity {
         }
 
         /**
-         *
-         * @param first
-         * @param second
+         * Change views however the user needs, in this context.
+         * @param first first view.
+         * @param second second view.
          */
         private void switchViews(View first, View second) {
             if (second == null)
