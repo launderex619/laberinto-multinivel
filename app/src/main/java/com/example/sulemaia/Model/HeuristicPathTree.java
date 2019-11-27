@@ -219,7 +219,7 @@ public class HeuristicPathTree {
             this.name = name;
             this.cost = cost;
             this.accumulative = 0f;
-            this.remaining = Float.MAX_VALUE;
+            this.remaining = 0f;
             this.posY = y;
             this.posX = x;
         }

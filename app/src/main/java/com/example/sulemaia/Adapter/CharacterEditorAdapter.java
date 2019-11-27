@@ -3,7 +3,9 @@ package com.example.sulemaia.Adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,26 @@ public class CharacterEditorAdapter extends RecyclerView.Adapter<CharacterEditor
     public void onBindViewHolder(@NonNull final Item holder, final int position) {
         holder.etCost.setFilters(new InputFilter[]{new Parser.DecimalDigitsInputFilter(5, 2)});
         holder.etCost.setText(String.format("%.2f", characterItem.getLandsCosts().get(position)));
+        holder.etCost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    characterItem.getLandsCosts().set(position, Float.parseFloat(holder.etCost.getText().toString()));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         holder.tvName.setText(characterItem.getLands().get(position));
         holder.cvImage.setImageDrawable(new ColorDrawable(characterItem.getLandsColors().get(position)));
         holder.cbSelect.setOnClickListener(new View.OnClickListener() {
