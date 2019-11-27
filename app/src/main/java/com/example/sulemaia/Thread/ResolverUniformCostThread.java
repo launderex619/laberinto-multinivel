@@ -86,7 +86,6 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
 
             //If actualNode != finalNode, we add it to the visited list.
             visitedNodes.add(actualNode);
-            //We add node's children.
             publishProgress(actualNode);
             getNodesNextStep(actualNode, expandedNodes, visitedNodes);
 
@@ -126,7 +125,7 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
      * Expand the nodes correctly, according to the limitations of the map.
      * @param node Node to be processed.
      * @param expandedNodes Expanded nodes list so we dont repeat.
-     * @param visitedNodes Visted nodes list so we dont repeat.
+     * @param visitedNodes Visited nodes list so we dont repeat.
      */
     private void getNodesNextStep(HeuristicPathTree.Node node,
                                   ArrayList<HeuristicPathTree.Node> expandedNodes,
@@ -138,7 +137,7 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
             HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
             if (response != null) {
                 if (!expandedNodes.contains(response)) {
-                    setFitness(response);
+                    setFitness(response, node);
                     expandedNodes.add(response);
                 }
             }
@@ -162,9 +161,8 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
      * Fitness method so we know which node to select each time.
      * @param response Node to process.
      */
-    private void setFitness(HeuristicPathTree.Node response) {
-        // aqui pon tu cagadero xd
-        //response.setRemaining();
+    private void setFitness(HeuristicPathTree.Node response, HeuristicPathTree.Node Father) {
+        response.setAccumulative(Father.getAccumulative() + Father.getCost());
     }
 
     /**

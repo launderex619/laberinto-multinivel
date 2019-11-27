@@ -131,6 +131,9 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         spMeasureType.setOnItemSelectedListener(new FirstBest.Measures());
 
         tlTableMap.post(new Runnable() {
+            /**
+             * Run the reaction of the table and the loading of the board.
+             */
             @Override
             public void run() {
                 createTable(Parser.getFileArray(contentFile));

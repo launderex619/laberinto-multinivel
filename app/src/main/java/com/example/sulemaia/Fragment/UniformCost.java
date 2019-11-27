@@ -366,9 +366,19 @@ public class UniformCost extends Fragment implements iUniformCost {
         }
     }
 
+    /**
+     * Method to be able to show the weight of each node in the graphic tree.
+     * @param node The node which we are modifying to show the weight.
+     */
     private void putNodesInfo(HeuristicPathTree.Node node) {
-        //using info for Uniform Cost, this will be different for each algorithm
-        //aqui pon tu cagadero x2 (copia el mio, pero usando los tuyos, tu me entiendes :V)
+        //using info for Uniform Cost, this will be different for each algorithm.
+        String text = board[node.getPosY()][node.getPosX()].getText().toString() +
+                ",\nStep: " + node.getStep() + "\n" +
+                "Accumulated: (" + node.getAccumulative() + ")";
+        board[node.getPosY()][node.getPosX()].setText(text);
+        for (HeuristicPathTree.Node n : node.getChildren()){
+            putNodesInfo(n);
+        }
     }
 
     /**

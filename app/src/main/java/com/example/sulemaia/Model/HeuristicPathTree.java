@@ -163,6 +163,7 @@ public class HeuristicPathTree {
                 inOrderFirst(anchor);
                 break;
             case A_STAR:
+                inOrderFirst(anchor);
                 break;
         }
     }

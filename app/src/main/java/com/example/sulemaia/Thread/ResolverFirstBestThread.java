@@ -170,7 +170,7 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
     }
 
     /**
-     * With the fitness, we either use the Euclidean or Manhattan measurment, and set the remaining
+     * With the fitness, we either use the Euclidean or Manhattan measurement, and set the remaining
      * measures to the node.
      * @param response the node to process.
      */

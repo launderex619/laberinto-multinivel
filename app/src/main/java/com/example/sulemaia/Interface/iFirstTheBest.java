@@ -7,14 +7,14 @@ import com.example.sulemaia.Model.HeuristicPathTree;
  */
 public interface iFirstTheBest {
     /**
-     * Declaration of the method to move the character, both logically and for the tree,
+     * Declaration of the method to move the character, both logically and for the tree.
      * @param posY actual Y coordinate.
      * @param posX actual X coordinate.
      */
     void moveCharacter(int posY, int posX);
 
     /**
-     * Metho to set color to a specific tile.
+     * Method to set color to a specific tile.
      * @param posY actual Y coordinate.
      * @param posX actual X coordinate.
      */
