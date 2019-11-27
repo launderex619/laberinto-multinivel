@@ -47,7 +47,9 @@ Si no desea instalar Android Studio pero aún desea probar nuestra aplicación, 
 ## Uso
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
-texte1 | texte2 | texte3
+
+Interfaz de gestión de los diferentes cuadros (cuadro inicial y final) y entornos. | Interfaz de gestión de los diferentes personajes (costo de viaje, íconos).
+ | Interfaz de juego y gestión del movimiento del personaje.
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
@@ -107,7 +109,8 @@ If you don't want to install Android Studio but still want to test our applicati
 ## Usage
 <img src="maze.jpg" height="400"> | <img src="characters.jpg" height="400"> | <img src="moving_in_maze.jpg" height="400">
 --- | --- | --- 
-texte1 | texte2 | texte3
+
+Management interface of the different boxes (initial and final box) and environments. | Management interface of the different characters (cost of travel, icons). | Game interface and movement management of the character.
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
