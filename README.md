@@ -51,7 +51,7 @@ Interfaz de gestión de los cuadros | Interfaz de gestión de los personajes | I
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
-texte4 | texte5
+Interfaz de gestión de elección de prioridad de algoritmo | Página de resultados finales : Mostrar pasos y árbol
 ## Documentación
 Puede encontrar toda la documentación de la aplicación [aquí] (https://launderex619.github.io/laberinto-multinivel/).
 
@@ -111,7 +111,7 @@ Management interface of boxes | Management interface of characters | Game interf
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
-oui oui oui | texte5
+Algorithm priority choice management interface | End Results Page : Showing Steps and Tree
 
 ## Documentation
 You can find all the documentation about our application [here] (https://launderex619.github.io/laberinto-multinivel/)
