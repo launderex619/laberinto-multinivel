@@ -284,11 +284,7 @@ public class AStar extends Fragment implements iAStar{
                 });
                 btnStartAlgorithm.setVisibility(View.GONE);
             } else {
-                new SimpleOkDialog(getContext(),
-                        getString(R.string.field_information_game_screen) + "\n" +
-                                v.getTag().toString(),
-                        ((EditText) v).getText().toString()
-                ).build().show();
+                putNodesInfo((EditText) v);
             }
         }
 
@@ -345,7 +341,6 @@ public class AStar extends Fragment implements iAStar{
         }
 
         HeuristicPathTree.Node node = heuristicPathTree.getFinalNode();
-        putNodesInfo(heuristicPathTree.getAnchor());
         board[node.getPosY()][node.getPosX()].setBackgroundColor(pathColor);
         while (node != heuristicPathTree.getAnchor()) {
             node = node.getFather();
@@ -371,17 +366,22 @@ public class AStar extends Fragment implements iAStar{
 
     /**
      * Method to be able to show the weight of each node in the graphic tree.
-     * @param node The node which we are modifying to show the weight.
+     * @param et The node which we are modifying to show the weight.
      */
-    private void putNodesInfo(HeuristicPathTree.Node node) {
-        //using info for A* Algorithm, this will be different for each algorithm.
-        String text = board[node.getPosY()][node.getPosX()].getText().toString() +
-                ",\nStep: " + node.getStep() + "\n" + "(" +
-                node.getAccumulative() + " + " + node.getRemaining() +
-                " = " + node.getAccumulative() + ")";
-        board[node.getPosY()][node.getPosX()].setText(text);
-        for (HeuristicPathTree.Node n : node.getChildren()){
-            putNodesInfo(n);
+    private void putNodesInfo(EditText et) {
+        for (int i = 0; i < nodes.length;i++ ){
+            for (int j = 0; j < nodes[0].length;j++ ){
+                if (board[i][j] == et){
+                    String text = board[i][j].getText().toString() +",\nStep: " + nodes[i][j].getStep() + "\n" +
+                            "Accumulated: (" + nodes[i][j].getAccumulative() + ")";
+                    new SimpleOkDialog(getContext(),
+                            getString(R.string.field_information_game_screen) + "\n" +
+                                    et.getTag().toString(),
+                            text
+                    ).build().show();
+                    break;
+                }
+            }
         }
     }
 
