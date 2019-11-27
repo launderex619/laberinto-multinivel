@@ -182,6 +182,11 @@ public class HeuristicPathTree {
         }
     }
 
+    /**
+     * Algorithm to obtain the tree in an Inorder organization for Uniform Cost, to
+     * make sure it will display correctly.
+     * @param father Father node each time.
+     */
     private void inUniformCost(Node father) {
         for (Node child : father.getChildren()) {
             addMovementAccumulative(child);
@@ -191,6 +196,11 @@ public class HeuristicPathTree {
         }
     }
 
+    /**
+     * Algorithm to obtain the tree in an Inorder organization for A*, to make
+     * sure it will display correctly.
+     * @param father Father node each time.
+     */
     private void inAstar(Node father) {
         for (Node child : father.getChildren()) {
             addMovementAll(child);

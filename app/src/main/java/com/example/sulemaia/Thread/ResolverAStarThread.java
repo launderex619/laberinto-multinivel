@@ -174,10 +174,12 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
             case EUCLIDIANA:
                 distance = (float) Math.sqrt(Math.pow(lastX - response.getPosX(), 2) + Math.pow(lastY - response.getPosY(), 2));
                 response.setAccumulative(Father.getAccumulative() + Father.getCost() + distance);
+                response.setRemaining(distance);
                 break;
             case MANHATTAN:
                 distance = (float) (Math.abs(response.getPosX() - lastX) + Math.abs(response.getPosY() - lastY));
                 response.setAccumulative(Father.getAccumulative() + Father.getCost() + distance);
+                response.setRemaining(distance);
                 break;
         }
     }
