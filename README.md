@@ -114,7 +114,7 @@ Management interface of the different boxes (initial and final box) and environm
 
 <img src="order.jpg" height="400"> | <img src="tree.jpg" height="400"> 
 --- | --- 
-texte4 | texte5
+oui oui oui | texte5
 
 ## Documentation
 You can find all the documentation about our application [here] (https://launderex619.github.io/laberinto-multinivel/)
