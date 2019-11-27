@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 
-
+/**
+ * Resolver class for the thread and execution of First Best Algorithm.
+ */
 public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTree.Node, HeuristicPathTree> {
     private static final int MANHATTAN = 0;
     private static final int EUCLIDIANA = 1;
@@ -27,6 +29,14 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
     private int lastY, lastX;
     private int actualStep = 1;
 
+    /**
+     * First Best algorithm constructor.
+     * @param nodes Heuristic nodes.
+     * @param expansionOrder List for expanded nodes.
+     * @param updateTime Value for the thread refresh.
+     * @param iMethods Method (related to the algorithm).
+     * @param measureMode Measure mode, since First Best uses Manhattan or Euclidean to weight the nodes.
+     */
     public ResolverFirstBestThread(HeuristicPathTree.Node[][] nodes,
                                    ArrayList<String> expansionOrder,
                                    long updateTime,
@@ -43,6 +53,11 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         tree = new HeuristicPathTree();
     }
 
+    /**
+     * In the background execution of the thread, we execute the actual algorithm.
+     * @param values Values related to the coordinates for initial and final positions.
+     * @return final tree of null.
+     */
     @Override
     protected HeuristicPathTree doInBackground(Integer... values) {
         int initialY = values[0];
@@ -87,12 +102,20 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         return null;
     }
 
+    /**
+     * Every time the thread makes a step, we change the character's position.
+     * @param values Values of the positions.
+     */
     @Override
     protected void onProgressUpdate(HeuristicPathTree.Node... values) {
         super.onProgressUpdate(values);
         iMethods.moveCharacter(values[0].getPosY(), values[0].getPosX());
     }
 
+    /**
+     * Once the algorithm has finished, we actually need to end the thread and draw the path over the UI.
+     * @param heuristicPathTree The tree whose path needs to be drawn.
+     */
     @Override
     protected void onPostExecute(HeuristicPathTree heuristicPathTree) {
         super.onPostExecute(heuristicPathTree);
@@ -101,7 +124,13 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         iMethods.drawPath(heuristicPathTree);
     }
 
-
+    /**
+     * Get the children of a node, if they are reachable (the is map available), and if the node
+     * is accessible by the options written by the user.
+     * @param node Node to be expanded.
+     * @param expandedNodes List of expanded nodes so we dont repeat.
+     * @param visitedNodes List of visited nodes so we dont repeat.
+     */
     private void getNodesNextStep(
             HeuristicPathTree.Node node,
             ArrayList<HeuristicPathTree.Node> expandedNodes,
@@ -120,6 +149,12 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         }
         
         Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
+            /**
+             * Compare two nodes to be able to execute the algorithm correctly.
+             * @param o1 First node to compare.
+             * @param o2 Second node to compare.
+             * @return the comparative value.
+             */
             @Override
             public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
                 return Float.compare(o1.getRemaining(), o2.getRemaining());
@@ -134,6 +169,11 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         //return nodes;
     }
 
+    /**
+     * With the fitness, we either use the Euclidean or Manhattan measurment, and set the remaining
+     * measures to the node.
+     * @param response the node to process.
+     */
     private void setFitness(HeuristicPathTree.Node response) {
         float distance = 0f;
         switch (measureMode) {
@@ -148,6 +188,15 @@ public class ResolverFirstBestThread extends AsyncTask<Integer, HeuristicPathTre
         }
     }
 
+    /**
+     * Method to expand a node in all directions, following the expansion order set by the user,
+     * making sure the expansion is possible, rather for map access, or limitations by the user.
+     * @param direction Direction to check to be expanded.
+     * @param y Y actual coordinate.
+     * @param x X actual coordinate.
+     * @param visitedNodes List of visited nodes so we dont expand incorrectly.
+     * @return
+     */
     private HeuristicPathTree.Node expandInDirection(String direction, int y, int x,
                                                      HashSet<HeuristicPathTree.Node> visitedNodes) {
         switch (direction) {

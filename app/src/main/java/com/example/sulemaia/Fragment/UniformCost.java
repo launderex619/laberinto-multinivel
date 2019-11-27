@@ -394,12 +394,18 @@ public class UniformCost extends Fragment implements iUniformCost {
         setFieldColor(y, x, colors.get(codes.indexOf(mapValues[y][x])));
     }
 
+    /**
+     * Mehtod to stop the thread once the algorithm finishes.
+     */
     @Override
     public synchronized void onStop() {
         stopThread();
         super.onStop();
     }
 
+    /**
+     * Method called by onStop to stop the thread.
+     */
     private void stopThread() {
         if (thread != null && (thread.getStatus() == AsyncTask.Status.RUNNING || thread.getStatus() == AsyncTask.Status.PENDING)) {
             thread.cancel(true);

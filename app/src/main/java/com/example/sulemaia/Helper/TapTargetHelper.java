@@ -48,7 +48,7 @@ public class TapTargetHelper {
     }
 
     /**
-     * The same method as the last one, but with an icon; it was clearly never used.
+     * The same method as the last one, but with an icon; Deprecated.
      * @param icon icon that was going to be shown with each tutoria point.
      * @return taptarget for view.
      */

@@ -371,6 +371,10 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         }
     }
 
+    /**
+     * Method to be able to show the weight of each node in the graphic tree.
+     * @param node The node which we are modifying to show the weight.
+     */
     private void putNodesInfo(HeuristicPathTree.Node node) {
         //using info for First the best, this will be different for each algorithm
         String text = board[node.getPosY()][node.getPosX()].getText().toString() +
@@ -435,12 +439,18 @@ public class FirstBest extends Fragment implements iFirstTheBest {
         }
     }
 
+    /**
+     * Method to make the thread stop once the algorithm finishes.
+     */
     @Override
     public synchronized void onStop() {
         stopThread();
         super.onStop();
     }
 
+    /**
+     * Method called by onStop to stop thread.
+     */
     private void stopThread() {
         if (thread != null && (thread.getStatus() == AsyncTask.Status.RUNNING || thread.getStatus() == AsyncTask.Status.PENDING)) {
             thread.cancel(true);

@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 
+/**
+ * Class to control all the app flow when the Uniform Cost algorithm is being executed.
+ */
 public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathTree.Node, HeuristicPathTree> {
     private static final String DOWN = "d", UP = "u", LEFT = "l", RIGHT = "r";
     private ArrayList<HeuristicPathTree.Node> expandedNodes;
@@ -24,6 +27,13 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
     private int lastY, lastX;
     private int actualStep = 1;
 
+    /**
+     * Constructor of the whole resolver for the Uniform Cost Thread.
+     * @param nodes Heuristic nodes.
+     * @param expansionOrder Expansion order set by the user.
+     * @param updateTime Update time for the thread.
+     * @param iMethods Method, related to which algorithm is being used.
+     */
     public ResolverUniformCostThread(HeuristicPathTree.Node[][] nodes,
                                      ArrayList<String> expansionOrder,
                                      long updateTime,
@@ -39,6 +49,11 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         tree = new HeuristicPathTree();
     }
 
+    /**
+     * In the background execution of the thread, we are actually executing the main algorithm.
+     * @param values Values related to the initial and final coordinates.
+     * @return Either the tree or null value.
+     */
     @Override
     protected HeuristicPathTree doInBackground(Integer... values) {
         int initialY = values[0];
@@ -85,12 +100,20 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         return null;
     }
 
+    /**
+     * Every time the thread refreshes, we have to move the character in the UI.
+     * @param values Values related to the position of the character.
+     */
     @Override
     protected void onProgressUpdate(HeuristicPathTree.Node... values) {
         super.onProgressUpdate(values);
         iMethods.moveCharacter(values[0].getPosY(), values[0].getPosX());
     }
 
+    /**
+     * Whenever the algorithm finishes, we have to finish the thread.
+     * @param heuristicPathTree Tree to process.
+     */
     @Override
     protected void onPostExecute(HeuristicPathTree heuristicPathTree) {
         super.onPostExecute(heuristicPathTree);
@@ -99,6 +122,12 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         iMethods.drawPath(heuristicPathTree);
     }
 
+    /**
+     * Expand the nodes correctly, according to the limitations of the map.
+     * @param node Node to be processed.
+     * @param expandedNodes Expanded nodes list so we dont repeat.
+     * @param visitedNodes Visted nodes list so we dont repeat.
+     */
     private void getNodesNextStep(HeuristicPathTree.Node node,
                                   ArrayList<HeuristicPathTree.Node> expandedNodes,
                                   HashSet<HeuristicPathTree.Node> visitedNodes) {
@@ -116,6 +145,12 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         }
 
         Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
+            /**
+             * Compare method to control the algorithm correctly.
+             * @param o1 First node to compare.
+             * @param o2 Second node to compare.
+             * @return Compared value.
+             */
             @Override
             public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
                 return Float.compare(o1.getAccumulative(), o2.getAccumulative());
@@ -123,12 +158,23 @@ public class ResolverUniformCostThread extends AsyncTask<Integer, HeuristicPathT
         });
     }
 
-
+    /**
+     * Fitness method so we know which node to select each time.
+     * @param response Node to process.
+     */
     private void setFitness(HeuristicPathTree.Node response) {
         // aqui pon tu cagadero xd
         //response.setRemaining();
     }
 
+    /**
+     * check if the direction in which the node is trying to be expanded is available or has any limitations.
+     * @param direction Direction to be expanded.
+     * @param y Y coordinate of the actual node.
+     * @param x X coordinate of the actual node.
+     * @param visitedNodes Visited nodes list so we dont repeat.
+     * @return a null value and/or the next coordinate to process.
+     */
     private HeuristicPathTree.Node expandInDirection(String direction, int y, int x,
                                                      HashSet<HeuristicPathTree.Node> visitedNodes) {
 
