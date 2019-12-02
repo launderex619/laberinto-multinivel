@@ -131,7 +131,7 @@ public class AStar extends Fragment implements iAStar{
 
         tlTableMap.post(new Runnable() {
             /**
-             * Run the reaction of the table and the loading of the board.
+             * Run the creation of the table and the loading of the board.
              */
             @Override
             public void run() {
@@ -301,7 +301,7 @@ public class AStar extends Fragment implements iAStar{
         }
 
         /**
-         * Code not used but still needed to be instantiated for the thread to work properly.
+         * Declared method for the correct implementation of the thread.
          * @param seekBar
          */
         @Override
@@ -310,7 +310,7 @@ public class AStar extends Fragment implements iAStar{
         }
 
         /**
-         * Code not used but still needed to be instantiated for the thread to work properly.
+         * Declared method for the correct implementation of the thread.
          * @param seekBar
          */
         @Override

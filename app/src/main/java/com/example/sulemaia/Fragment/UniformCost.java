@@ -298,7 +298,7 @@ public class UniformCost extends Fragment implements iUniformCost {
         }
 
         /**
-         * Code not used but still needed to be instantiated for the thread to work properly.
+         * Declared method for the correct implementation of the thread.
          * @param seekBar
          */
         @Override
@@ -307,7 +307,7 @@ public class UniformCost extends Fragment implements iUniformCost {
         }
 
         /**
-         * Code not used but still needed to be instantiated for the thread to work properly.
+         * Declared method for the correct implementation of the thread.
          * @param seekBar
          */
         @Override

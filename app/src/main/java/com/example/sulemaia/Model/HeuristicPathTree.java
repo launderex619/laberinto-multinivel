@@ -427,7 +427,7 @@ public class HeuristicPathTree {
         }
 
         /**
-         * Set the current cost to the node.
+         * Set the current cost to the node. <B>Deprecated.</B>
          * @param cost Current cost.
          */
         public void setCost(float cost) {

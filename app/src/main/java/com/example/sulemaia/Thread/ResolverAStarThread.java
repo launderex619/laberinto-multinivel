@@ -67,16 +67,37 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
         int finalX = lastX = values[3];
         //code for pre execute the thread
         iMethods.setColorToField(initialY, initialX);
-        visitedNodes.add(nodes[initialY][initialX]);
-        getNodesNextStep(nodes[initialY][initialX], expandedNodes, visitedNodes);
+        //visitedNodes.add(nodes[initialY][initialX]);
+        expandedNodes.add(nodes[initialY][initialX]);
+        //getNodesNextStep(nodes[initialY][initialX], expandedNodes, visitedNodes);
         tree.setAnchor(nodes[initialY][initialX]);
         tree.setInitial(nodes[initialY][initialX]);
+        setFitnessFirst(nodes[initialY][initialX]);
+        //nodes[initialY][initialX].setStep(actualStep++);
 
         // mientras la cola no este vacia
         while (expandedNodes.size() > 0) {
             if(isCancelled()){
                 break;
             }
+
+            //////////
+
+            Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
+                /**
+                 * Compare two nodes to be able to execute the algorithm correctly.
+                 * @param o1 First node to compare.
+                 * @param o2 Second node to compare.
+                 * @return the comparative value.
+                 */
+                @Override
+                public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
+                    return Float.compare(o1.getRemaining() + o1.getAccumulative(), o2.getRemaining() + o2.getAccumulative());
+                }
+            });
+
+            /////////////
+
             HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
             actualNode.setStep(actualStep++);
             //evaluamos el nodo
@@ -88,11 +109,10 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                 return tree;
             }
             //lo agregamos al set de visitados
-            visitedNodes.add(actualNode);
-            //agregamos a los hijos
-            //expandedNodes.addAll(getNodesNextStep(actualNode.getPosY(), actualNode.getPosX(), expandedNodes, visitedNodes));.
+            //visitedNodes.add(actualNode);
             publishProgress(actualNode);
             getNodesNextStep(actualNode, expandedNodes, visitedNodes);
+            visitedNodes.add(actualNode);
             try {
                 Thread.sleep(updateTime);
             } catch (InterruptedException e) {
@@ -142,25 +162,71 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
             HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
             //area for fitness
             if (response != null) {
+                /*
                 if (!expandedNodes.contains(response)) {
                     setFitness(response, node);
+                    expandedNodes.add(response);
+                }*/
+                setFitness(response, node);
+
+                if(expandedNodes.contains(response)){
+                    for(HeuristicPathTree.Node aux : expandedNodes){
+                        if( (aux.getName() == response.getName()) && ( (aux.getAccumulative() + aux.getRemaining()) < (response.getAccumulative() + response.getRemaining()) ) ){
+                            //Skip this node, because it's not better.
+                        }
+                        else if( (aux.getName() == response.getName()) && ( (response.getAccumulative() + response.getRemaining()) < (aux.getAccumulative() + aux.getRemaining())) ){
+                            expandedNodes.remove(aux);
+                            expandedNodes.add(response);
+                        }
+                    }
+                }
+                if(visitedNodes.contains(response)){
+                    /*for(HeuristicPathTree.Node aux : visitedNodes){
+                        if( (aux.getName() == response.getName()) && ( (aux.getAccumulative() + aux.getRemaining()) < (response.getAccumulative() + response.getRemaining()) ) ){
+                            //Skip this node, because it's not better.
+                        }
+                    }*/
+                }
+                else{
                     expandedNodes.add(response);
                 }
             }
         }
 
-        Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
-            /**
-             * Compare two nodes to be able to execute the algorithm correctly.
-             * @param o1 First node to compare.
-             * @param o2 Second node to compare.
-             * @return the comparative value.
-             */
-            @Override
-            public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
-                return Float.compare(o1.getRemaining() + o1.getAccumulative(), o2.getRemaining() + o2.getAccumulative());
-            }
-        });
+        //Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
+          //  /**
+            // * Compare two nodes to be able to execute the algorithm correctly.
+             //* @param o1 First node to compare.
+             //* @param o2 Second node to compare.
+             //* @return the comparative value.
+             //*/
+            //@Override
+            //public int compare(HeuristicPathTree.Node o1, HeuristicPathTree.Node o2) {
+              //  return Float.compare(o1.getRemaining() + o1.getAccumulative(), o2.getRemaining() + o2.getAccumulative());
+            //}
+        //});
+    }
+
+    /**
+     * Methon to set the h(n) and g(n) values to the first node of the tree.
+     * @param Node Anchor node.
+     */
+    private void setFitnessFirst(HeuristicPathTree.Node Node) {
+        float distance = 0f;
+        switch (measureMode) {
+            case EUCLIDIANA:
+                //distance = (float) Math.sqrt(Math.pow(lastX - Node.getPosX(), 2) + Math.pow(lastY - Node.getPosY(), 2));
+                distance = (float) Math.sqrt( (Math.pow(lastX - Node.getPosX(), 2))  +  (Math.pow(lastY - Node.getPosY(), 2)) );
+                Node.setAccumulative(0);
+                Node.setRemaining(distance);
+                break;
+            case MANHATTAN:
+                //distance = (float) (Math.abs(Node.getPosX() - lastX) + Math.abs(Node.getPosY() - lastY));
+                distance = (float) ( (Math.abs( Node.getPosX() - lastX )) + (Math.abs( Node.getPosY() - lastY )) );
+                Node.setAccumulative(0);
+                Node.setRemaining(distance);
+                break;
+        }
     }
 
     /**
@@ -173,12 +239,12 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
         switch (measureMode) {
             case EUCLIDIANA:
                 distance = (float) Math.sqrt(Math.pow(lastX - response.getPosX(), 2) + Math.pow(lastY - response.getPosY(), 2));
-                response.setAccumulative(Father.getAccumulative() + Father.getCost() + distance);
+                response.setAccumulative( Father.getAccumulative() + response.getCost() );
                 response.setRemaining(distance);
                 break;
             case MANHATTAN:
                 distance = (float) (Math.abs(response.getPosX() - lastX) + Math.abs(response.getPosY() - lastY));
-                response.setAccumulative(Father.getAccumulative() + Father.getCost() + distance);
+                response.setAccumulative( Father.getAccumulative() + response.getCost() );
                 response.setRemaining(distance);
                 break;
         }
