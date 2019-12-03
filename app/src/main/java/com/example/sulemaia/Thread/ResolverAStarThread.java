@@ -80,9 +80,6 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
             if(isCancelled()){
                 break;
             }
-
-            //////////
-
             Collections.sort(expandedNodes, new Comparator<HeuristicPathTree.Node>() {
                 /**
                  * Compare two nodes to be able to execute the algorithm correctly.
@@ -95,9 +92,6 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                     return Float.compare(o1.getRemaining() + o1.getAccumulative(), o2.getRemaining() + o2.getAccumulative());
                 }
             });
-
-            /////////////
-
             HeuristicPathTree.Node actualNode = expandedNodes.remove(0);
             actualNode.setStep(actualStep++);
             //evaluamos el nodo
@@ -108,8 +102,6 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                 tree.setFinal(actualNode);
                 return tree;
             }
-            //lo agregamos al set de visitados
-            //visitedNodes.add(actualNode);
             publishProgress(actualNode);
             getNodesNextStep(actualNode, expandedNodes, visitedNodes);
             visitedNodes.add(actualNode);
@@ -162,34 +154,31 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
             HeuristicPathTree.Node response = expandInDirection(direction, y, x, visitedNodes);
             //area for fitness
             if (response != null) {
-                /*
-                if (!expandedNodes.contains(response)) {
-                    setFitness(response, node);
-                    expandedNodes.add(response);
-                }*/
-                setFitness(response, node);
-
                 if(expandedNodes.contains(response)){
-                    for(HeuristicPathTree.Node aux : expandedNodes){
-                        if( (aux.getName() == response.getName()) && ( (aux.getAccumulative() + aux.getRemaining()) < (response.getAccumulative() + response.getRemaining()) ) ){
-                            //Skip this node, because it's not better.
-                        }
-                        else if( (aux.getName() == response.getName()) && ( (response.getAccumulative() + response.getRemaining()) < (aux.getAccumulative() + aux.getRemaining())) ){
-                            expandedNodes.remove(aux);
-                            expandedNodes.add(response);
-                        }
+                    float distance = 0;
+                    float acummulado = 0;
+                    float remaining = 0;
+                    switch (measureMode) {
+                        case EUCLIDIANA:
+                            distance = (float) Math.sqrt(Math.pow(lastX - response.getPosX(), 2) + Math.pow(lastY - response.getPosY(), 2));
+                            acummulado = node.getAccumulative() + response.getCost() ;
+                            remaining = (distance);
+                            break;
+                        case MANHATTAN:
+                            distance = (float) (Math.abs(response.getPosX() - lastX) + Math.abs(response.getPosY() - lastY));
+                            acummulado = ( node.getAccumulative() + response.getCost() );
+                            remaining = (distance);
+                            break;
                     }
-                }
-                if(visitedNodes.contains(response)){
-                    /*for(HeuristicPathTree.Node aux : visitedNodes){
-                        if( (aux.getName() == response.getName()) && ( (aux.getAccumulative() + aux.getRemaining()) < (response.getAccumulative() + response.getRemaining()) ) ){
-                            //Skip this node, because it's not better.
-                        }
-                    }*/
+                    if((acummulado + remaining) > (response.getAccumulative() + response.getRemaining())){
+                        response.setAccumulative(acummulado);
+                        response.setRemaining(remaining);
+                    }
                 }
                 else{
                     expandedNodes.add(response);
                 }
+                setFitness(response, node);
             }
         }
 
@@ -222,7 +211,7 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                 break;
             case MANHATTAN:
                 //distance = (float) (Math.abs(Node.getPosX() - lastX) + Math.abs(Node.getPosY() - lastY));
-                distance = (float) ( (Math.abs( Node.getPosX() - lastX )) + (Math.abs( Node.getPosY() - lastY )) );
+                distance = (float) ( (Math.abs( Node.getPosX() - lastX )) + (Math.abs( Node.getPosY() - lastY )));
                 Node.setAccumulative(0);
                 Node.setRemaining(distance);
                 break;
@@ -273,6 +262,9 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                         visitedNodes.add(nodes[y - 1][x]);
                         return null;
                     }
+                    if(nodes[y][x].getChildren().contains(nodes[y - 1][x])){
+                        return null;
+                    }
                     tree.addNode(nodes[y][x], nodes[y - 1][x]);
                     return nodes[y - 1][x];
                 }
@@ -286,6 +278,9 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                     }
                     if (!nodes[y + 1][x].isAccessible()) {
                         visitedNodes.add(nodes[y + 1][x]);
+                        return null;
+                    }
+                    if(nodes[y][x].getChildren().contains(nodes[y + 1][x])){
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y + 1][x]);
@@ -303,6 +298,9 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                         visitedNodes.add(nodes[y][x - 1]);
                         return null;
                     }
+                    if(nodes[y][x].getChildren().contains(nodes[y][x - 1])){
+                        return null;
+                    }
                     tree.addNode(nodes[y][x], nodes[y][x - 1]);
                     return nodes[y][x - 1];
                 }
@@ -316,6 +314,9 @@ public class ResolverAStarThread extends AsyncTask<Integer, HeuristicPathTree.No
                     }
                     if (!nodes[y][x + 1].isAccessible()) {
                         visitedNodes.add(nodes[y][x + 1]);
+                        return null;
+                    }
+                    if(nodes[y][x].getChildren().contains(nodes[y][x + 1])){
                         return null;
                     }
                     tree.addNode(nodes[y][x], nodes[y][x + 1]);
